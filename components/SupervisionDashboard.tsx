@@ -16,7 +16,7 @@ const KpiCard: React.FC<{ title: string; value: string | number; icon: string }>
     <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
         <div className="flex items-center">
             <div className="p-3 bg-indigo-100 dark:bg-indigo-900/50 rounded-full mr-4">
-                <span className="material-symbols-outlined text-2xl text-indigo-600 dark:text-indigo-400">{icon}</span>
+                <span className="material-symbols-outlined text-2xl text-primary dark:text-indigo-400">{icon}</span>
             </div>
             <div>
                 <p className="text-sm text-slate-500 dark:text-slate-400">{title}</p>

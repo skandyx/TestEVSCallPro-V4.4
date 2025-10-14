@@ -66,7 +66,7 @@ const DatabaseManager: React.FC<{ feature: Feature }> = ({ feature }) => {
         <div className="h-full flex flex-col space-y-6">
             <header>
                 <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center gap-3">
-                    <DatabaseIcon className="w-9 h-9 text-indigo-600 dark:text-indigo-400" />
+                    <span className="material-symbols-outlined text-4xl text-primary">database</span>
                     {t(feature.titleKey)}
                 </h1>
                 <p className="mt-2 text-lg text-slate-600 dark:text-slate-400">{t(feature.descriptionKey)}</p>

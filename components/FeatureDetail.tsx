@@ -28,7 +28,7 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ feature }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
           <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center">
-            <span className="material-symbols-outlined w-6 h-6 mr-3 text-indigo-500">timeline</span>
+            <span className="material-symbols-outlined w-6 h-6 mr-3 text-primary">timeline</span>
             {t(feature.userJourney.titleKey)}
           </h2>
           <ol className="list-decimal list-inside space-y-2 text-slate-700 dark:text-slate-300">
@@ -40,7 +40,7 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ feature }) => {
 
         <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
           <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center">
-            <span className="material-symbols-outlined w-6 h-6 mr-3 text-indigo-500">tune</span>
+            <span className="material-symbols-outlined w-6 h-6 mr-3 text-primary">tune</span>
             {t(feature.specs.titleKey)}
           </h2>
           <ul className="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">

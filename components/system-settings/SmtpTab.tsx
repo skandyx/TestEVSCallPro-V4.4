@@ -69,7 +69,7 @@ const SmtpTab: React.FC<SmtpTabProps> = ({ smtpSettings, handleChange }) => {
              {isTestEmailModalOpen && <TestEmailModal smtpSettings={smtpSettings} onClose={() => setIsTestEmailModalOpen(false)} showAlert={showAlert} />}
 
             <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                <EnvelopeIcon className="w-6 h-6 text-indigo-500"/>
+                <span className="material-symbols-outlined text-2xl text-primary">mail</span>
                 {t('systemSettings.email.title')}
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 -mt-4">{t('systemSettings.email.description')}</p>

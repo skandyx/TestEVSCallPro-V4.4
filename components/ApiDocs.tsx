@@ -13,7 +13,7 @@ const ApiDocs: React.FC<ApiDocsProps> = ({ feature }) => {
         <div className="h-full w-full flex flex-col">
             <header className="flex-shrink-0 mb-8">
                 <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center">
-                    <ServerStackIcon className="w-9 h-9 mr-3 text-indigo-600 dark:text-indigo-400"/>
+                    <span className="material-symbols-outlined text-4xl mr-3 text-primary">api</span>
                     {/* FIX: Replaced direct property access with translation function 't' to use i18n keys. */}
                     {t(feature.titleKey)}
                 </h1>

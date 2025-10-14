@@ -105,7 +105,7 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
                 {appLogoDataUrl ? (
                     <img src={appLogoDataUrl} alt="Logo" className={`transition-all duration-300 ${isSidebarCollapsed ? 'h-10 w-auto' : 'h-12 w-auto'}`} />
                 ) : (
-                    <span className="material-symbols-outlined text-indigo-600 text-3xl">hub</span>
+                    <span className="material-symbols-outlined text-primary text-3xl">hub</span>
                 )}
                 {!isSidebarCollapsed && <span className="text-lg font-bold text-slate-800 dark:text-slate-100 ml-2 truncate">{appName}</span>}
             </div>

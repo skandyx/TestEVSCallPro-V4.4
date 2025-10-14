@@ -57,7 +57,7 @@ const MaintenanceManager: React.FC<{ feature: Feature }> = ({ feature }) => {
                 <div className="lg:col-span-1 space-y-8">
                     <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
                         <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
-                            <span className="material-symbols-outlined text-2xl text-indigo-500">settings_suggest</span>
+                            <span className="material-symbols-outlined text-2xl text-primary">settings_suggest</span>
                             Planification des Sauvegardes
                         </h2>
                         <div className="space-y-4">

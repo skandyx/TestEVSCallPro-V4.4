@@ -76,7 +76,7 @@ const SystemConnectionManager: React.FC<{ feature: Feature }> = ({ feature }) =>
                 {/* Database Settings */}
                 <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
                     <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
-                        <DatabaseIcon className="w-6 h-6 text-indigo-500" />
+                        <span className="material-symbols-outlined text-2xl text-primary">database</span>
                         {t('systemConnection.db.title')}
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -111,7 +111,7 @@ const SystemConnectionManager: React.FC<{ feature: Feature }> = ({ feature }) =>
                 {/* Asterisk Settings */}
                 <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
                     <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
-                        <WifiIcon className="w-6 h-6 text-indigo-500" />
+                        <span className="material-symbols-outlined text-2xl text-primary">rss_feed</span>
                         {t('systemConnection.asterisk.title')}
                     </h2>
                     <div className="space-y-4">

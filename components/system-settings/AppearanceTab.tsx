@@ -33,7 +33,7 @@ const AppearanceTab: React.FC<AppearanceTabProps> = ({ appSettings, handleChange
     return (
         <div className="space-y-6">
             <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                <PaletteIcon className="w-6 h-6 text-indigo-500"/>
+                <span className="material-symbols-outlined text-2xl text-primary">palette</span>
                 {t('systemSettings.appearance.title')}
             </h2>
             <div>
