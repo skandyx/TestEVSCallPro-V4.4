@@ -389,6 +389,76 @@
       "cardTitle": "حصة نشطة"
     }
   },
+  "agentView": {
+    "extension": "رقم داخلي {ext}",
+    "statuses": {
+      "available": "متاح",
+      "onCall": "في مكالمة",
+      "wrapUp": "بعد المكالمة",
+      "onPause": "في استراحة",
+      "ringing": "يرن",
+      "disconnected": "غير متصل",
+      "onHold": "في الانتظار",
+      "training": "تدريب"
+    },
+    "statusManager": {
+      "settings": "الإعدادات"
+    },
+    "messages": "الرسائل",
+    "clearAll": "مسح الكل",
+    "respond": "الرد",
+    "yourResponsePlaceholder": "ردك...",
+    "kpis": {
+      "title": "مؤشرات الأداء اليومية",
+      "totalConnectedTime": "إجمالي وقت الاتصال",
+      "callsHandled": "المكالمات المعالجة",
+      "positiveQuals": "التوصيفات الإيجابية",
+      "totalPauseTime": "إجمالي وقت التوقف المؤقت",
+      "pauseCount": "عدد التوقفات المؤقتة",
+      "totalTrainingTime": "إجمالي وقت التدريب",
+      "trainingCount": "عدد التدريبات"
+    },
+    "callbacks": {
+      "allCampaigns": "جميع الحملات"
+    },
+    "feedback": {
+      "activateCampaign": "يرجى تحديد حملة نشطة للاتصال.",
+      "noContactAvailable": "لا يوجد المزيد من جهات الاتصال المتاحة في {campaignName}.",
+      "errorFetchingContact": "خطأ في جلب جهة الاتصال التالية.",
+      "mustEndTask": "يجب أن تكون في حالة 'متاح' لبدء مهمة جديدة."
+    },
+    "searching": "البحث عن جهة الاتصال التالية...",
+    "waitingForCall": "في انتظار المكالمة التالية...",
+    "myCallbacks": "مكالماتي المعاودة",
+    "overdue": "متأخرة",
+    "noCallbacks": "لا توجد مكالمات معاودة مجدولة لهذا اليوم.",
+    "noScript": "لا يوجد نص مرتبط بهذه الحملة.",
+    "scriptWillBeHere": "سيتم عرض النص هنا.",
+    "callControls": {
+      "title": "عناصر التحكم في المكالمات",
+      "call": "اتصال",
+      "endCall": "إنهاء المكالمة وتوصيفها",
+      "hangup": "إنهاء وتوصيف",
+      "hold": "تعليق",
+      "transfer": "تحويل"
+    },
+    "askForHelp": "طلب المساعدة",
+    "helpRequestSent": "تم إرسال طلب المساعدة إلى المشرفين.",
+    "qualifications": "التوصيفات",
+    "selectQualification": "حدد توصيفًا...",
+    "activeCampaigns": "الحملات النشطة",
+    "noCampaigns": "لا توجد حملات معينة.",
+    "callNumber": "اتصل بـ {phoneName}",
+    "callbackModal": {
+      "title": "جدولة تذكير شخصي",
+      "label": "تاريخ ووقت التذكير",
+      "button": "جدولة وإنهاء",
+      "error": {
+        "noTime": "يرجى تحديد تاريخ ووقت.",
+        "pastTime": "لا يمكنك جدولة تذكير في الماضي."
+      }
+    }
+  },
   "qualificationsManager": {
     "title": "مجموعات التوصيف",
     "createGroup": "إنشاء مجموعة",
@@ -741,71 +811,6 @@
     "listen": "استماع",
     "noRecords": "لم يتم العثور على سجلات للمرشحات المحددة.",
     "pagination": "صفحة {currentPage} من {totalPages} ({totalRecords} سجلات)"
-  },
-  "agentView": {
-    "extension": "رقم داخلي {ext}",
-    "statuses": {
-      "available": "متاح",
-      "onCall": "في مكالمة",
-      "wrapUp": "بعد المكالمة",
-      "onPause": "في استراحة",
-      "ringing": "يرن",
-      "disconnected": "غير متصل",
-      "onHold": "في الانتظار",
-      "training": "تدريب"
-    },
-    "statusManager": {
-      "settings": "الإعدادات"
-    },
-    "messages": "الرسائل",
-    "clearAll": "مسح الكل",
-    "respond": "الرد",
-    "yourResponsePlaceholder": "ردك...",
-    "kpis": {
-      "title": "مؤشرات الأداء اليومية",
-      "totalConnectedTime": "إجمالي وقت الاتصال",
-      "callsHandled": "المكالمات المعالجة",
-      "positiveQuals": "التوصيفات الإيجابية",
-      "totalPauseTime": "إجمالي وقت التوقف المؤقت",
-      "pauseCount": "عدد التوقفات المؤقتة",
-      "totalTrainingTime": "إجمالي وقت التدريب",
-      "trainingCount": "عدد التدريبات"
-    },
-    "activeQuota": {
-      "title": "حصة نشطة: {field} {operator} \"{value}\"",
-      "cardTitle": "حصة نشطة"
-    },
-    "callbacks": {
-      "allCampaigns": "جميع الحملات"
-    },
-    "feedback": {
-      "activateCampaign": "يرجى تحديد حملة نشطة للاتصال.",
-      "noContactAvailable": "لا يوجد المزيد من جهات الاتصال المتاحة في {campaignName}.",
-      "errorFetchingContact": "خطأ في جلب جهة الاتصال التالية.",
-      "mustEndTask": "يجب أن تكون في حالة 'متاح' لبدء مهمة جديدة."
-    },
-    "searching": "البحث عن جهة الاتصال التالية...",
-    "waitingForCall": "في انتظار المكالمة التالية...",
-    "myCallbacks": "مكالماتي المعاودة",
-    "overdue": "متأخرة",
-    "noCallbacks": "لا توجد مكالمات معاودة مجدولة لهذا اليوم.",
-    "noScript": "لا يوجد نص مرتبط بهذه الحملة.",
-    "scriptWillBeHere": "سيتم عرض النص هنا.",
-    "callControls": {
-      "title": "عناصر التحكم في المكالمات",
-      "call": "اتصال",
-      "endCall": "إنهاء المكالمة وتوصيفها",
-      "hangup": "إنهاء وتوصيف",
-      "hold": "تعليق",
-      "transfer": "تحويل"
-    },
-    "askForHelp": "طلب المساعدة",
-    "helpRequestSent": "تم إرسال طلب المساعدة إلى المشرفين.",
-    "qualifications": "التوصيفات",
-    "selectQualification": "حدد توصيفًا...",
-    "activeCampaigns": "الحملات النشطة",
-    "noCampaigns": "لا توجد حملات معينة.",
-    "callNumber": "اتصل بـ {phoneName}"
   },
   "supervision": {
     "kpis": {

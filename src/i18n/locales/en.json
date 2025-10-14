@@ -389,6 +389,76 @@
       "cardTitle": "Active Quota"
     }
   },
+  "agentView": {
+    "extension": "Ext. {ext}",
+    "statuses": {
+      "available": "Available",
+      "onCall": "On Call",
+      "wrapUp": "Wrap-Up",
+      "onPause": "On Pause",
+      "ringing": "Ringing",
+      "disconnected": "Disconnected",
+      "onHold": "On Hold",
+      "training": "Training"
+    },
+    "statusManager": {
+      "settings": "Settings"
+    },
+    "messages": "Messages",
+    "clearAll": "Clear all",
+    "respond": "Respond",
+    "yourResponsePlaceholder": "Your response...",
+    "kpis": {
+      "title": "Daily KPIs",
+      "totalConnectedTime": "Total Connected Time",
+      "callsHandled": "Calls Handled",
+      "positiveQuals": "Positive Quals",
+      "totalPauseTime": "Total Pause Time",
+      "pauseCount": "Pause Count",
+      "totalTrainingTime": "Total Training Time",
+      "trainingCount": "Training Count"
+    },
+    "callbacks": {
+      "allCampaigns": "All campaigns"
+    },
+    "feedback": {
+      "activateCampaign": "Please select an active campaign for dialing.",
+      "noContactAvailable": "No more contacts available in {campaignName}.",
+      "errorFetchingContact": "Error fetching next contact.",
+      "mustEndTask": "You must be in 'Available' state to start a new task."
+    },
+    "searching": "Searching for next contact...",
+    "waitingForCall": "Waiting for next call...",
+    "myCallbacks": "My Callbacks",
+    "overdue": "OVERDUE",
+    "noCallbacks": "No callbacks scheduled for this day.",
+    "noScript": "No script associated with this campaign.",
+    "scriptWillBeHere": "The script will be displayed here.",
+    "callControls": {
+      "title": "Call Controls",
+      "call": "Call",
+      "endCall": "End Call & Qualify",
+      "hangup": "Hang Up & Qualify",
+      "hold": "Hold",
+      "transfer": "Transfer"
+    },
+    "askForHelp": "Ask for Help",
+    "helpRequestSent": "Help request sent to supervisors.",
+    "qualifications": "Qualifications",
+    "selectQualification": "Select a qualification...",
+    "activeCampaigns": "Active Campaigns",
+    "noCampaigns": "No assigned campaigns.",
+    "callNumber": "Call {phoneName}",
+    "callbackModal": {
+      "title": "Schedule Personal Callback",
+      "label": "Callback Date and Time",
+      "button": "Schedule and Finalize",
+      "error": {
+        "noTime": "Please select a date and time.",
+        "pastTime": "You cannot schedule a callback in the past."
+      }
+    }
+  },
   "qualificationsManager": {
     "title": "Qualification Groups",
     "createGroup": "Create Group",
@@ -741,71 +811,6 @@
     "listen": "Listen",
     "noRecords": "No records found for the selected filters.",
     "pagination": "Page {currentPage} of {totalPages} ({totalRecords} records)"
-  },
-  "agentView": {
-    "extension": "Ext. {ext}",
-    "statuses": {
-      "available": "Available",
-      "onCall": "On Call",
-      "wrapUp": "Wrap-Up",
-      "onPause": "On Pause",
-      "ringing": "Ringing",
-      "disconnected": "Disconnected",
-      "onHold": "On Hold",
-      "training": "Training"
-    },
-    "statusManager": {
-      "settings": "Settings"
-    },
-    "messages": "Messages",
-    "clearAll": "Clear all",
-    "respond": "Respond",
-    "yourResponsePlaceholder": "Your response...",
-    "kpis": {
-      "title": "Daily KPIs",
-      "totalConnectedTime": "Total Connected Time",
-      "callsHandled": "Calls Handled",
-      "positiveQuals": "Positive Quals",
-      "totalPauseTime": "Total Pause Time",
-      "pauseCount": "Pause Count",
-      "totalTrainingTime": "Total Training Time",
-      "trainingCount": "Training Count"
-    },
-    "activeQuota": {
-      "title": "Active Quota: {field} {operator} \"{value}\"",
-      "cardTitle": "Active Quota"
-    },
-    "callbacks": {
-      "allCampaigns": "All campaigns"
-    },
-    "feedback": {
-      "activateCampaign": "Please select an active campaign for dialing.",
-      "noContactAvailable": "No more contacts available in {campaignName}.",
-      "errorFetchingContact": "Error fetching next contact.",
-      "mustEndTask": "You must be in 'Available' state to start a new task."
-    },
-    "searching": "Searching for next contact...",
-    "waitingForCall": "Waiting for next call...",
-    "myCallbacks": "My Callbacks",
-    "overdue": "OVERDUE",
-    "noCallbacks": "No callbacks scheduled for this day.",
-    "noScript": "No script associated with this campaign.",
-    "scriptWillBeHere": "The script will be displayed here.",
-    "callControls": {
-      "title": "Call Controls",
-      "call": "Call",
-      "endCall": "End Call & Qualify",
-      "hangup": "Hang Up & Qualify",
-      "hold": "Hold",
-      "transfer": "Transfer"
-    },
-    "askForHelp": "Ask for Help",
-    "helpRequestSent": "Help request sent to supervisors.",
-    "qualifications": "Qualifications",
-    "selectQualification": "Select a qualification...",
-    "activeCampaigns": "Active Campaigns",
-    "noCampaigns": "No assigned campaigns.",
-    "callNumber": "Call {phoneName}"
   },
   "supervision": {
     "kpis": {

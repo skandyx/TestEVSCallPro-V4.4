@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useI18n } from '../src/i18n/index.tsx';
 
 interface CallbackSchedulerModalProps {
     isOpen: boolean;
@@ -7,6 +8,7 @@ interface CallbackSchedulerModalProps {
 }
 
 const CallbackSchedulerModal: React.FC<CallbackSchedulerModalProps> = ({ isOpen, onClose, onSchedule }) => {
+    const { t } = useI18n();
     // FIX: Create a stable minimum datetime to prevent validation errors on re-render.
     // This function is called only once to initialize the state.
     const getMinDateTime = () => {
@@ -29,12 +31,12 @@ const CallbackSchedulerModal: React.FC<CallbackSchedulerModalProps> = ({ isOpen,
 
     const handleSubmit = () => {
         if (!scheduledTime) {
-            alert("Veuillez sélectionner une date et une heure.");
+            alert(t('agentView.callbackModal.error.noTime'));
             return;
         }
         // Use the stable minDateTime for validation
         if (new Date(scheduledTime) < new Date(minDateTime)) {
-            alert("Vous ne pouvez pas planifier un rappel dans le passé.");
+            alert(t('agentView.callbackModal.error.pastTime'));
             return;
         }
         // Convert local time from input back to ISO string (UTC) for the backend
@@ -45,10 +47,10 @@ const CallbackSchedulerModal: React.FC<CallbackSchedulerModalProps> = ({ isOpen,
         <div className="fixed inset-0 bg-slate-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
             <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl w-full max-w-md">
                 <div className="p-6">
-                    <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">Planifier un Rappel Personnel</h3>
+                    <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">{t('agentView.callbackModal.title')}</h3>
                     <div className="mt-4 space-y-4">
                         <div>
-                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Date et Heure du Rappel</label>
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('agentView.callbackModal.label')}</label>
                             <input 
                                 type="datetime-local" 
                                 value={scheduledTime} 
@@ -60,8 +62,8 @@ const CallbackSchedulerModal: React.FC<CallbackSchedulerModalProps> = ({ isOpen,
                     </div>
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-900 p-3 flex justify-end gap-2 border-t dark:border-slate-700">
-                    <button onClick={onClose} className="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-md hover:bg-slate-50 dark:hover:bg-slate-600">Annuler</button>
-                    <button onClick={handleSubmit} className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Planifier et Finaliser</button>
+                    <button onClick={onClose} className="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-md hover:bg-slate-50 dark:hover:bg-slate-600">{t('common.cancel')}</button>
+                    <button onClick={handleSubmit} className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">{t('agentView.callbackModal.button')}</button>
                 </div>
             </div>
         </div>
