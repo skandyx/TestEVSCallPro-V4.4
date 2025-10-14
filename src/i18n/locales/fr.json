@@ -386,6 +386,10 @@
       "title": "Aperçu du script : {scriptName}",
       "currentPage": "Page actuelle : {pageName}",
       "backToEditor": "Retour à l'éditeur"
+    },
+    "activeQuota": {
+      "title": "Quota actif : {field} {operator} \"{value}\"",
+      "cardTitle": "Quota Actif"
     }
   },
   "qualificationsManager": {
@@ -741,330 +745,395 @@
     "noRecords": "Aucun enregistrement trouvé pour les filtres sélectionnés.",
     "pagination": "Page {currentPage} sur {totalPages} ({totalRecords} enregistrements)"
   },
+  "agentView": {
+    "extension": "Ext. {ext}",
+    "statuses": {
+      "available": "Available",
+      "onCall": "On Call",
+      "wrapUp": "Wrap-Up",
+      "onPause": "On Pause",
+      "ringing": "Ringing",
+      "disconnected": "Disconnected",
+      "onHold": "On Hold",
+      "training": "Training"
+    },
+    "statusManager": {
+      "settings": "Settings"
+    },
+    "messages": "Messages",
+    "clearAll": "Clear all",
+    "respond": "Respond",
+    "yourResponsePlaceholder": "Your response...",
+    "kpis": {
+      "title": "Daily KPIs",
+      "totalConnectedTime": "Total Connected Time",
+      "callsHandled": "Calls Handled",
+      "positiveQuals": "Positive Quals",
+      "totalPauseTime": "Total Pause Time",
+      "pauseCount": "Pause Count",
+      "totalTrainingTime": "Total Training Time",
+      "trainingCount": "Training Count"
+    },
+    "activeQuota": {
+      "title": "Active Quota: {field} {operator} \"{value}\"",
+      "cardTitle": "Active Quota"
+    },
+    "callbacks": {
+      "allCampaigns": "All campaigns"
+    },
+    "feedback": {
+      "activateCampaign": "Please select an active campaign for dialing.",
+      "noContactAvailable": "No more contacts available in {campaignName}.",
+      "errorFetchingContact": "Error fetching next contact.",
+      "mustEndTask": "You must be in 'Available' state to start a new task."
+    },
+    "searching": "Searching for next contact...",
+    "waitingForCall": "Waiting for next call...",
+    "myCallbacks": "My Callbacks",
+    "overdue": "OVERDUE",
+    "noCallbacks": "No callbacks scheduled for this day.",
+    "noScript": "No script associated with this campaign.",
+    "scriptWillBeHere": "The script will be displayed here.",
+    "callControls": {
+      "title": "Call Controls",
+      "call": "Call",
+      "endCall": "End Call & Qualify",
+      "hangup": "Hang Up & Qualify",
+      "hold": "Hold",
+      "transfer": "Transfer"
+    },
+    "askForHelp": "Ask for Help",
+    "helpRequestSent": "Help request sent to supervisors.",
+    "qualifications": "Qualifications",
+    "selectQualification": "Select a qualification...",
+    "activeCampaigns": "Active Campaigns",
+    "noCampaigns": "No assigned campaigns.",
+    "callNumber": "Call {phoneName}"
+  },
   "supervision": {
     "kpis": {
-      "agentsReady": "Agents en Attente",
-      "agentsOnCall": "Agents en Appel",
-      "agentsOnWrapup": "Agents en Post-Appel",
-      "agentsOnPause": "Agents en Pause",
-      "activeCalls": "Appels Actifs"
+      "agentsReady": "Agents Ready",
+      "agentsOnCall": "Agents On Call",
+      "agentsOnWrapup": "Agents On Wrapup",
+      "agentsOnPause": "Agents On Pause",
+      "activeCalls": "Active Calls"
     },
     "tabs": {
       "agents": "Agents",
-      "calls": "Appels",
-      "campaigns": "Campagnes",
-      "groups": "Supervision par Groupe",
-      "sites": "Supervision par Site"
+      "calls": "Calls",
+      "campaigns": "Campaigns",
+      "groups": "Group Supervision",
+      "sites": "Site Supervision"
     },
     "groupBoard": {
-      "noActiveAgents": "Aucun agent actif dans aucun groupe.",
+      "noActiveAgents": "No active agents in any groups.",
       "stats": {
-        "ready": "Attente",
-        "onCall": "Appel",
-        "onPause": "Pause",
-        "wrapUp": "Post-Appel"
+        "ready": "Ready",
+        "onCall": "On Call",
+        "onPause": "On Pause",
+        "wrapUp": "Wrap-Up"
       }
     },
     "siteBoard": {
-      "noSite": "Site non assigné",
-      "noActiveAgents": "Aucun agent actif sur aucun site."
+      "noSite": "Unassigned Site",
+      "noActiveAgents": "No active agents on any sites."
     },
     "agentBoard": {
       "headers": {
         "agent": "Agent",
-        "status": "Statut",
-        "duration": "Durée",
-        "calls": "Appels",
-        "avgHandleTime": "DMT",
+        "status": "Status",
+        "duration": "Duration",
+        "calls": "Calls",
+        "avgHandleTime": "AHT",
         "actions": "Actions"
       },
-      "noAgents": "Aucun agent à afficher.",
-      "confirmForceLogout": "Êtes-vous sûr de vouloir forcer la déconnexion de l'agent {agentName} ?",
+      "noAgents": "No agents to display.",
+      "confirmForceLogout": "Are you sure you want to force logout agent {agentName}?",
       "actions": {
-        "contact": "Contacter {agentName}",
-        "listen": "Écouter l'appel",
-        "barge": "Intervenir dans l'appel",
-        "coach": "Chuchoter à l'agent",
-        "forcePause": "Forcer la Pause",
-        "forceLogout": "Forcer la Déconnexion"
+        "contact": "Contact {agentName}",
+        "listen": "Listen to call",
+        "barge": "Barge into call",
+        "coach": "Coach agent",
+        "forcePause": "Force Pause",
+        "forceLogout": "Force Logout"
       }
     },
     "callBoard": {
-      "actionAlert": "Action (simulation) : {action} sur l'appel {callId}",
+      "actionAlert": "Action (simulation): {action} on call {callId}",
       "headers": {
-        "caller": "Appelant",
+        "caller": "Caller",
         "agent": "Agent",
-        "campaign": "Campagne",
-        "duration": "Durée",
+        "campaign": "Campaign",
+        "duration": "Duration",
         "actions": "Actions"
       },
-      "noActiveCalls": "Aucun appel actif pour le moment.",
+      "noActiveCalls": "No active calls at the moment.",
       "actions": {
-        "monitor": "Monitorer l'appel",
-        "transfer": "Transférer l'appel",
-        "hangup": "Raccrocher l'appel"
+        "monitor": "Monitor Call",
+        "transfer": "Transfer Call",
+        "hangup": "Hang Up Call"
       }
     },
     "campaignBoard": {
-      "actionAlert": "Action (simulation) : {action} sur la campagne {campaignName}",
-      "confirmStop": "Êtes-vous sûr de vouloir arrêter définitivement la campagne {campaignName} ?",
+      "actionAlert": "Action (simulation): {action} on campaign {campaignName}",
+      "confirmStop": "Are you sure you want to permanently stop the campaign {campaignName}?",
       "headers": {
-        "campaign": "Campagne",
-        "status": "Statut",
-        "offered": "Présentés",
-        "answered": "Répondus",
-        "hitRate": "Taux de Réussite",
+        "campaign": "Campaign",
+        "status": "Status",
+        "offered": "Offered",
+        "answered": "Answered",
+        "hitRate": "Hit Rate",
         "actions": "Actions"
       },
-      "noCampaigns": "Aucune campagne à superviser.",
+      "noCampaigns": "No campaigns to supervise.",
       "statuses": {
-        "running": "En cours",
-        "paused": "En pause",
-        "stopped": "Arrêtée"
+        "running": "Running",
+        "paused": "Paused",
+        "stopped": "Stopped"
       },
       "actions": {
-        "pause": "Mettre en pause",
-        "start": "Démarrer",
-        "boost": "Booster la campagne",
-        "stop": "Arrêter la campagne"
+        "pause": "Pause",
+        "start": "Start",
+        "boost": "Boost Campaign",
+        "stop": "Stop Campaign"
       }
     }
   },
   "importContactsModal": {
-    "title": "Importer des contacts pour : {campaignName}",
-    "uploadLabel": "Téléverser un fichier (CSV, TXT, XLSX)",
-    "downloadTemplate": "Télécharger un fichier modèle CSV",
-    "fileReadError": "Une erreur est survenue lors de la lecture du fichier. Assurez-vous qu'il est valide et non corrompu.",
-    "validationError": "Une erreur est survenue lors de la validation. Veuillez réessayer.",
-    "exportErrorReasonHeader": "Raison de l'Erreur",
-    "validating": "Validation en cours...",
-    "validateAndImport": "Valider et Importer",
-    "finish": "Terminer",
+    "title": "Import contacts for: {campaignName}",
+    "uploadLabel": "Upload a file (CSV, TXT, XLSX)",
+    "downloadTemplate": "Download a CSV template file",
+    "fileReadError": "An error occurred while reading the file. Make sure it is valid and not corrupted.",
+    "validationError": "An error occurred during validation. Please try again.",
+    "exportErrorReasonHeader": "Error Reason",
+    "validating": "Validating...",
+    "validateAndImport": "Validate and Import",
+    "finish": "Finish",
     "deduplication": {
-      "title": "Dédoublonnage",
-      "tipTitle": "Astuce :",
-      "tipContent": "Pour dédoublonner sur plus de champs (ex: email, ID client), assignez un script d'agent à cette campagne.",
-      "enableLabel": "Activer le dédoublonnage",
-      "enableHelp": "Vérifie les doublons dans le fichier et par rapport aux contacts existants.",
-      "criteriaLabel": "Critères de dédoublonnage (un ou plusieurs)"
+      "title": "Deduplication",
+      "tipTitle": "Tip:",
+      "tipContent": "To deduplicate on more fields (e.g., email, customer ID), assign an agent script to this campaign.",
+      "enableLabel": "Enable deduplication",
+      "enableHelp": "Checks for duplicates within the file and against existing contacts.",
+      "criteriaLabel": "Deduplication criteria (one or more)"
     },
     "mapping": {
-      "description": "Faites correspondre les colonnes de votre fichier (à droite) aux champs de destination (à gauche). Le numéro de téléphone est obligatoire.",
-      "ignoreField": "Ignorer ce champ"
+      "description": "Match the columns from your file (right) to the destination fields (left). Phone number is required.",
+      "ignoreField": "Ignore this field"
     },
     "summary": {
-      "title": "Résumé de l'Importation",
-      "rowsRead": "Lignes Lues",
-      "contactsImported": "Contacts Importés",
-      "rowsRejected": "Lignes Rejetées",
-      "rejectionDetails": "Détails des Rejets",
-      "exportRejected": "Exporter les Lignes Rejetées",
+      "title": "Import Summary",
+      "rowsRead": "Rows Read",
+      "contactsImported": "Contacts Imported",
+      "rowsRejected": "Rows Rejected",
+      "rejectionDetails": "Rejection Details",
+      "exportRejected": "Export Rejected Rows",
       "table": {
-        "row": "Ligne",
-        "reason": "Raison du rejet"
+        "row": "Row",
+        "reason": "Reason for rejection"
       }
     },
     "fields": {
-      "firstName": "Prénom",
-      "lastName": "Nom",
-      "phoneNumber": "Numéro de téléphone",
-      "postalCode": "Code Postal"
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phoneNumber": "Phone Number",
+      "postalCode": "Postal Code"
     }
   },
   "audioManager": {
-    "title": "Bibliothèque de Fichiers Audio",
-    "uploadFile": "Téléverser un fichier",
+    "title": "Audio File Library",
+    "uploadFile": "Upload File",
     "headers": {
-        "duration": "Durée",
-        "size": "Taille",
-        "uploadDate": "Date d'ajout"
+        "duration": "Duration",
+        "size": "Size",
+        "uploadDate": "Upload Date"
     },
-    "noFiles": "Aucun fichier audio n'a été téléversé.",
-    "saveSuccess": "Fichier enregistré avec succès.",
-    "saveError": "Erreur lors de l'enregistrement du fichier."
+    "noFiles": "No audio files have been uploaded.",
+    "saveSuccess": "File saved successfully.",
+    "saveError": "Error while saving the file."
   },
   "audioFileModal": {
-      "editTitle": "Modifier le fichier audio",
-      "uploadTitle": "Téléverser un fichier audio",
-      "fileLabel": "Fichier (MP3, WAV)",
-      "clickToUpload": "Cliquez pour téléverser",
-      "processing": "Traitement en cours...",
-      "displayName": "Nom d'affichage",
-      "loading": "Chargement...",
-      "selectFileError": "Veuillez sélectionner un fichier."
+      "editTitle": "Edit Audio File",
+      "uploadTitle": "Upload Audio File",
+      "fileLabel": "File (MP3, WAV)",
+      "clickToUpload": "Click to upload",
+      "processing": "Processing...",
+      "displayName": "Display Name",
+      "loading": "Loading...",
+      "selectFileError": "Please select a file."
   },
   "recordsManager": {
       "filters": {
           "date": "Date",
-          "allAgents": "Tous les agents",
-          "allCampaigns": "Toutes les campagnes"
+          "allAgents": "All agents",
+          "allCampaigns": "All campaigns"
       },
       "headers": {
-          "dateTime": "Date & Heure",
-          "calledNumber": "Numéro appelé",
-          "duration": "Durée"
+          "dateTime": "Date & Time",
+          "calledNumber": "Called Number",
+          "duration": "Duration"
       },
-      "inbound": "Entrant",
-      "download": "Télécharger",
-      "noRecords": "Aucun enregistrement trouvé pour les filtres sélectionnés.",
-      "pagination": "Page {currentPage} sur {totalPages}"
+      "inbound": "Inbound",
+      "download": "Download",
+      "noRecords": "No records found for the selected filters.",
+      "pagination": "Page {currentPage} of {totalPages}"
   },
    "sessionViewer": {
     "filters": {
-      "startDate": "Date de début",
-      "endDate": "Date de fin",
+      "startDate": "Start Date",
+      "endDate": "End Date",
       "agent": "Agent",
-      "allAgents": "Tous les Agents",
-      "group": "Groupe",
-      "allGroups": "Tous les Groupes"
+      "allAgents": "All Agents",
+      "group": "Group",
+      "allGroups": "All Groups"
     },
     "headers": {
       "agent": "Agent",
-      "loginTime": "Heure de connexion",
-      "logoutTime": "Heure de déconnexion",
-      "duration": "Durée",
-      "status": "Statut"
+      "loginTime": "Login Time",
+      "logoutTime": "Logout Time",
+      "duration": "Duration",
+      "status": "Status"
     },
-    "noSessions": "Aucune session trouvée pour les filtres sélectionnés.",
-    "activeNow": "Actif"
+    "noSessions": "No sessions found for the selected filters.",
+    "activeNow": "Active"
   },
   "systemConnection": {
     "db": {
-      "title": "Base de Données (PostgreSQL)",
-      "host": "Hôte",
+      "title": "Database (PostgreSQL)",
+      "host": "Host",
       "port": "Port",
-      "user": "Utilisateur",
-      "password": "Mot de passe",
-      "database": "Nom de la base de données",
-      "testButton": "Tester la Connexion",
-      "testSuccess": "Connexion à la base de données réussie !",
-      "testFailure": "Échec de la connexion à la base de données."
+      "user": "User",
+      "password": "Password",
+      "database": "Database Name",
+      "testButton": "Test Connection",
+      "testSuccess": "Database connection successful!",
+      "testFailure": "Database connection failed."
     },
     "asterisk": {
-      "title": "Téléphonie (Asterisk)",
+      "title": "Telephony (Asterisk)",
       "ami": {
-        "title": "Interface de Management (AMI)",
-        "host": "Hôte AMI",
-        "port": "Port AMI",
-        "user": "Utilisateur AMI",
-        "password": "Mot de passe AMI"
+        "title": "Management Interface (AMI)",
+        "host": "AMI Host",
+        "port": "AMI Port",
+        "user": "AMI User",
+        "password": "AMI Password"
       },
       "agi": {
-        "title": "Interface de Passerelle (AGI)",
-        "port": "Port AGI du Backend",
-        "help": "Ce port doit correspondre à celui configuré dans le fichier '.env' du backend et dans 'extensions.conf' d'Asterisk."
+        "title": "Gateway Interface (AGI)",
+        "port": "Backend AGI Port",
+        "help": "This port must match the one configured in the backend's '.env' file and in Asterisk's 'extensions.conf'."
       },
-      "testButton": "Tester la Connexion AMI",
-      "testSuccess": "Connexion AMI réussie !",
-      "testFailure": "Échec de la connexion AMI."
+      "testButton": "Test AMI Connection",
+      "testSuccess": "AMI connection successful!",
+      "testFailure": "AMI connection failed."
     },
-    "passwordPlaceholder": "Laisser vide pour ne pas changer",
-    "warning": "La modification de ces paramètres peut rendre l'application indisponible. Un redémarrage du serveur backend est nécessaire pour appliquer les changements.",
-    "saveButton": "Enregistrer les Modifications",
-    "saveSuccess": "Paramètres enregistrés. Veuillez redémarrer le serveur backend pour appliquer les changements."
+    "passwordPlaceholder": "Leave blank to keep unchanged",
+    "warning": "Changing these settings can make the application unavailable. A restart of the backend server is required to apply changes.",
+    "saveButton": "Save Changes",
+    "saveSuccess": "Settings saved. Please restart the backend server to apply the changes."
   },
   "databaseManager": {
-    "attention": "Attention : L'interaction directe avec la base de données est une opération à haut risque. Des requêtes incorrectes peuvent entraîner la corruption ou la perte de données. Cet outil est réservé aux SuperAdmins pour la maintenance et le dépannage uniquement.",
-    "schema": "Schéma de la Base de Données",
-    "predefinedQueries": "Requêtes Prédéfinies",
+    "attention": "Attention: Direct interaction with the database is a high-risk operation. Incorrect queries can lead to data corruption or loss. This tool is reserved for SuperAdmins for maintenance and troubleshooting purposes only.",
+    "schema": "Database Schema",
+    "predefinedQueries": "Predefined Queries",
     "queries": {
-      "listUsers": "Lister les Utilisateurs",
-      "listActiveCampaigns": "Lister les Campagnes Actives",
-      "countContactsByCampaign": "Compter les Contacts par Campagne",
-      "viewLast20Contacts": "Voir les 20 Derniers Contacts",
-      "listScripts": "Lister les Scripts"
+      "listUsers": "List Users",
+      "listActiveCampaigns": "List Active Campaigns",
+      "countContactsByCampaign": "Count Contacts by Campaign",
+      "viewLast20Contacts": "View Last 20 Contacts",
+      "listScripts": "List Scripts"
     },
-    "readOnlyMode": "Mode lecture seule",
-    "execute": "Exécuter",
-    "executing": "Exécution...",
-    "resultsPlaceholder": "Les résultats de la requête s'afficheront ici.",
-    "resultsCount": "{count} ligne(s) retournée(s).",
-    "schemaLoadError": "Échec du chargement du schéma de la base de données.",
-    "queryError": "Une erreur est survenue lors de l'exécution de la requête.",
-    "querySuccessNoRows": "La requête a été exécutée avec succès mais n'a retourné aucune ligne."
+    "readOnlyMode": "Read-only mode",
+    "execute": "Execute",
+    "executing": "Executing...",
+    "resultsPlaceholder": "Query results will be displayed here.",
+    "resultsCount": "{count} row(s) returned.",
+    "schemaLoadError": "Failed to load the database schema.",
+    "queryError": "An error occurred while executing the query.",
+    "querySuccessNoRows": "The query was executed successfully but returned no rows."
   },
    "apiDocs": {
-    "description": "Ceci est la documentation interactive de l'API REST EVSCallPro. Vous pouvez explorer les points d'accès, voir les structures de données attendues, et même tester les appels API directement depuis cette interface.",
-    "iframeTitle": "Documentation API"
+    "description": "This is the interactive documentation for the EVSCallPro REST API. You can explore endpoints, see expected data structures, and even test API calls directly from this interface.",
+    "iframeTitle": "API Documentation"
   },
   "monitoring": {
-    "title": "Monitoring Système",
+    "title": "System Monitoring",
     "health": {
-      "up": "Opérationnel",
-      "degraded": "Dégradé",
-      "down": "En panne"
+      "up": "Operational",
+      "degraded": "Degraded",
+      "down": "Down"
     },
     "kpis": {
-      "cpu": "Charge CPU",
-      "ram": "Utilisation RAM",
-      "disk": "Utilisation Disque",
-      "recordings": "Enregistrements",
-      "totalSize": "Taille totale",
-      "latency": "Latence API"
+      "cpu": "CPU Load",
+      "ram": "RAM Usage",
+      "disk": "Disk Usage",
+      "recordings": "Recordings",
+      "totalSize": "Total size",
+      "latency": "API Latency"
     },
     "logs": {
-      "title": "Journaux Système",
+      "title": "System Logs",
       "tabs": {
-        "system": "Système",
+        "system": "System",
         "ami": "AMI",
-        "security": "Sécurité"
+        "security": "Security"
       },
-      "noLogs": "Aucun journal à afficher."
+      "noLogs": "No logs to display."
     },
-    "purgeLogs": "Purger les Journaux",
+    "purgeLogs": "Purge Logs",
     "connectivity": {
-      "title": "Connectivité des Services",
-      "sitePrefix": "Site : ",
-      "success": "Succès",
-      "failure": "Échec",
-      "testing": "Test en cours...",
-      "idle": "Inactif",
-      "testButton": "Tester"
+      "title": "Service Connectivity",
+      "sitePrefix": "Site: ",
+      "success": "Success",
+      "failure": "Failure",
+      "testing": "Testing...",
+      "idle": "Idle",
+      "testButton": "Test"
     }
   },
   "siteManager": {
     "title": "Sites",
-    "addSite": "Ajouter un Site",
+    "addSite": "Add a Site",
     "headers": {
-      "name": "Nom",
-      "gatewayIp": "IP Passerelle",
+      "name": "Name",
+      "gatewayIp": "Gateway IP",
       "extensions": "Extensions",
-      "physicalExtensions": "Extensions Physiques",
-      "directMedia": "Média Direct"
+      "physicalExtensions": "Physical Extensions",
+      "directMedia": "Direct Media"
     },
     "modal": {
-      "editTitle": "Modifier le Site",
-      "newTitle": "Nouveau Site",
-      "siteName": "Nom du Site",
-      "gatewayIpLabel": "Adresse IP de la passerelle (Yeastar)",
+      "editTitle": "Edit Site",
+      "newTitle": "New Site",
+      "siteName": "Site Name",
+      "gatewayIpLabel": "Gateway IP Address (Yeastar)",
       "gatewayIpPlaceholder": "Ex: 10.1.0.254",
-      "physicalExtensionsLabel": "Extensions physiques",
+      "physicalExtensionsLabel": "Physical Extensions",
       "extensionPlaceholder": "Ex: 201"
     },
-    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce site ? Les utilisateurs assignés n'auront plus de site.",
-    "deleteDisabledTooltip": "Impossible de supprimer un site avec des agents assignés.",
-    "backToList": "Retour à la liste des sites",
+    "deleteConfirm": "Are you sure you want to delete this site? Assigned users will no longer have a site.",
+    "deleteDisabledTooltip": "Cannot delete a site with assigned agents.",
+    "backToList": "Back to sites list",
     "detail": {
-      "description": "Gérer les extensions physiques pour ce site.",
-      "searchPlaceholder": "Rechercher une extension...",
-      "bulkGenerate": "Générer en Masse",
-      "addExtension": "Ajouter une Extension",
-      "confirmDeleteExtension": "Êtes-vous sûr de vouloir supprimer l'extension {number} ?",
+      "description": "Manage physical extensions for this site.",
+      "searchPlaceholder": "Search for an extension...",
+      "bulkGenerate": "Bulk Generate",
+      "addExtension": "Add Extension",
+      "confirmDeleteExtension": "Are you sure you want to delete extension {number}?",
       "addModal": {
-        "title": "Ajouter une Extension",
-        "numberLabel": "Numéro d'extension",
-        "duplicateError": "Cette extension existe déjà."
+        "title": "Add Extension",
+        "numberLabel": "Extension number",
+        "duplicateError": "This extension already exists."
       },
       "generateModal": {
-        "title": "Générer une Plage d'Extensions",
-        "from": "De",
-        "to": "À",
-        "rangeError": "La valeur 'De' doit être inférieure à la valeur 'À'.",
-        "limitError": "Vous ne pouvez générer que 100 extensions à la fois.",
-        "generatedMessage": "{count} extension(s) ajoutée(s)."
+        "title": "Generate Extension Range",
+        "from": "From",
+        "to": "To",
+        "rangeError": "'From' value must be less than 'To' value.",
+        "limitError": "You can only generate up to 100 extensions at a time.",
+        "generatedMessage": "{count} extension(s) added."
       },
-      "deleteSelected": "Supprimer la sélection ({count})",
-      "confirmDeleteSelected": "Êtes-vous sûr de vouloir supprimer les {count} extensions sélectionnées ?"
+      "deleteSelected": "Delete Selection ({count})",
+      "confirmDeleteSelected": "Are you sure you want to delete the {count} selected extensions?"
     }
   }
 }

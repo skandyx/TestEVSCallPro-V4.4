@@ -111,7 +111,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
 
     const { 
         currentUser, campaigns, qualifications, savedScripts, contactNotes, users, personalCallbacks,
-        agentStates, logout, fetchApplicationData, updateContact, theme, setTheme, changeAgentStatus
+        agentStates, logout, fetchApplicationData, updateContact, theme, setTheme, changeAgentStatus, callHistory
     } = useStore(state => ({
         currentUser: state.currentUser!,
         campaigns: state.campaigns,
@@ -127,6 +127,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
         theme: state.theme,
         setTheme: state.setTheme,
         changeAgentStatus: state.changeAgentStatus,
+        callHistory: state.callHistory,
     }));
     
     const agentState: AgentState | undefined = useMemo(() => agentStates.find(a => a.id === currentUser.id), [currentUser, agentStates]);
@@ -161,6 +162,22 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
     
     const assignedCampaigns = useMemo(() => currentUser.campaignIds.map(id => campaigns.find(c => c.id === id && c.isActive)).filter((c): c is Campaign => !!c), [currentUser.campaignIds, campaigns]);
     
+    const positiveQualificationsToday = useMemo(() => {
+        if (!callHistory || !qualifications || !currentUser) return 0;
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        return callHistory.filter(call => {
+            if (call.agentId !== currentUser.id) return false;
+            const callDate = new Date(call.startTime);
+            if (callDate < today) return false;
+            
+            const qual = qualifications.find(q => q.id === call.qualificationId);
+            return qual?.type === 'positive';
+        }).length;
+    }, [callHistory, qualifications, currentUser.id]);
+
     const mySortedCallbacks = useMemo(() => {
         if (!personalCallbacks) return [];
     
@@ -576,7 +593,16 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
             
             <main className="flex-1 grid grid-cols-12 gap-4 p-4 overflow-hidden">
                 <div className="col-span-3 flex flex-col gap-4">
-                     <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border dark:border-slate-700 flex flex-col min-h-0"><h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 border-b dark:border-slate-600 pb-2 mb-4">{t('agentView.kpis.title')}</h2><div className="mb-4"><h3 className="text-base font-semibold text-slate-600 dark:text-slate-300">{t('agentView.kpis.title')}</h3>{agentState ? (<div className="grid grid-cols-2 gap-2 mt-2"><div className="col-span-2"><KpiCard title={t('agentView.kpis.totalConnectedTime')} value={formatTimer(agentState.totalConnectedTime)} /></div><KpiCard title={t('agentView.kpis.callsHandled')} value={agentState.callsHandledToday} /><KpiCard title="DMC" value={formatTimer(agentState.averageTalkTime)} /><KpiCard title={t('agentView.kpis.totalPauseTime')} value={formatTimer(agentState.totalPauseTime)} /><KpiCard title={t('agentView.kpis.pauseCount')} value={agentState.pauseCount} /><KpiCard title={t('agentView.kpis.totalTrainingTime')} value={formatTimer(agentState.totalTrainingTime)} /><KpiCard title={t('agentView.kpis.trainingCount')} value={agentState.trainingCount} /></div>) : <p className="text-xs text-slate-400 italic mt-1">Chargement...</p>}</div>{(!currentContact && status === 'En Attente') && (<div className="flex-1 mt-auto pt-4 border-t dark:border-slate-600"><div className="h-full flex flex-col items-center justify-center text-center">{feedbackMessage ? (<p className="text-amber-600 font-semibold">{feedbackMessage}</p>) : (<><svg className="animate-spin h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p className="text-slate-500 dark:text-slate-400 mt-4">{isLoadingNextContact ? t('agentView.searching') : t('agentView.waitingForCall')}</p></>)}</div></div>)}</div>
+                     <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border dark:border-slate-700 flex flex-col min-h-0"><h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 border-b dark:border-slate-600 pb-2 mb-4">{t('agentView.kpis.title')}</h2><div className="mb-4"><h3 className="text-base font-semibold text-slate-600 dark:text-slate-300">{t('agentView.kpis.title')}</h3>{agentState ? (<div className="grid grid-cols-2 gap-2 mt-2">
+                        <KpiCard title={t('agentView.kpis.totalConnectedTime')} value={formatTimer(agentState.totalConnectedTime)} />
+                        <KpiCard title="DMC" value={formatTimer(agentState.averageTalkTime)} />
+                        <KpiCard title={t('agentView.kpis.callsHandled')} value={agentState.callsHandledToday} />
+                        <KpiCard title={t('agentView.kpis.positiveQuals')} value={positiveQualificationsToday} />
+                        <KpiCard title={t('agentView.kpis.totalPauseTime')} value={formatTimer(agentState.totalPauseTime)} />
+                        <KpiCard title={t('agentView.kpis.pauseCount')} value={agentState.pauseCount} />
+                        <KpiCard title={t('agentView.kpis.totalTrainingTime')} value={formatTimer(agentState.totalTrainingTime)} />
+                        <KpiCard title={t('agentView.kpis.trainingCount')} value={agentState.trainingCount} />
+                    </div>) : <p className="text-xs text-slate-400 italic mt-1">Chargement...</p>}</div>{(!currentContact && status === 'En Attente') && (<div className="flex-1 mt-auto pt-4 border-t dark:border-slate-600"><div className="h-full flex flex-col items-center justify-center text-center">{feedbackMessage ? (<p className="text-amber-600 font-semibold">{feedbackMessage}</p>) : (<><svg className="animate-spin h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p className="text-slate-500 dark:text-slate-400 mt-4">{isLoadingNextContact ? t('agentView.searching') : t('agentView.waitingForCall')}</p></>)}</div></div>)}</div>
                     <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border dark:border-slate-700 flex-1 flex flex-col min-h-0"><div className="border-b dark:border-slate-600 pb-2 mb-2 flex items-center justify-between flex-shrink-0"><h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2"><span className="material-symbols-outlined text-2xl text-primary">phone_callback</span>{t('agentView.myCallbacks')}</h2><div className="flex items-center gap-2"><button onClick={() => handleCallbackDateChange(-1)} className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"><ArrowLeftIcon className="w-4 h-4"/></button><span className="font-semibold text-sm">{callbackViewDate.toLocaleDateString(language, { weekday: 'long', day: 'numeric', month: 'long' })}</span><button onClick={() => handleCallbackDateChange(1)} className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"><ArrowRightIcon className="w-4 h-4"/></button></div><select value={callbackCampaignFilter} onChange={e => setCallbackCampaignFilter(e.target.value)} className="text-sm p-1 border bg-white dark:bg-slate-700 dark:border-slate-600 rounded-md"><option value="all">{t('agentView.callbacks.allCampaigns')}</option>{assignedCampaigns.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div><div className="flex-1 overflow-y-auto pr-2 space-y-2 text-base">
                         {mySortedCallbacks.length > 0 ? (
                             mySortedCallbacks.map(cb => {

@@ -383,6 +383,10 @@
       "title": "Script Preview: {scriptName}",
       "currentPage": "Current Page: {pageName}",
       "backToEditor": "Back to Editor"
+    },
+    "activeQuota": {
+      "title": "Active Quota: {field} {operator} \"{value}\"",
+      "cardTitle": "Active Quota"
     }
   },
   "qualificationsManager": {
@@ -761,6 +765,7 @@
       "title": "Daily KPIs",
       "totalConnectedTime": "Total Connected Time",
       "callsHandled": "Calls Handled",
+      "positiveQuals": "Positive Quals",
       "totalPauseTime": "Total Pause Time",
       "pauseCount": "Pause Count",
       "totalTrainingTime": "Total Training Time",
