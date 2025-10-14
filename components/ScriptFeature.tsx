@@ -5,7 +5,6 @@ import type { Feature, SavedScript } from '../types.ts';
 import { useStore } from '../src/store/useStore.ts';
 import { useI18n } from '../src/i18n/index.tsx';
 import ScriptBuilder from './ScriptBuilder.tsx';
-import { PlusIcon, EditIcon, TrashIcon, DuplicateIcon } from './Icons.tsx';
 import AgentPreview from './AgentPreview.tsx';
 
 const ScriptFeature: React.FC<{ feature: Feature }> = ({ feature }) => {
@@ -71,7 +70,7 @@ const ScriptFeature: React.FC<{ feature: Feature }> = ({ feature }) => {
                     <p className="mt-2 text-lg text-slate-600 dark:text-slate-400">{t(feature.descriptionKey)}</p>
                 </div>
                 <button onClick={handleAddNew} className="bg-primary hover:bg-primary-hover text-primary-text font-bold py-2 px-4 rounded-lg shadow-md inline-flex items-center">
-                    <PlusIcon className="w-5 h-5 mr-2" />
+                    <span className="material-symbols-outlined mr-2">add</span>
                     {t('scriptFeature.addScript')}
                 </button>
             </header>
@@ -93,15 +92,15 @@ const ScriptFeature: React.FC<{ feature: Feature }> = ({ feature }) => {
                                     )}
                                 </div>
                                 <div className="space-x-2">
-                                    <button onClick={() => handleDuplicate(script.id)} title={t('common.duplicate')} className="p-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"><DuplicateIcon className="w-5 h-5"/></button>
-                                    <button onClick={() => handleEdit(script)} title={t('common.edit')} className="p-2 text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400"><EditIcon className="w-5 h-5"/></button>
+                                    <button onClick={() => handleDuplicate(script.id)} title={t('common.duplicate')} className="p-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"><span className="material-symbols-outlined">content_copy</span></button>
+                                    <button onClick={() => handleEdit(script)} title={t('common.edit')} className="p-2 text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400"><span className="material-symbols-outlined">edit</span></button>
                                     <button 
                                         onClick={() => handleDelete(script.id)} 
                                         title={isAssigned ? t('scriptFeature.deleteDisabledTooltip') : t('common.delete')} 
                                         className={`p-2 text-slate-500 ${isAssigned ? 'cursor-not-allowed text-slate-300 dark:text-slate-600' : 'hover:text-red-600 dark:hover:text-red-400'}`}
                                         disabled={isAssigned}
                                     >
-                                        <TrashIcon className="w-5 h-5"/>
+                                        <span className="material-symbols-outlined">delete</span>
                                     </button>
                                 </div>
                             </li>

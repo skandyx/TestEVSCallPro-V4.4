@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import type { AgentState, User, AgentStatus } from '../types.ts';
-import { MicrophoneIcon, PhoneArrowUpRightIcon, AcademicCapIcon, PauseIcon, TrashIcon, UserCircleIcon, EnvelopeIcon } from './Icons.tsx';
 import { useI18n } from '../src/i18n/index.tsx';
 
 interface AgentBoardProps {
@@ -108,7 +107,7 @@ const AgentBoard: React.FC<AgentBoardProps> = ({ agents, currentUser, apiCall, o
                                         {agent.profilePictureUrl ? (
                                             <img src={agent.profilePictureUrl} alt="Avatar" className="w-10 h-10 rounded-full object-cover" />
                                         ) : (
-                                            <UserCircleIcon className="w-10 h-10 text-slate-400" />
+                                            <span className="material-symbols-outlined text-4xl text-slate-400">account_circle</span>
                                         )}
                                         <span className={`absolute top-0 right-0 block h-3.5 w-3.5 rounded-full border-2 border-white dark:border-slate-800 ${getStatusLedColor(agent.status)}`}></span>
                                     </div>
@@ -127,12 +126,10 @@ const AgentBoard: React.FC<AgentBoardProps> = ({ agents, currentUser, apiCall, o
                             <td className="px-4 py-3 text-slate-600 dark:text-slate-400">{agent.callsHandledToday}</td>
                             <td className="px-4 py-3 text-slate-600 dark:text-slate-400 font-mono">{formatDuration(agent.averageHandlingTime)}</td>
                             <td className="px-4 py-3 text-center space-x-1">
-                                <button onClick={() => handleContactAgent(agent.id, agentFullName)} disabled={!hasPermission || agent.status === 'Déconnecté'} title={t('supervision.agentBoard.actions.contact', { agentName: agentFullName })} className="p-1 rounded-md text-slate-500 hover:bg-slate-100 disabled:text-slate-300 disabled:cursor-not-allowed dark:hover:bg-slate-700"><EnvelopeIcon className="w-4 h-4"/></button>
-                                <button onClick={() => handleSupervisorAction('listen', agent.id)} disabled={!canCoach} title={t('supervision.agentBoard.actions.listen')} className="p-1 rounded-md text-slate-500 hover:bg-slate-100 disabled:text-slate-300 disabled:cursor-not-allowed dark:hover:bg-slate-700"><MicrophoneIcon className="w-4 h-4"/></button>
-                                <button onClick={() => handleSupervisorAction('barge', agent.id)} disabled={!canCoach} title={t('supervision.agentBoard.actions.barge')} className="p-1 rounded-md text-slate-500 hover:bg-slate-100 disabled:text-slate-300 disabled:cursor-not-allowed dark:hover:bg-slate-700"><PhoneArrowUpRightIcon className="w-4 h-4"/></button>
-                                <button onClick={() => handleSupervisorAction('coach', agent.id)} disabled={!canCoach} title={t('supervision.agentBoard.actions.coach')} className="p-1 rounded-md text-slate-500 hover:bg-slate-100 disabled:text-slate-300 disabled:cursor-not-allowed dark:hover:bg-slate-700"><AcademicCapIcon className="w-4 h-4"/></button>
-                                <button onClick={() => handleSupervisorAction('force-pause', agent.id)} disabled={!canForcePause || agent.status === 'Déconnecté'} title={t('supervision.agentBoard.actions.forcePause')} className="p-1 rounded-md text-slate-500 hover:bg-slate-100 disabled:text-slate-300 disabled:cursor-not-allowed dark:hover:bg-slate-700"><PauseIcon className="w-4 h-4"/></button>
-                                <button onClick={() => handleForceLogout(agent.id, agentFullName)} disabled={!hasPermission || agent.status === 'Déconnecté'} title={t('supervision.agentBoard.actions.forceLogout')} className="p-1 rounded-md text-red-500 hover:bg-red-100 disabled:text-red-200 disabled:cursor-not-allowed dark:hover:bg-red-900/50"><TrashIcon className="w-4 h-4"/></button>
+                                <button onClick={() => handleContactAgent(agent.id, agentFullName)} disabled={!hasPermission || agent.status === 'Déconnecté'} title={t('supervision.agentBoard.actions.contact', { agentName: agentFullName })} className="p-1 rounded-md text-slate-500 hover:bg-slate-100 disabled:text-slate-300 disabled:cursor-not-allowed dark:hover:bg-slate-700"><span className="material-symbols-outlined text-base">mail</span></button>
+                                <button onClick={() => handleSupervisorAction('listen', agent.id)} disabled={!canCoach} title={t('supervision.agentBoard.actions.listen')} className="p-1 rounded-md text-slate-500 hover:bg-slate-100 disabled:text-slate-300 disabled:cursor-not-allowed dark:hover:bg-slate-700"><span className="material-symbols-outlined text-base">hearing</span></button>
+                                <button onClick={() => handleSupervisorAction('coach', agent.id)} disabled={!canCoach} title={t('supervision.agentBoard.actions.coach')} className="p-1 rounded-md text-slate-500 hover:bg-slate-100 disabled:text-slate-300 disabled:cursor-not-allowed dark:hover:bg-slate-700"><span className="material-symbols-outlined text-base">record_voice_over</span></button>
+                                <button onClick={() => handleForceLogout(agent.id, agentFullName)} disabled={!hasPermission || agent.status === 'Déconnecté'} title={t('supervision.agentBoard.actions.forceLogout')} className="p-1 rounded-md text-red-500 hover:bg-red-100 disabled:text-red-300 disabled:cursor-not-allowed dark:hover:bg-red-900/50"><span className="material-symbols-outlined text-base">logout</span></button>
                             </td>
                         </tr>
                         )
@@ -149,4 +146,5 @@ const AgentBoard: React.FC<AgentBoardProps> = ({ agents, currentUser, apiCall, o
     );
 };
 
+// FIX: Added default export to resolve module import error in SupervisionDashboard.tsx.
 export default AgentBoard;

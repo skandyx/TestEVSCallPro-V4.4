@@ -2,13 +2,6 @@
 
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import type { SavedScript, Page, ScriptBlock, BlockType } from '../types.ts';
-import {
-    PlusIcon, TrashIcon, EyeIcon, SettingsIcon, PaletteIcon, XMarkIcon, ArrowLeftIcon, ArrowRightIcon,
-    TextBlockIcon, InputIcon, RadioIcon, CheckboxIcon, DropdownIcon, WebBrowserIcon, DateIcon,
-    PhoneIcon, EmailIcon, TimeIcon, ButtonIcon, LabelIcon, GroupIcon, MinusIcon, ResetViewIcon,
-    AlignLeftIcon, AlignCenterIcon, AlignRightIcon, TextareaIcon, UserJourneyIcon as HistoryIcon,
-    ImageIcon, ArrowUpTrayIcon as UploadIcon
-} from './Icons.tsx';
 import { useI18n } from '../src/i18n/index.tsx';
 
 // Props definition
@@ -68,24 +61,24 @@ const ScriptBuilder: React.FC<ScriptBuilderProps> = ({ script, onSave, onClose, 
     const panStart = useRef({ x: 0, y: 0 });
 
     const BLOCK_PALETTE = useMemo(() => [
-        { type: 'group' as BlockType, icon: GroupIcon, label: t('scriptBuilder.palette.group'), default: { width: 400, height: 250, backgroundColor: 'rgba(226, 232, 240, 0.5)', content: {} } },
+        { type: 'group' as BlockType, icon: 'layers', label: t('scriptBuilder.palette.group'), default: { width: 400, height: 250, backgroundColor: 'rgba(226, 232, 240, 0.5)', content: {} } },
         // FIX: Added 'as const' to ensure TypeScript infers a literal type for 'textAlign', resolving a type error.
-        { type: 'label' as BlockType, icon: LabelIcon, label: t('scriptBuilder.palette.label'), default: { width: 300, height: 40, content: { text: t('scriptBuilder.defaults.label') }, fontSize: 18, textAlign: 'left' as const } },
+        { type: 'label' as BlockType, icon: 'label', label: t('scriptBuilder.palette.label'), default: { width: 300, height: 40, content: { text: t('scriptBuilder.defaults.label') }, fontSize: 18, textAlign: 'left' as const } },
         // FIX: Added 'as const' to ensure TypeScript infers a literal type for 'textAlign', resolving a type error.
-        { type: 'text' as BlockType, icon: TextBlockIcon, label: t('scriptBuilder.palette.text'), default: { width: 300, height: 80, content: { text: t('scriptBuilder.defaults.text') }, textAlign: 'left' as const } },
-        { type: 'input' as BlockType, icon: InputIcon, label: t('scriptBuilder.palette.input'), default: { width: 300, height: 70, content: { placeholder: t('scriptBuilder.defaults.placeholder'), format: 'text' }, readOnly: false } },
-        { type: 'textarea' as BlockType, icon: TextareaIcon, label: t('scriptBuilder.palette.textarea'), default: { width: 300, height: 120, content: { placeholder: t('scriptBuilder.defaults.placeholder') }, readOnly: false } },
-        { type: 'email' as BlockType, icon: EmailIcon, label: t('scriptBuilder.palette.email'), default: { width: 300, height: 70, content: { placeholder: t('scriptBuilder.defaults.emailPlaceholder') }, readOnly: false } },
-        { type: 'phone' as BlockType, icon: PhoneIcon, label: t('scriptBuilder.palette.phone'), default: { width: 300, height: 70, content: { placeholder: t('scriptBuilder.defaults.phonePlaceholder') }, readOnly: false } },
-        { type: 'date' as BlockType, icon: DateIcon, label: t('scriptBuilder.palette.date'), default: { width: 200, height: 70, content: {}, readOnly: false } },
-        { type: 'time' as BlockType, icon: TimeIcon, label: t('scriptBuilder.palette.time'), default: { width: 200, height: 70, content: {}, readOnly: false } },
-        { type: 'radio' as BlockType, icon: RadioIcon, label: t('scriptBuilder.palette.radio'), default: { width: 300, height: 120, content: { question: t('scriptBuilder.defaults.question'), options: [t('scriptBuilder.defaults.radioOption1'), t('scriptBuilder.defaults.radioOption2')] }, readOnly: false } },
-        { type: 'checkbox' as BlockType, icon: CheckboxIcon, label: t('scriptBuilder.palette.checkbox'), default: { width: 300, height: 120, content: { question: t('scriptBuilder.defaults.question'), options: [t('scriptBuilder.defaults.checkboxOptionA'), t('scriptBuilder.defaults.checkboxOptionB')] }, readOnly: false } },
-        { type: 'dropdown' as BlockType, icon: DropdownIcon, label: t('scriptBuilder.palette.dropdown'), default: { width: 300, height: 70, content: { options: [t('scriptBuilder.defaults.dropdownValue1'), t('scriptBuilder.defaults.dropdownValue2')] }, readOnly: false } },
+        { type: 'text' as BlockType, icon: 'short_text', label: t('scriptBuilder.palette.text'), default: { width: 300, height: 80, content: { text: t('scriptBuilder.defaults.text') }, textAlign: 'left' as const } },
+        { type: 'input' as BlockType, icon: 'edit_square', label: t('scriptBuilder.palette.input'), default: { width: 300, height: 70, content: { placeholder: t('scriptBuilder.defaults.placeholder'), format: 'text' }, readOnly: false } },
+        { type: 'textarea' as BlockType, icon: 'notes', label: t('scriptBuilder.palette.textarea'), default: { width: 300, height: 120, content: { placeholder: t('scriptBuilder.defaults.placeholder') }, readOnly: false } },
+        { type: 'email' as BlockType, icon: 'mail', label: t('scriptBuilder.palette.email'), default: { width: 300, height: 70, content: { placeholder: t('scriptBuilder.defaults.emailPlaceholder') }, readOnly: false } },
+        { type: 'phone' as BlockType, icon: 'phone', label: t('scriptBuilder.palette.phone'), default: { width: 300, height: 70, content: { placeholder: t('scriptBuilder.defaults.phonePlaceholder') }, readOnly: false } },
+        { type: 'date' as BlockType, icon: 'calendar_month', label: t('scriptBuilder.palette.date'), default: { width: 200, height: 70, content: {}, readOnly: false } },
+        { type: 'time' as BlockType, icon: 'schedule', label: t('scriptBuilder.palette.time'), default: { width: 200, height: 70, content: {}, readOnly: false } },
+        { type: 'radio' as BlockType, icon: 'radio_button_checked', label: t('scriptBuilder.palette.radio'), default: { width: 300, height: 120, content: { question: t('scriptBuilder.defaults.question'), options: [t('scriptBuilder.defaults.radioOption1'), t('scriptBuilder.defaults.radioOption2')] }, readOnly: false } },
+        { type: 'checkbox' as BlockType, icon: 'check_box', label: t('scriptBuilder.palette.checkbox'), default: { width: 300, height: 120, content: { question: t('scriptBuilder.defaults.question'), options: [t('scriptBuilder.defaults.checkboxOptionA'), t('scriptBuilder.defaults.checkboxOptionB')] }, readOnly: false } },
+        { type: 'dropdown' as BlockType, icon: 'arrow_drop_down_circle', label: t('scriptBuilder.palette.dropdown'), default: { width: 300, height: 70, content: { options: [t('scriptBuilder.defaults.dropdownValue1'), t('scriptBuilder.defaults.dropdownValue2')] }, readOnly: false } },
         // FIX: Added 'as const' to ensure TypeScript infers a literal type for 'textAlign', resolving a type error.
-        { type: 'button' as BlockType, icon: ButtonIcon, label: t('scriptBuilder.palette.button'), default: { width: 200, height: 50, content: { text: t('scriptBuilder.defaults.buttonText'), action: { type: 'none' } }, backgroundColor: '#4f46e5', textColor: '#ffffff', textAlign: 'center' as const } },
-        { type: 'history' as BlockType, icon: HistoryIcon, label: t('scriptBuilder.palette.history'), default: { width: 400, height: 200, content: {} } },
-        { type: 'image' as BlockType, icon: ImageIcon, label: t('scriptBuilder.palette.image'), default: { width: 200, height: 150, content: { src: null } } },
+        { type: 'button' as BlockType, icon: 'smart_button', label: t('scriptBuilder.palette.button'), default: { width: 200, height: 50, content: { text: t('scriptBuilder.defaults.buttonText'), action: { type: 'none' } }, backgroundColor: '#4f46e5', textColor: '#ffffff', textAlign: 'center' as const } },
+        { type: 'history' as BlockType, icon: 'history', label: t('scriptBuilder.palette.history'), default: { width: 400, height: 200, content: {} } },
+        { type: 'image' as BlockType, icon: 'image', label: t('scriptBuilder.palette.image'), default: { width: 200, height: 150, content: { src: null } } },
     ], [t]);
 
 
@@ -522,13 +515,13 @@ const ScriptBuilder: React.FC<ScriptBuilderProps> = ({ script, onSave, onClose, 
                                                         className="w-full p-2 border rounded-md text-sm"
                                                     />
                                                     <button onClick={() => handleDeleteOption(selectedBlockId!, index)} className="p-1 text-slate-400 hover:text-red-600">
-                                                        <TrashIcon className="w-4 h-4" />
+                                                        <span className="material-symbols-outlined text-base">delete</span>
                                                     </button>
                                                 </div>
                                             ))}
                                         </div>
                                         <button onClick={() => handleAddOption(selectedBlockId!)} className="text-sm font-medium text-indigo-600 hover:text-indigo-700 mt-2 inline-flex items-center gap-1">
-                                            <PlusIcon className="w-4 h-4" /> {t('scriptBuilder.properties.addOption')}
+                                            <span className="material-symbols-outlined text-base">add_circle</span> {t('scriptBuilder.properties.addOption')}
                                         </button>
                                     </div>
                                 </div>
@@ -540,12 +533,12 @@ const ScriptBuilder: React.FC<ScriptBuilderProps> = ({ script, onSave, onClose, 
                                         {(selectedBlock.content.options || []).map((option: string, index: number) => (
                                             <div key={index} className="flex items-center gap-2">
                                                 <input type="text" value={option} onChange={e => handleOptionChange(selectedBlockId!, index, e.target.value)} className="w-full p-2 border rounded-md text-sm"/>
-                                                <button onClick={() => handleDeleteOption(selectedBlockId!, index)} className="p-1 text-slate-400 hover:text-red-600"><TrashIcon className="w-4 h-4" /></button>
+                                                <button onClick={() => handleDeleteOption(selectedBlockId!, index)} className="p-1 text-slate-400 hover:text-red-600"><span className="material-symbols-outlined text-base">delete</span></button>
                                             </div>
                                         ))}
                                     </div>
                                     <button onClick={() => handleAddOption(selectedBlockId!)} className="text-sm font-medium text-indigo-600 hover:text-indigo-700 mt-2 inline-flex items-center gap-1">
-                                        <PlusIcon className="w-4 h-4" /> {t('scriptBuilder.properties.addOption')}
+                                        <span className="material-symbols-outlined text-base">add_circle</span> {t('scriptBuilder.properties.addOption')}
                                     </button>
                                 </div>
                             )}
@@ -562,7 +555,7 @@ const ScriptBuilder: React.FC<ScriptBuilderProps> = ({ script, onSave, onClose, 
                                                         <li key={child.id} className="flex items-center justify-between bg-slate-50 p-2 rounded-md hover:bg-slate-100">
                                                             <span className="text-slate-800 truncate text-xs">{child.name}</span>
                                                             <button onClick={() => handleDeleteBlock(child.id)} className="text-slate-400 hover:text-red-600 p-1" title={t('scriptBuilder.properties.deleteBlockTooltip', { name: child.name })}>
-                                                                <TrashIcon className="w-4 h-4" />
+                                                                <span className="material-symbols-outlined text-base">delete</span>
                                                             </button>
                                                         </li>
                                                     ))}
@@ -609,7 +602,7 @@ const ScriptBuilder: React.FC<ScriptBuilderProps> = ({ script, onSave, onClose, 
                                 </div>
                                 <div>
                                 <label className="font-medium block mb-1">{t('scriptBuilder.properties.alignment')}</label>
-                                <div className="flex items-center gap-1 rounded-md bg-slate-100 p-1">{['left', 'center', 'right'].map(align => <button key={align} onClick={() => handleBlockUpdate(selectedBlockId!, { textAlign: align as any })} className={`p-1.5 rounded w-full flex justify-center ${selectedBlock.textAlign === align ? 'bg-white shadow-sm' : 'hover:bg-slate-200'}`}>{align === 'left' ? <AlignLeftIcon className="w-5 h-5"/> : align === 'center' ? <AlignCenterIcon className="w-5 h-5"/> : <AlignRightIcon className="w-5 h-5"/>}</button>)}</div>
+                                <div className="flex items-center gap-1 rounded-md bg-slate-100 p-1">{['left', 'center', 'right'].map(align => <button key={align} onClick={() => handleBlockUpdate(selectedBlockId!, { textAlign: align as any })} className={`p-1.5 rounded w-full flex justify-center ${selectedBlock.textAlign === align ? 'bg-white shadow-sm' : 'hover:bg-slate-200'}`}><span className="material-symbols-outlined">format_align_{align}</span></button>)}</div>
                                 </div>
                                 </>
                                 }
@@ -659,7 +652,7 @@ const ScriptBuilder: React.FC<ScriptBuilderProps> = ({ script, onSave, onClose, 
                     {!selectedBlock.isStandard &&
                         <div className="mt-auto pt-4 border-t border-slate-200">
                             <button onClick={() => handleDeleteBlock(selectedBlock.id)} className="w-full flex items-center justify-center gap-2 text-sm text-red-600 font-semibold bg-red-50 hover:bg-red-100 p-2 rounded-md transition-colors">
-                                <TrashIcon className="w-4 h-4" />
+                                <span className="material-symbols-outlined text-base">delete</span>
                                 {t('scriptBuilder.properties.deleteBlockButton', { name: selectedBlock.name })}
                             </button>
                         </div>
@@ -711,7 +704,7 @@ const ScriptBuilder: React.FC<ScriptBuilderProps> = ({ script, onSave, onClose, 
                 case 'image': 
                     return block.content.src 
                         ? <img src={block.content.src} alt={block.name} className="w-full h-full object-contain" />
-                        : <div className="h-full w-full flex flex-col items-center justify-center bg-slate-100 text-slate-400"><ImageIcon className="w-8 h-8" /><span className="text-xs mt-1">Image</span></div>;
+                        : <div className="h-full w-full flex flex-col items-center justify-center bg-slate-100 text-slate-400"><span className="material-symbols-outlined text-4xl">image</span><span className="text-xs mt-1">Image</span></div>;
                 default: return <div className="h-full flex flex-col justify-center"><span className="p-1 text-xs text-center truncate pointer-events-none">{block.content?.label || block.content?.text || block.content?.question || block.type}</span></div>;
              }
         }
@@ -735,7 +728,7 @@ const ScriptBuilder: React.FC<ScriptBuilderProps> = ({ script, onSave, onClose, 
                                 className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 shadow-sm"
                                 title={t('scriptBuilder.canvas.deleteBlock')}
                             >
-                                <TrashIcon className="w-3 h-3" />
+                                <span className="material-symbols-outlined text-sm">delete</span>
                             </button>
                         }
                     </>
@@ -762,7 +755,7 @@ const ScriptBuilder: React.FC<ScriptBuilderProps> = ({ script, onSave, onClose, 
                     </div>
                 </div>
                 <div className="space-x-2">
-                    <button onClick={() => onPreview(editedScript)} className="font-semibold py-2 px-4 rounded-lg inline-flex items-center bg-slate-200 hover:bg-slate-300"><EyeIcon className="w-5 h-5 mr-2" /> {t('scriptBuilder.preview')}</button>
+                    <button onClick={() => onPreview(editedScript)} className="font-semibold py-2 px-4 rounded-lg inline-flex items-center bg-slate-200 hover:bg-slate-300"><span className="material-symbols-outlined mr-2">visibility</span> {t('scriptBuilder.preview')}</button>
                     <button onClick={onClose} className="font-semibold py-2 px-4 rounded-lg">{t('common.close')}</button>
                     <button onClick={() => onSave(editedScript)} className="font-bold py-2 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">{t('common.save')}</button>
                 </div>
@@ -774,7 +767,7 @@ const ScriptBuilder: React.FC<ScriptBuilderProps> = ({ script, onSave, onClose, 
                     <div className="grid grid-cols-2 gap-2">
                         {BLOCK_PALETTE.map(item => (
                             <div key={item.type} draggable onDragStart={e => e.dataTransfer.setData('blockType', item.type)} className="p-2 bg-slate-50 hover:bg-slate-100 rounded-md cursor-grab flex flex-col items-center text-center">
-                                <item.icon className="w-6 h-6 mb-1 text-slate-600" />
+                                <span className="material-symbols-outlined text-2xl mb-1 text-slate-600">{item.icon}</span>
                                 <span className="text-xs">{item.label}</span>
                             </div>
                         ))}
@@ -802,17 +795,17 @@ const ScriptBuilder: React.FC<ScriptBuilderProps> = ({ script, onSave, onClose, 
                     </div>
                     {/* Page Tabs & Zoom controls */}
                     <div className="absolute bottom-4 left-4 z-10 bg-white rounded-lg shadow-md flex items-center border divide-x">
-                        <button onClick={goToPrevPage} className="p-2 hover:bg-slate-100 disabled:opacity-50" disabled={activePageIndex === 0}><ArrowLeftIcon className="w-5 h-5"/></button>
+                        <button onClick={goToPrevPage} className="p-2 hover:bg-slate-100 disabled:opacity-50" disabled={activePageIndex === 0}><span className="material-symbols-outlined">arrow_back</span></button>
                         <span className="font-medium text-sm px-3">{t('scriptBuilder.page_of_pages', { currentPage: activePageIndex + 1, totalPages: editedScript.pages.length })}</span>
-                        <button onClick={goToNextPage} className="p-2 hover:bg-slate-100 disabled:opacity-50" disabled={activePageIndex >= editedScript.pages.length - 1}><ArrowRightIcon className="w-5 h-5"/></button>
-                        <button onClick={handleAddPage} className="p-2 hover:bg-slate-100"><PlusIcon className="w-5 h-5"/></button>
-                        <button onClick={() => handleDeletePage(activePageId)} className="p-2 hover:bg-red-100 disabled:opacity-50 text-slate-600 hover:text-red-600" disabled={editedScript.pages.length <= 1 || editedScript.startPageId === activePageId}><TrashIcon className="w-5 h-5"/></button>
+                        <button onClick={goToNextPage} className="p-2 hover:bg-slate-100 disabled:opacity-50" disabled={activePageIndex >= editedScript.pages.length - 1}><span className="material-symbols-outlined">arrow_forward</span></button>
+                        <button onClick={handleAddPage} className="p-2 hover:bg-slate-100"><span className="material-symbols-outlined">add_circle</span></button>
+                        <button onClick={() => handleDeletePage(activePageId)} className="p-2 hover:bg-red-100 disabled:opacity-50 text-slate-600 hover:text-red-600" disabled={editedScript.pages.length <= 1 || editedScript.startPageId === activePageId}><span className="material-symbols-outlined">delete</span></button>
                     </div>
                     <div className="absolute bottom-4 right-4 z-10 bg-white rounded-lg shadow-md flex items-center border">
-                        <button onClick={() => setViewTransform(v => ({...v, zoom: v.zoom * 1.2}))} className="p-2 hover:bg-slate-100" title={t('scriptBuilder.zoomIn')}><PlusIcon className="w-5 h-5"/></button>
+                        <button onClick={() => setViewTransform(v => ({...v, zoom: v.zoom * 1.2}))} className="p-2 hover:bg-slate-100" title={t('scriptBuilder.zoomIn')}><span className="material-symbols-outlined">add_circle</span></button>
                         <span className="text-sm font-semibold p-2 w-16 text-center">{Math.round(viewTransform.zoom * 100)}%</span>
-                        <button onClick={() => setViewTransform(v => ({...v, zoom: v.zoom / 1.2}))} className="p-2 hover:bg-slate-100 border-x" title={t('scriptBuilder.zoomOut')}><MinusIcon className="w-5 h-5"/></button>
-                        <button onClick={() => setViewTransform({x:20, y:20, zoom:1})} className="p-2 hover:bg-slate-100" title={t('scriptBuilder.resetView')}><ResetViewIcon className="w-5 h-5"/></button>
+                        <button onClick={() => setViewTransform(v => ({...v, zoom: v.zoom / 1.2}))} className="p-2 hover:bg-slate-100 border-x" title={t('scriptBuilder.zoomOut')}><span className="material-symbols-outlined">remove_circle</span></button>
+                        <button onClick={() => setViewTransform({x:20, y:20, zoom:1})} className="p-2 hover:bg-slate-100" title={t('scriptBuilder.resetView')}><span className="material-symbols-outlined">zoom_in_map</span></button>
                     </div>
                 </div>
 

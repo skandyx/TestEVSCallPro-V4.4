@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import type { SavedScript, ScriptBlock, DisplayCondition, Page, ButtonAction, Contact, ContactNote, User, Campaign } from '../types.ts';
 import { useI18n } from '../src/i18n/index.tsx';
-import { ImageIcon } from './Icons.tsx';
 
 interface AgentPreviewProps {
   script: SavedScript;
@@ -366,7 +365,7 @@ const AgentPreview: React.FC<AgentPreviewProps> = ({
                 <div {...commonContainerProps} className="p-0 overflow-hidden">
                     {block.content.src
                         ? <img src={block.content.src} alt={block.name} className="w-full h-full object-contain" />
-                        : <div className="h-full w-full flex flex-col items-center justify-center bg-slate-100 text-slate-400"><ImageIcon className="w-8 h-8" /><span className="text-xs mt-1">Image</span></div>
+                        : <div className="h-full w-full flex flex-col items-center justify-center bg-slate-100 text-slate-400"><span className="material-symbols-outlined text-4xl">image</span><span className="text-xs mt-1">Image</span></div>
                     }
                 </div>
             );

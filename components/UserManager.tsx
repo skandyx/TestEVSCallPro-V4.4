@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import type { Feature, User, UserRole, Campaign, UserGroup, Site } from '../types.ts';
-import { UsersIcon, PlusIcon, EditIcon, TrashIcon, ChevronDownIcon } from './Icons.tsx';
 import ImportUsersModal from './ImportUsersModal.tsx';
 import { useI18n } from '../src/i18n/index.tsx';
 import { useStore } from '../src/store/useStore.ts';
@@ -569,10 +568,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
             <button onClick={() => requestSort(sortKey)} className="group inline-flex items-center gap-1">
                 {label}
                 <span className="opacity-0 group-hover:opacity-100 transition-opacity">
-                    {sortConfig.key === sortKey
-                        ? <ChevronDownIcon className={`w-4 h-4 transition-transform ${sortConfig.direction === 'ascending' ? 'rotate-180' : ''}`} />
-                        : <ChevronDownIcon className="w-4 h-4 text-slate-400" />
-                    }
+                    <span className={`material-symbols-outlined text-base transition-transform ${sortConfig.key === sortKey ? (sortConfig.direction === 'ascending' ? 'rotate-180' : '') : 'text-slate-400'}`}>expand_more</span>
                 </span>
             </button>
         </th>
@@ -597,7 +593,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
                     <button onClick={handleImport} className="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-4 rounded-lg shadow-sm transition-colors dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600">{t('userManager.importButton')}</button>
                     <button onClick={() => setIsGeneratingModalOpen(true)} className="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-4 rounded-lg shadow-sm transition-colors dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600">{t('userManager.generateButton')}</button>
                     <button onClick={handleAddNew} className="bg-primary hover:bg-primary-hover text-primary-text font-bold py-2 px-4 rounded-lg shadow-md transition-colors inline-flex items-center">
-                    <PlusIcon className="w-5 h-5 mr-2" />
+                    <span className="material-symbols-outlined mr-2">add</span>
                     {t('userManager.addUserButton')}
                     </button>
                 </div>
@@ -633,7 +629,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
                             <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
                                 <div className="h-10 w-10 flex-shrink-0 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center">
-                                <UsersIcon className="h-6 w-6 text-slate-500 dark:text-slate-400"/>
+                                <span className="material-symbols-outlined text-2xl text-slate-500 dark:text-slate-400">group</span>
                                 </div>
                                 <div className="ml-4">
                                 <div className="text-sm font-medium text-slate-900 dark:text-slate-100">{user.firstName} {user.lastName}</div>
@@ -650,9 +646,9 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
                             </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
-                            <button onClick={() => handleEdit(user)} className="text-link hover:underline inline-flex items-center"><EditIcon className="w-4 h-4 mr-1"/> {t('common.edit')}</button>
+                            <button onClick={() => handleEdit(user)} className="text-link hover:underline inline-flex items-center"><span className="material-symbols-outlined text-base mr-1">edit</span> {t('common.edit')}</button>
                             <button onClick={() => onDeleteUser(user.id)} className={`inline-flex items-center ${!canDelete ? 'text-slate-400 cursor-not-allowed' : 'text-red-600 hover:text-red-900 dark:hover:text-red-400'}`} disabled={!canDelete} title={tooltip}>
-                                <TrashIcon className="w-4 h-4 mr-1"/> {t('common.delete')}
+                                <span className="material-symbols-outlined text-base mr-1">delete</span> {t('common.delete')}
                             </button>
                             </td>
                         </tr>

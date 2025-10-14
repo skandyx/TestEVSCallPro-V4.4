@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import type { Feature, BackupSchedule, BackupLog } from '../types.ts';
 import { useStore } from '../src/store/useStore.ts';
 import { useI18n } from '../src/i18n/index.tsx';
-import { Cog6ToothIcon, ArrowDownTrayIcon, TrashIcon, InformationCircleIcon } from './Icons.tsx';
 
 const MaintenanceManager: React.FC<{ feature: Feature }> = ({ feature }) => {
     const { t } = useI18n();
@@ -58,7 +57,7 @@ const MaintenanceManager: React.FC<{ feature: Feature }> = ({ feature }) => {
                 <div className="lg:col-span-1 space-y-8">
                     <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
                         <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
-                            <Cog6ToothIcon className="w-6 h-6 text-indigo-500" />
+                            <span className="material-symbols-outlined text-2xl text-indigo-500">settings_suggest</span>
                             Planification des Sauvegardes
                         </h2>
                         <div className="space-y-4">
@@ -111,8 +110,8 @@ const MaintenanceManager: React.FC<{ feature: Feature }> = ({ feature }) => {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
-                                            <button onClick={() => handleRestore(log.fileName)} className="text-link hover:underline inline-flex items-center gap-1.5"><ArrowDownTrayIcon className="w-4 h-4" />Restaurer</button>
-                                            <button onClick={() => handleDelete(log.fileName)} className="text-red-600 hover:text-red-900 dark:hover:text-red-400 inline-flex items-center gap-1.5"><TrashIcon className="w-4 h-4" />Supprimer</button>
+                                            <button onClick={() => handleRestore(log.fileName)} className="text-link hover:underline inline-flex items-center gap-1.5"><span className="material-symbols-outlined text-base">download</span>Restaurer</button>
+                                            <button onClick={() => handleDelete(log.fileName)} className="text-red-600 hover:text-red-900 dark:hover:text-red-400 inline-flex items-center gap-1.5"><span className="material-symbols-outlined text-base">delete</span>Supprimer</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -123,7 +122,7 @@ const MaintenanceManager: React.FC<{ feature: Feature }> = ({ feature }) => {
                 </div>
             </div>
              <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 dark:border-yellow-600 p-6 rounded-r-lg flex items-start gap-3">
-                <InformationCircleIcon className="w-6 h-6 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+                <span className="material-symbols-outlined text-2xl text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5">info</span>
                 <p className="text-sm text-yellow-800 dark:text-yellow-300">
                     <strong>Attention :</strong> La restauration d'une sauvegarde est une action destructrice qui écrasera toutes les données actuelles. Assurez-vous d'avoir une sauvegarde récente avant de procéder. Les opérations de sauvegarde peuvent brièvement impacter les performances du système.
                 </p>

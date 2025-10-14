@@ -3,7 +3,6 @@ import type { Feature, IvrFlow } from '../types.ts';
 import { useStore } from '../src/store/useStore.ts';
 import { useI18n } from '../src/i18n/index.tsx';
 import IvrDesigner from './IvrDesigner.tsx';
-import { PlusIcon, EditIcon, TrashIcon, DuplicateIcon } from './Icons.tsx';
 
 const IvrFeature: React.FC<{ feature: Feature }> = ({ feature }) => {
     const { t } = useI18n();
@@ -60,7 +59,7 @@ const IvrFeature: React.FC<{ feature: Feature }> = ({ feature }) => {
                     <p className="mt-2 text-lg text-slate-600 dark:text-slate-400">{t(feature.descriptionKey)}</p>
                 </div>
                 <button onClick={handleAddNew} className="bg-primary hover:bg-primary-hover text-primary-text font-bold py-2 px-4 rounded-lg shadow-md inline-flex items-center">
-                    <PlusIcon className="w-5 h-5 mr-2" />
+                    <span className="material-symbols-outlined mr-2">add</span>
                     {t('ivrManager.createFlow')}
                 </button>
             </header>
@@ -73,9 +72,9 @@ const IvrFeature: React.FC<{ feature: Feature }> = ({ feature }) => {
                                 <p className="text-sm text-slate-500 dark:text-slate-400">{flow.nodes.length} noeuds, {flow.connections.length} connexions</p>
                             </div>
                             <div className="space-x-2">
-                                <button onClick={() => handleDuplicate(flow.id)} title={t('common.duplicate')} className="p-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"><DuplicateIcon className="w-5 h-5"/></button>
-                                <button onClick={() => handleEdit(flow)} title={t('common.edit')} className="p-2 text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400"><EditIcon className="w-5 h-5"/></button>
-                                <button onClick={() => handleDelete(flow.id)} title={t('common.delete')} className="p-2 text-slate-500 hover:text-red-600 dark:hover:text-red-400"><TrashIcon className="w-5 h-5"/></button>
+                                <button onClick={() => handleDuplicate(flow.id)} title={t('common.duplicate')} className="p-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"><span className="material-symbols-outlined">content_copy</span></button>
+                                <button onClick={() => handleEdit(flow)} title={t('common.edit')} className="p-2 text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400"><span className="material-symbols-outlined">edit</span></button>
+                                <button onClick={() => handleDelete(flow.id)} title={t('common.delete')} className="p-2 text-slate-500 hover:text-red-600 dark:hover:text-red-400"><span className="material-symbols-outlined">delete</span></button>
                             </div>
                         </li>
                     ))}

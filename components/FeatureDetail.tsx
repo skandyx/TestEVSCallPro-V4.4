@@ -1,6 +1,5 @@
 import React from 'react';
 import type { Feature } from '../types.ts';
-import { UserJourneyIcon, SpecsIcon, LightbulbIcon } from './Icons.tsx';
 import { useI18n } from '../src/i18n/index.tsx';
 
 interface FeatureDetailProps {
@@ -29,7 +28,7 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ feature }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
           <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center">
-            <UserJourneyIcon className="w-6 h-6 mr-3 text-indigo-500" />
+            <span className="material-symbols-outlined w-6 h-6 mr-3 text-indigo-500">timeline</span>
             {t(feature.userJourney.titleKey)}
           </h2>
           <ol className="list-decimal list-inside space-y-2 text-slate-700 dark:text-slate-300">
@@ -41,7 +40,7 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ feature }) => {
 
         <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
           <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center">
-            <SpecsIcon className="w-6 h-6 mr-3 text-indigo-500" />
+            <span className="material-symbols-outlined w-6 h-6 mr-3 text-indigo-500">tune</span>
             {t(feature.specs.titleKey)}
           </h2>
           <ul className="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
@@ -54,7 +53,7 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ feature }) => {
 
       <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 dark:border-yellow-600 p-6 rounded-r-lg">
         <h3 className="text-lg font-bold text-yellow-900 dark:text-yellow-200 mb-2 flex items-center">
-          <LightbulbIcon className="w-6 h-6 mr-3 text-yellow-600 dark:text-yellow-400" />
+          <span className="material-symbols-outlined w-6 h-6 mr-3 text-yellow-600 dark:text-yellow-400">lightbulb</span>
           {t(feature.simplificationTip.titleKey)}
         </h3>
         <p className="text-yellow-800 dark:text-yellow-300">{t(feature.simplificationTip.contentKey)}</p>

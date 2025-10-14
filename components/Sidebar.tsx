@@ -1,11 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import type { Feature, FeatureId, User, FeatureCategory, ModuleVisibility, AgentStatus, UserRole } from '../types.ts';
-import {
-    LogoIcon, UserCircleIcon, ChevronDownIcon,
-    UsersIcon, PhoneArrowUpRightIcon, InboxArrowDownIcon, SpeakerWaveIcon, WrenchScrewdriverIcon,
-    ChartBarIcon, ServerStackIcon, SettingsIcon, PowerIcon, ChevronDoubleLeftIcon,
-    QuestionMarkCircleIcon
-} from './Icons.tsx';
 import { useI18n } from '../src/i18n/index.tsx';
 // FIX: Corrected module import path to resolve module resolution error.
 import { useStore } from '../src/store/useStore.ts';
@@ -17,15 +11,15 @@ interface SidebarProps {
     onOpenProfile: () => void;
 }
 
-const categoryIcons: Record<FeatureCategory, React.FC<any>> = {
-    'Agent': UsersIcon,
-    'Outbound': PhoneArrowUpRightIcon,
-    'Inbound': InboxArrowDownIcon,
-    'Sound': SpeakerWaveIcon,
-    'Configuration': WrenchScrewdriverIcon,
-    'Supervision & Reporting': ChartBarIcon,
-    'System': ServerStackIcon,
-    'Settings': SettingsIcon,
+const categoryIcons: Record<FeatureCategory, string> = {
+    'Agent': 'group',
+    'Outbound': 'call_made',
+    'Inbound': 'call_received',
+    'Sound': 'volume_up',
+    'Configuration': 'build',
+    'Supervision & Reporting': 'bar_chart',
+    'System': 'dns',
+    'Settings': 'settings',
 };
 
 const categoryOrder: FeatureCategory[] = ['Agent', 'Outbound', 'Inbound', 'Sound', 'Configuration', 'Supervision & Reporting', 'System', 'Settings'];
@@ -111,7 +105,7 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
                 {appLogoDataUrl ? (
                     <img src={appLogoDataUrl} alt="Logo" className={`transition-all duration-300 ${isSidebarCollapsed ? 'h-10 w-auto' : 'h-12 w-auto'}`} />
                 ) : (
-                    <LogoIcon className="w-8 h-8 text-indigo-600" />
+                    <span className="material-symbols-outlined text-indigo-600 text-3xl">hub</span>
                 )}
                 {!isSidebarCollapsed && <span className="text-lg font-bold text-slate-800 dark:text-slate-100 ml-2 truncate">{appName}</span>}
             </div>
@@ -122,7 +116,7 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
                     .map(categoryName => {
                         const featuresInCategory = categories[categoryName];
                         const isExpanded = expandedCategories.includes(categoryName);
-                        const Icon = categoryIcons[categoryName as FeatureCategory];
+                        const iconName = categoryIcons[categoryName as FeatureCategory];
                         const isActiveCategory = featuresInCategory.some(f => f.id === activeFeatureId);
                         const translatedCategoryName = t(getCategoryTranslationKey(categoryName as FeatureCategory));
 
@@ -141,9 +135,9 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
                                     }`}
                                     title={translatedCategoryName}
                                 >
-                                    {Icon && <Icon className="w-5 h-5 flex-shrink-0" />}
+                                    {iconName && <span className="material-symbols-outlined text-xl w-5 h-5 flex-shrink-0">{iconName}</span>}
                                     {!isSidebarCollapsed && <span className="flex-1 ml-3">{translatedCategoryName}</span>}
-                                    {!isSidebarCollapsed && <ChevronDownIcon className={`w-5 h-5 transition-transform ${isExpanded ? '' : '-rotate-90'}`} />}
+                                    {!isSidebarCollapsed && <span className="material-symbols-outlined w-5 h-5 transition-transform ${isExpanded ? '' : '-rotate-90'}">expand_more</span>}
                                 </button>
                                 {!isSidebarCollapsed && isExpanded && (
                                     <div className="mt-1 space-y-1 pl-4">
@@ -178,7 +172,7 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
                             {currentUser.profilePictureUrl ? (
                                 <img src={currentUser.profilePictureUrl} alt="Avatar" className="w-10 h-10 rounded-full object-cover" />
                             ) : (
-                                <UserCircleIcon className="w-10 h-10 text-slate-400" />
+                                <span className="material-symbols-outlined text-4xl text-slate-400">account_circle</span>
                             )}
                             <span className={`absolute top-0 right-0 block h-3.5 w-3.5 rounded-full border-2 border-white ${getStatusColor(agentStatus)}`}></span>
                         </div>
@@ -196,7 +190,7 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
                         className="w-full flex items-center p-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md"
                         title={t('sidebar.logout')}
                     >
-                        <PowerIcon className={`w-5 h-5 ${isSidebarCollapsed ? 'mx-auto' : 'mr-3'}`} />
+                        <span className={`material-symbols-outlined text-xl w-5 h-5 ${isSidebarCollapsed ? 'mx-auto' : 'mr-3'}`}>power_settings_new</span>
                         {!isSidebarCollapsed && <span className="font-semibold">{t('sidebar.logout')}</span>}
                     </button>
                     <button
@@ -204,7 +198,7 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
                         className="w-full flex items-center p-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md"
                         title={isSidebarCollapsed ? t('sidebar.expand') : t('sidebar.collapse')}
                     >
-                        <ChevronDoubleLeftIcon className={`w-5 h-5 transition-transform ${isSidebarCollapsed ? 'rotate-180 mx-auto' : 'mr-3'}`} />
+                        <span className={`material-symbols-outlined text-xl w-5 h-5 transition-transform ${isSidebarCollapsed ? 'rotate-180 mx-auto' : 'mr-3'}`}>keyboard_double_arrow_left</span>
                         {!isSidebarCollapsed && <span className="font-semibold">{t('sidebar.collapse')}</span>}
                     </button>
                 </div>
