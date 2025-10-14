@@ -63,8 +63,8 @@ const saveCampaign = async (campaign, id) => {
 
         if (id) {
             const res = await client.query(
-                'UPDATE campaigns SET name=$1, description=$2, script_id=$3, qualification_group_id=$4, caller_id=$5, is_active=$6, dialing_mode=$7, priority=$8, wrap_up_time=$9, quota_rules=$10, filter_rules=$11, updated_at=NOW() WHERE id=$12 RETURNING *',
-                [campaignData.name, campaignData.description, campaignData.scriptId, campaignData.qualificationGroupId, campaignData.callerId, campaignData.isActive, campaignData.dialingMode, campaignData.priority, campaignData.wrapUpTime, JSON.stringify(campaignData.quotaRules), JSON.stringify(campaignData.filterRules), id]
+                'UPDATE campaigns SET name=$1, description=$2, script_id=$3, qualification_group_id=$4, caller_id=$5, is_active=$6, dialing_mode=$7, priority=$8, wrap_up_time=$9, quota_rules=$10, filter_rules=$11, quotas_enabled=$12, updated_at=NOW() WHERE id=$13 RETURNING *',
+                [campaignData.name, campaignData.description, campaignData.scriptId, campaignData.qualificationGroupId, campaignData.callerId, campaignData.isActive, campaignData.dialingMode, campaignData.priority, campaignData.wrapUpTime, JSON.stringify(campaignData.quotaRules), JSON.stringify(campaignData.filterRules), campaignData.quotasEnabled || false, id]
             );
             if (res.rows.length === 0) {
                 throw new Error(`La campagne avec l'ID ${id} n'a pas été trouvée.`);
@@ -73,8 +73,8 @@ const saveCampaign = async (campaign, id) => {
         } else {
             const newId = `campaign-${Date.now()}`;
             const res = await client.query(
-                'INSERT INTO campaigns (id, name, description, script_id, qualification_group_id, caller_id, is_active, dialing_mode, priority, wrap_up_time, quota_rules, filter_rules) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *',
-                [newId, campaignData.name, campaignData.description, campaignData.scriptId, campaignData.qualificationGroupId, campaignData.callerId, campaignData.isActive, campaignData.dialingMode, campaignData.priority, campaignData.wrapUpTime, JSON.stringify(campaignData.quotaRules || []), JSON.stringify(campaignData.filterRules || [])]
+                'INSERT INTO campaigns (id, name, description, script_id, qualification_group_id, caller_id, is_active, dialing_mode, priority, wrap_up_time, quota_rules, filter_rules, quotas_enabled) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *',
+                [newId, campaignData.name, campaignData.description, campaignData.scriptId, campaignData.qualificationGroupId, campaignData.callerId, campaignData.isActive, campaignData.dialingMode, campaignData.priority, campaignData.wrapUpTime, JSON.stringify(campaignData.quotaRules || []), JSON.stringify(campaignData.filterRules || []), campaignData.quotasEnabled || false]
             );
             savedCampaign = res.rows[0];
         }
@@ -211,27 +211,54 @@ const importContacts = async (campaignId, contacts, deduplicationConfig) => {
 };
 
 const getNextContactForCampaign = async (agentId, campaignId) => {
-    // The transaction and the UPDATE are removed.
-    // The SELECT...FOR UPDATE SKIP LOCKED provides a degree of protection against immediate, concurrent requests.
-    const res = await pool.query(
-        `SELECT * FROM contacts 
-         WHERE campaign_id = $1 
-         AND status = 'pending' 
-         AND (custom_fields->>'relaunch_at' IS NULL OR (custom_fields->>'relaunch_at')::timestamptz <= NOW())
-         ORDER BY created_at LIMIT 1 FOR UPDATE SKIP LOCKED`,
-        [campaignId]
-    );
+    const finalQuery = `
+        WITH campaign_info AS (
+            SELECT quotas_enabled, quota_rules FROM campaigns WHERE id = $1
+        )
+        SELECT c.*
+        FROM contacts c, campaign_info ci
+        WHERE c.campaign_id = $1
+          AND c.status = 'pending'
+          AND (c.custom_fields->>'relaunch_at' IS NULL OR (c.custom_fields->>'relaunch_at')::timestamptz <= NOW())
+          AND (
+            ci.quotas_enabled IS NOT TRUE
+            OR
+            EXISTS (
+                SELECT 1
+                FROM jsonb_array_elements(ci.quota_rules) AS rule
+                WHERE 
+                    (rule->>'currentCount')::int < (rule->>'limit')::int
+                    AND
+                    CASE rule->>'operator'
+                        WHEN 'equals' THEN 
+                            CASE rule->>'contactField'
+                                WHEN 'postalCode' THEN c.postal_code = rule->>'value'
+                                ELSE c.custom_fields->>(rule->>'contactField') = rule->>'value'
+                            END
+                        WHEN 'starts_with' THEN
+                            CASE rule->>'contactField'
+                                WHEN 'postalCode' THEN c.postal_code LIKE (rule->>'value' || '%')
+                                ELSE c.custom_fields->>(rule->>'contactField') LIKE (rule->>'value' || '%')
+                            END
+                        ELSE FALSE
+                    END
+            )
+          )
+        ORDER BY c.created_at
+        LIMIT 1
+        FOR UPDATE OF c SKIP LOCKED;
+    `;
+    
+    const res = await pool.query(finalQuery, [campaignId]);
 
     if (res.rows.length === 0) {
         return { contact: null, campaign: null };
     }
 
     const contact = res.rows[0];
-    // We fetch the campaign separately, as we are no longer in a transaction that guarantees its state.
-    const campaignRes = await pool.query('SELECT * FROM campaigns WHERE id = $1', [campaignId]);
+    const fullCampaign = await getCampaignById(campaignId);
 
-    // Return the PENDING contact. Its status will be updated upon actual dialing.
-    return { contact: keysToCamel(contact), campaign: keysToCamel(campaignRes.rows[0]) };
+    return { contact: keysToCamel(contact), campaign: fullCampaign };
 };
 
 const markContactAsCalled = async (contactId, campaignId) => {

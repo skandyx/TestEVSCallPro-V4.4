@@ -62,7 +62,7 @@ const CampaignModal: React.FC<CampaignModalProps> = ({ campaign, users, scripts,
             retryAttempts: 3, retryIntervals: [30, 60, 120], retryOnStatus: [], amdEnabled: true, amdConfidence: 80,
             // FIX: Use 'as const' to ensure TypeScript infers a literal type for 'voicemailAction', preventing potential type errors.
             voicemailAction: 'HANGUP' as const, recordingEnabled: true, recordingBeep: true, maxRingDuration: 25, wrapUpTime: 10,
-            maxCallDuration: 3600, quotaRules: [], filterRules: [],
+            maxCallDuration: 3600, quotasEnabled: false, quotaRules: [], filterRules: [],
         };
         return campaign ? { ...campaign, schedule: campaign.schedule || defaultSchedule } : newCampaignData;
     });
@@ -95,7 +95,7 @@ const CampaignModal: React.FC<CampaignModalProps> = ({ campaign, users, scripts,
             retryAttempts: 3, retryIntervals: [30, 60, 120], retryOnStatus: [], amdEnabled: true, amdConfidence: 80,
             // FIX: Use 'as const' to ensure TypeScript infers a literal type for 'voicemailAction', preventing potential type errors.
             voicemailAction: 'HANGUP' as const, recordingEnabled: true, recordingBeep: true, maxRingDuration: 25, wrapUpTime: 10,
-            maxCallDuration: 3600, quotaRules: [], filterRules: [],
+            maxCallDuration: 3600, quotasEnabled: false, quotaRules: [], filterRules: [],
         };
         setFormData(campaign ? { ...campaign, schedule: campaign.schedule || defaultSchedule } : newCampaignData);
     }, [campaign, qualificationGroups, defaultSchedule]);
@@ -224,6 +224,16 @@ const CampaignModal: React.FC<CampaignModalProps> = ({ campaign, users, scripts,
                             <div className="grid grid-cols-2 gap-4">
                                 <div><label className="block text-sm font-medium text-slate-700 dark:text-slate-300">{t('outboundCampaignsManager.modal.labels.dialingMode')}</label><select name="dialingMode" value={formData.dialingMode} onChange={handleChange} className="mt-1 block w-full p-2 border bg-white rounded-md dark:bg-slate-900 dark:border-slate-600 dark:text-slate-200"><option value="PREDICTIVE">{t('outboundCampaignsManager.modal.dialingModes.predictive')}</option><option value="PROGRESSIVE">{t('outboundCampaignsManager.modal.dialingModes.progressive')}</option><option value="MANUAL">{t('outboundCampaignsManager.modal.dialingModes.manual')}</option></select></div>
                                 <div><label className="block text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center">{t('outboundCampaignsManager.modal.labels.callerId')} <span className={`w-2 h-2 rounded-full inline-block ml-2 ${isCallerIdValid ? 'bg-green-500' : 'bg-red-500'}`}></span></label><input type="text" name="callerId" value={formData.callerId} onChange={handleChange} required className="mt-1 block w-full p-2 border border-slate-300 rounded-md dark:bg-slate-900 dark:border-slate-600 dark:text-slate-200" /></div>
+                            </div>
+                             <div className="flex items-center justify-between pt-4 border-t dark:border-slate-700">
+                                <div>
+                                    <label className="font-medium text-slate-700 dark:text-slate-300">Forcer les Quotas</label>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">Si activé, seuls les contacts correspondant à un quota non atteint seront présentés.</p>
+                                </div>
+                                <ToggleSwitch 
+                                    enabled={!!formData.quotasEnabled}
+                                    onChange={isEnabled => setFormData(prev => ({ ...prev, quotasEnabled: isEnabled }))}
+                                />
                             </div>
                             <div><label className="block text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center">{t('outboundCampaignsManager.modal.labels.wrapUpTime')} <span className={`w-2 h-2 rounded-full inline-block ml-2 ${isWrapUpTimeValid ? 'bg-green-500' : 'bg-red-500'}`}></span></label><input type="number" name="wrapUpTime" value={formData.wrapUpTime} onChange={handleChange} min="0" max="120" required className="mt-1 block w-full p-2 border rounded-md dark:bg-slate-900 dark:border-slate-600 dark:text-slate-200" /><p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{t('outboundCampaignsManager.modal.wrapUpHelp')}</p></div>
                             <div>

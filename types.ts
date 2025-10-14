@@ -193,6 +193,7 @@ export interface Campaign {
     maxRingDuration: number;
     wrapUpTime: number;
     maxCallDuration: number;
+    quotasEnabled?: boolean;
     quotaRules: QuotaRule[];
     filterRules: FilterRule[];
 }

@@ -136,6 +136,7 @@ CREATE TABLE campaigns (
     max_ring_duration INTEGER,
     wrap_up_time INTEGER,
     max_call_duration INTEGER,
+    quotas_enabled BOOLEAN NOT NULL DEFAULT FALSE,
     quota_rules JSONB,
     filter_rules JSONB,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
