@@ -214,7 +214,11 @@ const getNextContactForCampaign = async (agentId, campaignId) => {
     // The transaction and the UPDATE are removed.
     // The SELECT...FOR UPDATE SKIP LOCKED provides a degree of protection against immediate, concurrent requests.
     const res = await pool.query(
-        `SELECT * FROM contacts WHERE campaign_id = $1 AND status = 'pending' ORDER BY created_at LIMIT 1 FOR UPDATE SKIP LOCKED`,
+        `SELECT * FROM contacts 
+         WHERE campaign_id = $1 
+         AND status = 'pending' 
+         AND (custom_fields->>'relaunch_at' IS NULL OR (custom_fields->>'relaunch_at')::timestamptz <= NOW())
+         ORDER BY created_at LIMIT 1 FOR UPDATE SKIP LOCKED`,
         [campaignId]
     );
 
@@ -238,7 +242,7 @@ const markContactAsCalled = async (contactId, campaignId) => {
     );
 };
 
-const qualifyContact = async (contactId, qualificationId, campaignId, agentId) => {
+const qualifyContact = async (contactId, qualificationId, campaignId, agentId, relaunchTime = null) => {
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
@@ -274,8 +278,17 @@ const qualifyContact = async (contactId, qualificationId, campaignId, agentId) =
                 }
             }
         }
-
-        await client.query("UPDATE contacts SET status = 'qualified', updated_at = NOW() WHERE id = $1", [contactId]);
+        
+        if (relaunchTime) {
+            // It's a "Relance" (code 95), set status to pending and schedule relaunch
+            await client.query(
+                `UPDATE contacts SET status = 'pending', custom_fields = custom_fields || jsonb_build_object('relaunch_at', $1::timestamptz), updated_at = NOW() WHERE id = $2`,
+                [relaunchTime, contactId]
+            );
+        } else {
+            // Normal qualification
+            await client.query("UPDATE contacts SET status = 'qualified', updated_at = NOW() WHERE id = $1", [contactId]);
+        }
         
         const contactResForHistory = await client.query("SELECT phone_number FROM contacts WHERE id = $1", [contactId]);
         const agentRes = await client.query("SELECT login_id FROM users WHERE id = $1", [agentId]);

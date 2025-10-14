@@ -16,6 +16,12 @@ interface AgentPreviewProps {
   onInsertContact?: (campaignId: string, contactData: Record<string, any>, phoneNumber: string) => Promise<void>;
   onUpdateContact?: (contact: Contact) => Promise<void>;
   onClearContact?: () => void;
+  matchingQuota?: {
+    name: string;
+    current: number;
+    limit: number;
+    progress: number;
+  } | null;
 }
 
 const checkCondition = (condition: DisplayCondition | null, values: Record<string, any>): boolean => {
@@ -30,7 +36,8 @@ const checkCondition = (condition: DisplayCondition | null, values: Record<strin
 const AgentPreview: React.FC<AgentPreviewProps> = ({ 
     script, onClose, embedded = false, contact = null, 
     contactNotes = [], users = [], newNote = '', setNewNote = () => {}, onSaveNote = () => {},
-    campaign = null, onInsertContact = async () => {}, onUpdateContact = async () => {}, onClearContact = () => {}
+    campaign = null, onInsertContact = async () => {}, onUpdateContact = async () => {}, onClearContact = () => {},
+    matchingQuota = null
 }) => {
   const { t } = useI18n();
   const [formValues, setFormValues] = useState<Record<string, any>>({});
@@ -412,9 +419,27 @@ const AgentPreview: React.FC<AgentPreviewProps> = ({
     // Embedded mode for AgentView
     return (
       <div className="h-full w-full flex flex-col">
-        <header className="p-3 border-b border-slate-200 flex-shrink-0">
-            <h2 className="text-base font-bold text-slate-800 truncate">{script.name}</h2>
-            <p className="text-xs text-slate-500">{t('agentPreview.embedded.page')} {currentPage?.name}</p>
+        <header className="p-3 border-b border-slate-200 dark:border-slate-700 flex-shrink-0 flex items-center gap-4 bg-white dark:bg-slate-800">
+            <div className="w-1/4">
+                <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 truncate">{script.name}</h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{t('agentPreview.embedded.page')} {currentPage?.name}</p>
+            </div>
+            
+            <div className="flex-1 min-w-0">
+                {matchingQuota && (
+                    <div className="w-full max-w-xs mx-auto">
+                        <p className="text-xs text-center font-semibold text-slate-600 dark:text-slate-300 truncate" title={matchingQuota.name}>
+                           {matchingQuota.name}
+                        </p>
+                        <div className="w-full bg-slate-200 dark:bg-slate-600 rounded-full h-2 mt-1">
+                            <div className="bg-primary h-2 rounded-full" style={{ width: `${matchingQuota.progress}%` }}></div>
+                        </div>
+                        <p className="text-xs text-right text-slate-500 dark:text-slate-400">{matchingQuota.current} / {matchingQuota.limit}</p>
+                    </div>
+                )}
+            </div>
+            
+            <div className="w-1/4"></div>
         </header>
         <div className="flex-1 overflow-y-auto p-2 bg-slate-50">
           {ScriptCanvas}

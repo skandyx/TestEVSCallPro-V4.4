@@ -41,8 +41,8 @@ const isAdmin = (req, res, next) => {
  */
 router.post('/:id/qualify', async (req, res) => {
     try {
-        const { qualificationId, campaignId, agentId } = req.body;
-        await db.qualifyContact(req.params.id, qualificationId, campaignId, agentId);
+        const { qualificationId, campaignId, agentId, relaunchTime } = req.body;
+        await db.qualifyContact(req.params.id, qualificationId, campaignId, agentId, relaunchTime);
         res.status(200).json({ message: 'Contact qualified successfully' });
     } catch (error) {
         console.error('Error qualifying contact:', error);
