@@ -1,0 +1,1070 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "all": "Tous",
+    "loading": "Chargement",
+    "none": "Aucun",
+    "name": "Nom",
+    "description": "Description",
+    "actions": "Actions",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email",
+    "password": "Mot de passe",
+    "role": "Rôle",
+    "campaign": "Campagne",
+    "agent": "Agent",
+    "send": "Envoyer",
+    "duplicate": "Dupliquer",
+    "add": "Ajouter",
+    "unknown": "Inconnu"
+  },
+  "login": {
+    "title": "Connectez-vous à votre compte",
+    "subtitle": "Bon retour ! Veuillez saisir vos informations.",
+    "loginIdLabel": "Identifiant / Poste",
+    "button": "Se connecter",
+    "initializing": "Initialisation...",
+    "invalidCredentials": "Identifiants invalides. Veuillez vérifier votre identifiant et votre mot de passe.",
+    "disabledAccount": "Votre compte est désactivé. Veuillez contacter un administrateur.",
+    "serverError": "Une erreur serveur est survenue. Veuillez réessayer plus tard.",
+    "copyright": "© EVS Call Pro. Tous droits réservés."
+  },
+  "sidebar": {
+    "categories": {
+      "Agent": "Agent",
+      "Outbound": "Sortant",
+      "Inbound": "Entrant",
+      "Sound": "Son",
+      "Configuration": "Configuration",
+      "Supervision_Reporting": "Supervision & Rapports",
+      "Système": "Système",
+      "Paramètres": "Paramètres"
+    },
+    "profile": "Profil",
+    "logout": "Déconnexion",
+    "collapse": "Réduire",
+    "expand": "Agrandir"
+  },
+  "header": {
+    "tabs": {
+      "application": "Application",
+      "monitoring": "Monitoring"
+    },
+    "theme": {
+      "system": "Système",
+      "light": "Clair",
+      "dark": "Sombre"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "markAllAsRead": "Tout marquer comme lu",
+      "noNotifications": "Aucune nouvelle notification.",
+      "needsHelp": "{agentName} ({agentLoginId}) demande de l'aide.",
+      "respond": "Répondre",
+      "yourMessage": "Votre message...",
+      "send": "Envoyer"
+    }
+  },
+  "featureDetail": {
+    "welcome": "Bienvenue sur l'Architecte de Solutions",
+    "selectFeature": "Sélectionnez une fonctionnalité dans la barre latérale pour commencer."
+  },
+  "features": {
+    "users": { "title": "Utilisateurs", "description": "Gérer les comptes des collaborateurs, leurs rôles et leurs permissions." },
+    "groups": { "title": "Groupes", "description": "Créer des groupes d'agents pour une gestion et un routage simplifiés." },
+    "planning": { "title": "Plannings", "description": "Gérer les plannings hebdomadaires des agents et leurs diverses activités." },
+    "outbound": { "title": "Campagnes Sortantes", "description": "Module central pour la création et la gestion des campagnes d'appels sortants." },
+    "scripts": { "title": "Scripts d'agent", "description": "Éditeur visuel pour construire des guides d'appel interactifs pour les agents." },
+    "ivr": { "title": "Flux SVI", "description": "Éditeur visuel pour concevoir les parcours d'appels entrants (Serveur Vocal Interactif)." },
+    "audio": { "title": "Bibliothèque Média", "description": "Gérer les fichiers audio utilisés dans les SVI (messages d'accueil, musiques d'attente)." },
+    "records": { "title": "Enregistrements", "description": "Écouter, télécharger et rechercher les enregistrements d'appels." },
+    "qualifications": { "title": "Qualifications d'appel", "description": "Définir les statuts de fin d'appel pour le reporting et les stratégies de rappel." },
+    "supervision": { "title": "Supervision en Temps Réel", "description": "Tableau de bord pour visualiser l'activité du centre de contact en direct." },
+    "reporting": { "title": "Rapports & Analytiques", "description": "Explorer les données historiques et générer des rapports de performance." },
+    "history": { "title": "Historique des Appels", "description": "Journal détaillé et filtrable de tous les appels traités." },
+    "sessions": { "title": "Login/Logout Agents", "description": "Journal détaillé des sessions de connexion des agents." },
+    "trunks": { "title": "Trunks SIP", "description": "Gérer les connexions vers vos opérateurs téléphoniques." },
+    "dids": { "title": "Numéros SDA", "description": "Gérer vos numéros de téléphone entrants et leur routage." },
+    "sites-config": { "title": "Configuration des Sites", "description": "Gérer les sites physiques ou logiques pour le routage et l'assignation des agents." },
+    "module-settings": { "title": "Gestion des Modules", "description": "Activer ou désactiver des menus pour les rôles administrateur et superviseur." },
+    "languages": { "title": "Langues & Traductions", "description": "Gérer le support multilingue de l'application.", "simplificationTip": { "title": "Information", "content": "Cette section est à titre informatif. La gestion des traductions est actuellement une tâche de développeur qui implique la modification directe des fichiers JSON." } },
+    "database-client": { "title": "Client Base de Données", "description": "Interagir directement avec la base de données PostgreSQL. (SuperAdmin uniquement)" },
+    "system-connection": { "title": "Connexions Système", "description": "Configurer les connexions aux services principaux comme la base de données et Asterisk." },
+    "maintenance": { "title": "Maintenance & Sauvegardes", "description": "Gérer les sauvegardes, les restaurations et les tâches de maintenance du système." },
+    "help": { "title": "Centre d'Aide", "description": "Trouver la documentation et les ressources de support." },
+    "api-docs": { "title": "Documentation API", "description": "Documentation technique pour l'API REST." },
+    "billing": { "title": "Facturation & Abonnement", "description": "Gérer votre abonnement, vos moyens de paiement et voir vos factures." },
+    "system-settings": { "title": "Paramètres Système", "description": "Paramètres généraux de l'application, comme l'apparence et les e-mails." }
+  },
+  "alerts": {
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible."
+
+  },
+  "didManager": {
+  "title": "Numéros SDA (DID)",
+  "addNumber": "Ajouter un Numéro",
+  "headers": {
+    "number": "Numéro",
+    "description": "Description",
+    "trunk": "Trunk",
+    "routing": "Routage (SVI)",
+    "actions": "Actions"
+  },
+  "modal": {
+    "editTitle": "Modifier le Numéro",
+    "newTitle": "Nouveau Numéro (SDA)",
+    "numberLabel": "Numéro",
+    "descriptionLabel": "Description",
+    "trunkLabel": "Trunk SIP",
+    "routingLabel": "Routage entrant (SVI)",
+    "noRouting": "Aucun (sonnerie par défaut)"
+  }
+},
+  "moduleSettings": {
+  "descriptions": {
+    "Agent": "Gérer les utilisateurs, les groupes et les plannings des agents.",
+    "Outbound": "Configurer les campagnes sortantes et les scripts d'appel.",
+    "Inbound": "Concevoir les parcours d'appels entrants (SVI).",
+    "Sound": "Gérer la bibliothèque audio et les enregistrements d'appels.",
+    "Configuration": "Définir les qualifications d'appel pour le reporting.",
+    "Supervision_Reporting": "Accéder aux tableaux de bord temps réel et aux rapports historiques.",
+    "Système": "Accéder aux outils de maintenance et au centre d'aide.",
+    "Paramètres": "Configurer les paramètres techniques de la plateforme."
+  }
+  },
+
+
+   "systemSettings": {
+    "tabs": {
+        "appearance": "Apparence",
+        "smtp": "Email (SMTP)",
+        "licences": "Licences"
+    },
+    "licences": {
+        "placeholder": "La gestion des licences sera implémentée ici."
+    },
+    "appearance": {
+      "title": "Apparence & Branding",
+      "appName": "Nom de l'application",
+      "companyAddress": "Adresse de l'entreprise",
+      "defaultLanguage": "Langue par défaut",
+      "fontFamily": "Police de l'application",
+      "fontSize": "Taille du texte de base",
+      "fontSizes": {
+        "small": "Petite",
+        "normal": "Normale",
+        "large": "Grande"
+      },
+      "colorPalette": "Palette de couleurs",
+      "logo": "Logo de l'application",
+      "logoHelp": "PNG, JPG, SVG. Recommandé : 200x50px, max 500KB.",
+      "favicon": "Icône de l'application (Favicon)",
+      "faviconHelp": "ICO, PNG, SVG. Recommandé : 32x32px, max 50KB."
+    },
+    "email": {
+      "title": "Email (SMTP)",
+      "description": "Configurer le serveur pour l'envoi d'emails (rapports, notifications).",
+      "server": "Serveur SMTP",
+      "port": "Port",
+      "user": "Utilisateur",
+      "from": "Adresse d'expédition",
+      "auth": "Authentification requise",
+      "secure": "Connexion sécurisée (TLS)",
+      "testButton": "Envoyer un email de test",
+      "testModalTitle": "Tester la configuration SMTP",
+      "testModalRecipient": "Email du destinataire",
+      "testModalSending": "Envoi en cours..."
+    },
+    "saveButton": "Enregistrer les paramètres",
+    "saveSuccess": "Paramètres système enregistrés avec succès.",
+    "saveError": "Erreur lors de l'enregistrement des paramètres.",
+    "testEmailSuccess": "Email de test envoyé avec succès ! Vérifiez votre boîte de réception.",
+    "testEmailError": "Échec de l'envoi de l'email de test.",
+    "fileTooLarge": "Le fichier est trop volumineux. La taille maximale est de {maxSize}KB.",
+    "invalidFileType": "Type de fichier invalide."
+  },
+  "scriptFeature": {
+    "addScript": "Créer un Script",
+    "pageCount": "{count, plural, =0 {0 page} one {1 page} other {# pages}}",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce script ?",
+    "usedBy": "Utilisé par :",
+    "deleteDisabledTooltip": "Impossible de supprimer un script assigné à une campagne."
+  },
+  "ivrManager": {
+    "createFlow": "Créer un Flux",
+    "noFlows": "Aucun flux SVI n'a encore été créé."
+  },
+  "groupManager": {
+    "modal": {
+      "titleNew": "Nouveau Groupe",
+      "titleEdit": "Modifier le Groupe",
+      "groupName": "Nom du groupe",
+      "members": "Membres",
+      "noAgents": "Aucun agent disponible à ajouter."
+    },
+    "search": "Rechercher un groupe...",
+    "create": "Créer un Groupe",
+    "headers": {
+      "name": "Nom",
+      "count": "Nombre de membres"
+    },
+    "noGroups": "Aucun groupe n'a été créé."
+  },
+  "userManager": {
+    "title": "Gestion des Utilisateurs",
+    "addUserButton": "Ajouter un utilisateur",
+    "importButton": "Importer des utilisateurs",
+    "generateButton": "Générer des utilisateurs",
+    "searchPlaceholder": "Rechercher par nom, identifiant, email...",
+    "headers": {
+      "name": "Nom",
+      "id": "ID",
+      "loginId": "Identifiant",
+      "role": "Rôle",
+      "status": "Statut"
+    },
+    "modal": {
+      "addTitle": "Ajouter un nouvel utilisateur",
+      "editTitle": "Modifier l'utilisateur",
+      "loginId": "Identifiant / Poste",
+      "loginIdHelp": "Doit être un identifiant numérique unique de 4 à 6 chiffres.",
+      "loginIdExists": "Cet identifiant est déjà utilisé.",
+      "emailExists": "Cette adresse email est déjà utilisée.",
+      "lastSuperAdmin": "Impossible de changer le rôle du dernier SuperAdmin.",
+      "generate": "Générer",
+      "passwordHelp": "Laisser vide pour ne pas changer",
+      "activeUser": "Utilisateur actif",
+      "site": "Site",
+      "noSite": "Aucun site",
+      "planningManagement": {
+      "title": "Gestion par Planning",
+      "description": "Si activé, le statut de l'agent est géré automatiquement par le planning."
+      },
+      "tabs": {
+        "general": "Général",
+        "groups": "Groupes",
+        "campaigns": "Campagnes"
+      },
+      "mobileNumber": "Numéro de mobile",
+      "useMobileAsStation": "Utiliser le mobile comme poste",
+      "useMobileAsStationHelp": "Si activé, les appels seront passés vers le numéro de mobile de l'agent au lieu d'un softphone."
+    },
+    "generateModal": {
+      "title": "Générer une plage d'utilisateurs",
+      "from": "De",
+      "to": "À",
+      "confirm": "Générer"
+    },
+    "delete": {
+      "superAdmin": "Le SuperAdmin ne peut pas être supprimé.",
+      "activeUser": "Désactivez l'utilisateur avant de le supprimer.",
+      "lastAdmin": "Impossible de supprimer le dernier Administrateur."
+    }
+  },
+  "scriptBuilder": {
+    "elements": "Éléments",
+    "palette": {
+      "group": "Groupe",
+      "label": "Titre",
+      "text": "Texte",
+      "input": "Champ de saisie",
+      "textarea": "Zone de texte",
+      "email": "Email",
+      "phone": "Téléphone",
+      "date": "Date",
+      "time": "Heure",
+      "radio": "Choix unique",
+      "checkbox": "Choix multiple",
+      "dropdown": "Liste déroulante",
+      "button": "Bouton",
+      "history": "Historique",
+      "image": "Image"
+    },
+    "defaults": {
+      "label": "Titre du champ",
+      "text": "Ceci est un paragraphe de texte. Vous pouvez le modifier pour donner des instructions à l'agent.",
+      "placeholder": "Saisir ici...",
+      "emailPlaceholder": "exemple@domaine.com",
+      "phonePlaceholder": "0123456789",
+      "question": "Votre question ici",
+      "radioOption1": "Option 1",
+      "radioOption2": "Option 2",
+      "checkboxOptionA": "Option A",
+      "checkboxOptionB": "Option B",
+      "dropdownValue1": "Valeur 1",
+      "dropdownValue2": "Valeur 2",
+      "buttonText": "Cliquer ici"
+    },
+    "background": "Arrière-plan",
+    "changeBackgroundColor": "Changer la couleur de fond du script",
+    "preview": "Aperçu",
+    "page_of_pages": "Page {currentPage}/{totalPages}",
+    "zoomIn": "Zoom avant",
+    "zoomOut": "Zoom arrière",
+    "resetView": "Réinitialiser la vue",
+    "cannotDeleteLastPage": "Impossible de supprimer la dernière page.",
+    "cannotDeleteStartPage": "Impossible de supprimer la page de démarrage.",
+    "confirmDeletePage": "Êtes-vous sûr de vouloir supprimer cette page ?",
+    "nameAlreadyExists": "Le nom '{name}' est déjà utilisé sur cette page.",
+    "technicalNameAlreadyExists": "Le nom technique '{fieldName}' est déjà utilisé. Veuillez choisir un autre nom.",
+    "pageNotFound": "Page non trouvée",
+    "properties": {
+      "blockNameLabel": "Nom du bloc (visible par l'agent)",
+      "technicalName": "Nom technique :",
+      "tabs": { "content": "Contenu", "style": "Style" },
+      "showField": "Afficher ce champ",
+      "showFieldHelp": "Désactiver pour masquer ce champ standard.",
+      "placeholder": "Texte de substitution",
+      "format": "Format",
+      "formats": { "text": "Texte", "number": "Nombre", "password": "Mot de passe" },
+      "buttonText": "Texte du bouton",
+      "question": "Question",
+      "options": "Options",
+      "newOption": "Nouvelle option",
+      "addOption": "Ajouter une option",
+      "historyHelp": "Ce bloc affichera l'historique des notes du contact.",
+      "blocksInGroup": "Blocs dans ce groupe",
+      "deleteBlockTooltip": "Supprimer le bloc '{name}'",
+      "dragBlocksHere": "Glissez des blocs ici pour les ajouter au groupe.",
+      "readOnly": "Lecture seule",
+      "readOnlyHelp": "Empêche l'agent de modifier ce champ.",
+      "width": "Largeur (px)",
+      "height": "Hauteur (px)",
+      "font": "Police",
+      "size": "Taille (px)",
+      "alignment": "Alignement",
+      "background": "Arrière-plan",
+      "text": "Texte",
+      "buttonAction": "Action du bouton",
+      "action": "Action",
+      "destinationPage": "Page de destination",
+      "selectPage": "Sélectionner une page",
+      "deleteBlockButton": "Supprimer \"{name}\""
+    },
+    "actions": {
+      "none": "Aucune",
+      "next": "Page suivante",
+      "previous": "Page précédente",
+      "navigate": "Naviguer vers...",
+      "save": "Sauvegarder la fiche",
+      "insertContact": "Insérer une nouvelle fiche"
+    },
+    "canvas": {
+      "historyPreview": "Aperçu de l'historique",
+      "deleteBlock": "Supprimer le bloc"
+    },
+    "image": {
+      "upload": "Télécharger une image",
+      "invalidType": "Type de fichier invalide. Seuls les fichiers PNG, JPG, GIF et SVG sont autorisés.",
+      "tooLarge": "Le fichier est trop volumineux. La taille maximale est de 1 Mo."
+    }
+  },
+  "agentPreview": {
+    "dataSaved": "Données enregistrées.",
+    "invalidPhone": "Veuillez fournir un numéro de téléphone valide pour insérer une nouvelle fiche.",
+    "contactInserted": "Nouveau contact inséré avec succès.",
+    "insertError": "Erreur lors de l'insertion du contact : {message}",
+    "notesHistory": "Historique & Notes",
+    "noNotes": "Aucune note pour ce contact.",
+    "addNotePlaceholder": "Ajouter une nouvelle note...",
+    "saveNote": "Enregistrer la note",
+    "selectOption": "Sélectionner une option",
+    "unsupportedBlock": "Type de bloc non supporté : {type}",
+    "embedded": {
+      "page": "Page :"
+    },
+    "modal": {
+      "title": "Aperçu du script : {scriptName}",
+      "currentPage": "Page actuelle : {pageName}",
+      "backToEditor": "Retour à l'éditeur"
+    }
+  },
+  "qualificationsManager": {
+    "title": "Groupes de Qualifications",
+    "createGroup": "Créer un groupe",
+    "searchPlaceholder": "Rechercher un groupe...",
+    "headers": {
+      "name": "Nom",
+      "count": "Qualifications"
+    },
+    "noGroups": "Aucun groupe n'a été créé. Ajoutez-en un pour commencer !",
+    "deleteDisabledTooltip": "Impossible de supprimer un groupe assigné à une campagne.",
+    "modal": {
+      "addTitle": "Nouvelle Qualification",
+      "editTitle": "Modifier la Qualification",
+      "parent": "Parent (Optionnel)",
+      "noParent": "Aucun parent (Niveau 1)",
+      "code": "Code",
+      "codeUsed": "Ce code est déjà utilisé.",
+      "description": "Description",
+      "type": "Type",
+      "types": {
+        "positive": "Positive",
+        "neutral": "Neutre",
+        "negative": "Négative"
+      },
+      "recyclable": "Recyclable",
+      "recyclableHelp": "Permet de réinjecter les fiches qualifiées."
+    },
+    "noQualifications": "Aucune qualification.",
+    "groupModal": {
+      "editTitle": "Modifier le Groupe",
+      "newTitle": "Nouveau Groupe",
+      "groupNameLabel": "Nom du groupe",
+      "availableQuals": "Qualifications Disponibles",
+      "groupQuals": "Qualifications du Groupe",
+      "unassign": "Désassigner",
+      "assign": "Assigner"
+    }
+  },
+  "outboundCampaignsManager": {
+    "list": {
+      "title": "Campagnes",
+      "create": "Créer une campagne",
+      "headers": {
+        "name": "Nom",
+        "id": "ID",
+        "status": "Statut",
+        "contacts": "Contacts",
+        "mode": "Mode"
+      },
+      "actions": {
+        "import": "Importer",
+        "deleteDisabledTooltip": "Impossible de supprimer une campagne active. Veuillez la désactiver d'abord."
+      }
+    },
+    "modal": {
+      "editTitle": "Modifier la campagne",
+      "newTitle": "Nouvelle campagne",
+      "ledReady": "Prête à démarrer",
+      "ledIncomplete": "Champs requis manquants",
+      "tabs": {
+        "general": "Général",
+        "planning": "Planification",
+        "quotas": "Quotas",
+        "filters": "Inclusion/Exclusion"
+      },
+      "labels": {
+        "name": "Nom",
+        "agentScript": "Script d'agent",
+        "qualifGroup": "Groupe de qualifications",
+        "dialingMode": "Mode de numérotation",
+        "callerId": "Numéro présenté",
+        "wrapUpTime": "Temps de post-appel (secondes)",
+        "assignedAgents": "Agents & Groupes Assignés",
+        "groups": "Groupes",
+        "individualAgents": "Agents individuels",
+        "activeCampaign": "Campagne active",
+        "activityDays": "Jours et heures d'activité"
+      },
+      "noScript": "Aucun script",
+      "dialingModes": {
+        "predictive": "Prédictif",
+        "progressive": "Progressif",
+        "manual": "Manuel"
+      },
+      "wrapUpHelp": "Durée max pour un agent en état \"Post-appel\" (max 120s).",
+      "agentCount": "{count} agents",
+      "weekdays": {
+        "monday": "Lundi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi",
+        "thursday": "Jeudi",
+        "friday": "Vendredi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche"
+      },
+      "valuePlaceholder": "Valeur",
+      "limitPlaceholder": "Limite",
+      "addQuotaRule": "Ajouter une règle de quota",
+      "addFilterRule": "Ajouter une règle de filtrage",
+      "operators": {
+        "equals": "égal à",
+        "starts_with": "commence par",
+        "contains": "contient",
+        "isNotEmpty": "n'est pas vide"
+      },
+      "filterTypes": {
+        "include": "Inclure",
+        "exclude": "Exclure"
+      },
+      "fields": {
+        "postalCode": "Code Postal",
+        "phoneNumber": "Numéro de téléphone",
+        "lastName": "Nom de famille"
+      }
+    }
+  },
+  "campaignDetail": {
+    "backToCampaigns": "Retour aux campagnes",
+    "associatedScript": "Script associé : {scriptName}",
+    "noDataToExport": "Aucune donnée de contact traité à exporter.",
+    "export": "Exporter les Traités",
+    "dashboard": {
+      "kpis": {
+        "completionRate": "Taux d'achèvement",
+        "contactRate": "Taux de contact",
+        "conversionRate": "Taux de conversion",
+        "aht": "DMT"
+      },
+      "fileProgress": {
+        "title": "Progression du Fichier",
+        "processed": "Traitées :",
+        "remaining": "Restantes :"
+      },
+      "quota": {
+        "title": "Suivi des Quotas",
+        "ruleStartsWith": "Quota : {field} commence par \"{value}\"",
+        "ruleEquals": "Quota : {field} est égal à \"{value}\"",
+        "achieved": "Atteint :"
+      },
+      "charts": {
+        "successByHourTitle": "Conversions par heure de la journée",
+        "conversionsLabel": "Conversions"
+      },
+      "tables": {
+        "qualifPerfTitle": "Performance par Qualification",
+        "agentPerfTitle": "Performance par Agent",
+        "headers": {
+          "qualification": "Qualification",
+          "processedRecords": "Fiches traitées",
+          "rate": "Taux",
+          "agent": "Agent",
+          "processedCalls": "Appels traités",
+          "conversions": "Conversions"
+        }
+      }
+    },
+    "tabs": {
+      "contacts": "Contacts ({count})",
+      "dashboard": "Tableau de Bord",
+      "dashboard2": "Analyse Détaillée",
+      "settings": "Paramètres"
+    },
+    "contacts": {
+      "searchPlaceholder": "Rechercher des contacts...",
+      "deleteSelection": "Supprimer la sélection ({count})",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer {count} contact(s) ? Cette action est irréversible.",
+      "headers": {
+        "lastName": "Nom",
+        "firstName": "Prénom",
+        "phone": "Téléphone",
+        "querry": "QUERY",
+        "status": "Statut",
+        "lastQualif": "Dernière Qualif.",
+        "lastNote": "Dernière Note"
+      },
+      "noContacts": "Aucun contact trouvé pour cette campagne.",
+      "pagination": "Page {currentPage} sur {totalPages}"
+    },
+    "settings": {
+      "recycling": {
+        "title": "Recyclage des Contacts",
+        "description": "Réinjectez des contacts dans la campagne en fonction de leur dernière qualification. Seuls les contacts avec le statut 'qualifié' seront affectés.",
+        "headers": {
+          "qualification": "Qualification",
+          "processedRecords": "Fiches Traitées",
+          "action": "Action"
+        },
+        "recycleButton": "Recycler",
+        "recycleButtonTooltip": "Réinitialiser le statut à 'en attente'",
+        "notRecyclableTooltip": "Cette qualification n'est pas recyclable",
+        "confirmRecycle": "Êtes-vous sûr de vouloir recycler tous les contacts avec cette qualification ? Leur statut sera réinitialisé à \"en attente\"."
+      }
+    },
+    "dashboard2": {
+      "title": "Analyse Détaillée",
+      "reset": "Réinitialiser",
+      "detailTitle": "Détail des fiches pour la sélection",
+      "noRecords": "Aucune fiche à afficher pour la sélection actuelle.",
+      "callsLabel": "{count, plural, one {appel} other {appels}}",
+      "headers": {
+        "contact": "Contact",
+        "phone": "Téléphone",
+        "agent": "Agent",
+        "callDate": "Date d'appel",
+        "qualification": "Qualification"
+      }
+    },
+    "exportHeaders": {
+      "date": "Date de Traitement",
+      "agent": "Agent",
+      "phone": "Numéro de Téléphone",
+      "duration": "Durée",
+      "qualCode": "Code Qualif.",
+      "qualDescription": "Description Qualif."
+    }
+  },
+  "contactHistory": {
+    "title": "Historique du Contact",
+    "loading": "Chargement de l'historique...",
+    "kpis": {
+      "totalCalls": "Appels Totaux",
+      "talkTime": "Temps de Parole Total",
+      "uniqueAgents": "Agents Uniques",
+      "positiveQuals": "Qualifs Positives"
+    },
+    "timelineTitle": "Chronologie",
+    "callBy": "Appel par {agentName}",
+    "noteBy": "Note par {agentName}",
+    "duration": "Durée :",
+    "qualification": "Qualification :",
+    "noHistory": "Aucun historique trouvé pour ce contact."
+  },
+  "reporting": {
+    "exportPdf": "Exporter en PDF",
+    "filters": {
+      "dateRanges": {
+        "last7days": "7 derniers jours",
+        "last30days": "30 derniers jours",
+        "thisMonth": "Ce mois-ci"
+      },
+      "allCampaigns": "Toutes les campagnes",
+      "allAgents": "Tous les agents"
+    },
+    "kpis": {
+      "processedCalls": "Appels Traités",
+      "totalTalkTime": "Temps de Parole Total",
+      "avgCallDuration": "Durée Moy. d'Appel",
+      "successRate": "Taux de Réussite",
+      "occupancyRate": "Taux d'Occupation"
+    },
+    "tabs": {
+      "charts": "Graphiques",
+      "timesheet": "Feuille de Temps",
+      "campaign": "Performance Campagne",
+      "agent": "Performance Agent",
+      "group": "Performance Groupe",
+      "site": "Performance Site",
+      "history": "Historique Appels"
+    },
+    "charts": {
+      "callsByCampaignTitle": "Appels par Campagne",
+      "successByHourTitle": "Réussites par Heure",
+      "successByAgentTitle": "Taux de Réussite par Agent (%)",
+      "adherenceByAgentTitle": "Écart d'Adhérence Moyen (s)",
+      "conversionsLabel": "Conversions",
+      "successRateLabel": "Taux de Réussite",
+      "avgAdherenceLabel": "Écart d'Adhérence"
+    },
+    "tables": {
+      "campaignPerf": {
+        "title": "Performance par Campagne",
+        "headers": {
+          "campaign": "Campagne",
+          "calls": "Appels",
+          "totalDuration": "Durée Totale",
+          "avgDuration": "Durée Moy.",
+          "successRate": "Taux de Réussite"
+        }
+      },
+      "agentPerf": {
+        "titleCalls": "Performance par Agent (Appels)",
+        "headers": {
+          "agent": "Agent",
+          "calls": "Appels",
+          "totalDuration": "Durée Totale",
+          "avgDuration": "Durée Moy.",
+          "successRate": "Taux de Réussite"
+        }
+      },
+      "groupPerf": {
+        "title": "Performance par Groupe",
+        "headers": {
+          "group": "Groupe"
+        }
+      },
+      "sitePerf": {
+        "title": "Performance par Site",
+        "headers": {
+          "site": "Site"
+        }
+      },
+      "timesheet": {
+        "title": "Feuille de Temps des Agents",
+        "headers": {
+          "date": "Date",
+          "agent": "Agent",
+          "firstLogin": "Première Connexion",
+          "lastLogout": "Dernière Déconnexion",
+          "totalDuration": "Durée Totale"
+        }
+      },
+      "callHistory": {
+        "title": "Historique des Appels",
+        "headers": {
+          "dateTime": "Date & Heure",
+          "agent": "Agent",
+          "campaign": "Campagne",
+          "number": "Numéro",
+          "duration": "Durée",
+          "qualification": "Qualification"
+        }
+      }
+    },
+    "inboundCalls": "Appels Entrants",
+    "noSessionData": "Aucune donnée de session pour la période sélectionnée.",
+    "noCallData": "Aucune donnée d'appel pour la période sélectionnée.",
+    "pdf": {
+        "title": "Rapport d'Analyse",
+        "chartsTitle": "Aperçu des Graphiques"
+    }
+  },
+  "history": {
+    "filters": {
+      "searchTerm": "Rechercher",
+      "searchPlaceholder": "Numéro ou nom du contact...",
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "inbound": "Entrant / Sans Campagne"
+    },
+    "headers": {
+      "dateTime": "Date & Heure",
+      "direction": "Direction",
+      "contactName": "Nom du Contact",
+      "number": "Numéro",
+      "duration": "Durée",
+      "qualification": "Qualification"
+    },
+    "inbound": "Entrant",
+    "outbound": "Sortant",
+    "listen": "Écouter",
+    "noRecords": "Aucun enregistrement trouvé pour les filtres sélectionnés.",
+    "pagination": "Page {currentPage} sur {totalPages} ({totalRecords} enregistrements)"
+  },
+  "supervision": {
+    "kpis": {
+      "agentsReady": "Agents en Attente",
+      "agentsOnCall": "Agents en Appel",
+      "agentsOnWrapup": "Agents en Post-Appel",
+      "agentsOnPause": "Agents en Pause",
+      "activeCalls": "Appels Actifs"
+    },
+    "tabs": {
+      "agents": "Agents",
+      "calls": "Appels",
+      "campaigns": "Campagnes",
+      "groups": "Supervision par Groupe",
+      "sites": "Supervision par Site"
+    },
+    "groupBoard": {
+      "noActiveAgents": "Aucun agent actif dans aucun groupe.",
+      "stats": {
+        "ready": "Attente",
+        "onCall": "Appel",
+        "onPause": "Pause",
+        "wrapUp": "Post-Appel"
+      }
+    },
+    "siteBoard": {
+      "noSite": "Site non assigné",
+      "noActiveAgents": "Aucun agent actif sur aucun site."
+    },
+    "agentBoard": {
+      "headers": {
+        "agent": "Agent",
+        "status": "Statut",
+        "duration": "Durée",
+        "calls": "Appels",
+        "avgHandleTime": "DMT",
+        "actions": "Actions"
+      },
+      "noAgents": "Aucun agent à afficher.",
+      "confirmForceLogout": "Êtes-vous sûr de vouloir forcer la déconnexion de l'agent {agentName} ?",
+      "actions": {
+        "contact": "Contacter {agentName}",
+        "listen": "Écouter l'appel",
+        "barge": "Intervenir dans l'appel",
+        "coach": "Chuchoter à l'agent",
+        "forcePause": "Forcer la Pause",
+        "forceLogout": "Forcer la Déconnexion"
+      }
+    },
+    "callBoard": {
+      "actionAlert": "Action (simulation) : {action} sur l'appel {callId}",
+      "headers": {
+        "caller": "Appelant",
+        "agent": "Agent",
+        "campaign": "Campagne",
+        "duration": "Durée",
+        "actions": "Actions"
+      },
+      "noActiveCalls": "Aucun appel actif pour le moment.",
+      "actions": {
+        "monitor": "Monitorer l'appel",
+        "transfer": "Transférer l'appel",
+        "hangup": "Raccrocher l'appel"
+      }
+    },
+    "campaignBoard": {
+      "actionAlert": "Action (simulation) : {action} sur la campagne {campaignName}",
+      "confirmStop": "Êtes-vous sûr de vouloir arrêter définitivement la campagne {campaignName} ?",
+      "headers": {
+        "campaign": "Campagne",
+        "status": "Statut",
+        "offered": "Présentés",
+        "answered": "Répondus",
+        "hitRate": "Taux de Réussite",
+        "actions": "Actions"
+      },
+      "noCampaigns": "Aucune campagne à superviser.",
+      "statuses": {
+        "running": "En cours",
+        "paused": "En pause",
+        "stopped": "Arrêtée"
+      },
+      "actions": {
+        "pause": "Mettre en pause",
+        "start": "Démarrer",
+        "boost": "Booster la campagne",
+        "stop": "Arrêter la campagne"
+      }
+    }
+  },
+  "importContactsModal": {
+    "title": "Importer des contacts pour : {campaignName}",
+    "uploadLabel": "Téléverser un fichier (CSV, TXT, XLSX)",
+    "downloadTemplate": "Télécharger un fichier modèle CSV",
+    "fileReadError": "Une erreur est survenue lors de la lecture du fichier. Assurez-vous qu'il est valide et non corrompu.",
+    "validationError": "Une erreur est survenue lors de la validation. Veuillez réessayer.",
+    "exportErrorReasonHeader": "Raison de l'Erreur",
+    "validating": "Validation en cours...",
+    "validateAndImport": "Valider et Importer",
+    "finish": "Terminer",
+    "deduplication": {
+      "title": "Dédoublonnage",
+      "tipTitle": "Astuce :",
+      "tipContent": "Pour dédoublonner sur plus de champs (ex: email, ID client), assignez un script d'agent à cette campagne.",
+      "enableLabel": "Activer le dédoublonnage",
+      "enableHelp": "Vérifie les doublons dans le fichier et par rapport aux contacts existants.",
+      "criteriaLabel": "Critères de dédoublonnage (un ou plusieurs)"
+    },
+    "mapping": {
+      "description": "Faites correspondre les colonnes de votre fichier (à droite) aux champs de destination (à gauche). Le numéro de téléphone est obligatoire.",
+      "ignoreField": "Ignorer ce champ"
+    },
+    "summary": {
+      "title": "Résumé de l'Importation",
+      "rowsRead": "Lignes Lues",
+      "contactsImported": "Contacts Importés",
+      "rowsRejected": "Lignes Rejetées",
+      "rejectionDetails": "Détails des Rejets",
+      "exportRejected": "Exporter les Lignes Rejetées",
+      "table": {
+        "row": "Ligne",
+        "reason": "Raison du rejet"
+      }
+    },
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "phoneNumber": "Numéro de téléphone",
+      "postalCode": "Code Postal"
+    }
+  },
+  "audioManager": {
+    "title": "Bibliothèque de Fichiers Audio",
+    "uploadFile": "Téléverser un fichier",
+    "headers": {
+        "duration": "Durée",
+        "size": "Taille",
+        "uploadDate": "Date d'ajout"
+    },
+    "noFiles": "Aucun fichier audio n'a été téléversé.",
+    "saveSuccess": "Fichier enregistré avec succès.",
+    "saveError": "Erreur lors de l'enregistrement du fichier."
+  },
+  "audioFileModal": {
+      "editTitle": "Modifier le fichier audio",
+      "uploadTitle": "Téléverser un fichier audio",
+      "fileLabel": "Fichier (MP3, WAV)",
+      "clickToUpload": "Cliquez pour téléverser",
+      "processing": "Traitement en cours...",
+      "displayName": "Nom d'affichage",
+      "loading": "Chargement...",
+      "selectFileError": "Veuillez sélectionner un fichier."
+  },
+  "recordsManager": {
+      "filters": {
+          "date": "Date",
+          "allAgents": "Tous les agents",
+          "allCampaigns": "Toutes les campagnes"
+      },
+      "headers": {
+          "dateTime": "Date & Heure",
+          "calledNumber": "Numéro appelé",
+          "duration": "Durée"
+      },
+      "inbound": "Entrant",
+      "download": "Télécharger",
+      "noRecords": "Aucun enregistrement trouvé pour les filtres sélectionnés.",
+      "pagination": "Page {currentPage} sur {totalPages}"
+  },
+   "sessionViewer": {
+    "filters": {
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "agent": "Agent",
+      "allAgents": "Tous les Agents",
+      "group": "Groupe",
+      "allGroups": "Tous les Groupes"
+    },
+    "headers": {
+      "agent": "Agent",
+      "loginTime": "Heure de connexion",
+      "logoutTime": "Heure de déconnexion",
+      "duration": "Durée",
+      "status": "Statut"
+    },
+    "noSessions": "Aucune session trouvée pour les filtres sélectionnés.",
+    "activeNow": "Actif"
+  },
+  "systemConnection": {
+    "db": {
+      "title": "Base de Données (PostgreSQL)",
+      "host": "Hôte",
+      "port": "Port",
+      "user": "Utilisateur",
+      "password": "Mot de passe",
+      "database": "Nom de la base de données",
+      "testButton": "Tester la Connexion",
+      "testSuccess": "Connexion à la base de données réussie !",
+      "testFailure": "Échec de la connexion à la base de données."
+    },
+    "asterisk": {
+      "title": "Téléphonie (Asterisk)",
+      "ami": {
+        "title": "Interface de Management (AMI)",
+        "host": "Hôte AMI",
+        "port": "Port AMI",
+        "user": "Utilisateur AMI",
+        "password": "Mot de passe AMI"
+      },
+      "agi": {
+        "title": "Interface de Passerelle (AGI)",
+        "port": "Port AGI du Backend",
+        "help": "Ce port doit correspondre à celui configuré dans le fichier '.env' du backend et dans 'extensions.conf' d'Asterisk."
+      },
+      "testButton": "Tester la Connexion AMI",
+      "testSuccess": "Connexion AMI réussie !",
+      "testFailure": "Échec de la connexion AMI."
+    },
+    "passwordPlaceholder": "Laisser vide pour ne pas changer",
+    "warning": "La modification de ces paramètres peut rendre l'application indisponible. Un redémarrage du serveur backend est nécessaire pour appliquer les changements.",
+    "saveButton": "Enregistrer les Modifications",
+    "saveSuccess": "Paramètres enregistrés. Veuillez redémarrer le serveur backend pour appliquer les changements."
+  },
+  "databaseManager": {
+    "attention": "Attention : L'interaction directe avec la base de données est une opération à haut risque. Des requêtes incorrectes peuvent entraîner la corruption ou la perte de données. Cet outil est réservé aux SuperAdmins pour la maintenance et le dépannage uniquement.",
+    "schema": "Schéma de la Base de Données",
+    "predefinedQueries": "Requêtes Prédéfinies",
+    "queries": {
+      "listUsers": "Lister les Utilisateurs",
+      "listActiveCampaigns": "Lister les Campagnes Actives",
+      "countContactsByCampaign": "Compter les Contacts par Campagne",
+      "viewLast20Contacts": "Voir les 20 Derniers Contacts",
+      "listScripts": "Lister les Scripts"
+    },
+    "readOnlyMode": "Mode lecture seule",
+    "execute": "Exécuter",
+    "executing": "Exécution...",
+    "resultsPlaceholder": "Les résultats de la requête s'afficheront ici.",
+    "resultsCount": "{count} ligne(s) retournée(s).",
+    "schemaLoadError": "Échec du chargement du schéma de la base de données.",
+    "queryError": "Une erreur est survenue lors de l'exécution de la requête.",
+    "querySuccessNoRows": "La requête a été exécutée avec succès mais n'a retourné aucune ligne."
+  },
+   "apiDocs": {
+    "description": "Ceci est la documentation interactive de l'API REST EVSCallPro. Vous pouvez explorer les points d'accès, voir les structures de données attendues, et même tester les appels API directement depuis cette interface.",
+    "iframeTitle": "Documentation API"
+  },
+  "monitoring": {
+    "title": "Monitoring Système",
+    "health": {
+      "up": "Opérationnel",
+      "degraded": "Dégradé",
+      "down": "En panne"
+    },
+    "kpis": {
+      "cpu": "Charge CPU",
+      "ram": "Utilisation RAM",
+      "disk": "Utilisation Disque",
+      "recordings": "Enregistrements",
+      "totalSize": "Taille totale",
+      "latency": "Latence API"
+    },
+    "logs": {
+      "title": "Journaux Système",
+      "tabs": {
+        "system": "Système",
+        "ami": "AMI",
+        "security": "Sécurité"
+      },
+      "noLogs": "Aucun journal à afficher."
+    },
+    "purgeLogs": "Purger les Journaux",
+    "connectivity": {
+      "title": "Connectivité des Services",
+      "sitePrefix": "Site : ",
+      "success": "Succès",
+      "failure": "Échec",
+      "testing": "Test en cours...",
+      "idle": "Inactif",
+      "testButton": "Tester"
+    }
+  },
+  "siteManager": {
+    "title": "Sites",
+    "addSite": "Ajouter un Site",
+    "headers": {
+      "name": "Nom",
+      "gatewayIp": "IP Passerelle",
+      "extensions": "Extensions",
+      "physicalExtensions": "Extensions Physiques",
+      "directMedia": "Média Direct"
+    },
+    "modal": {
+      "editTitle": "Modifier le Site",
+      "newTitle": "Nouveau Site",
+      "siteName": "Nom du Site",
+      "gatewayIpLabel": "Adresse IP de la passerelle (Yeastar)",
+      "gatewayIpPlaceholder": "Ex: 10.1.0.254",
+      "physicalExtensionsLabel": "Extensions physiques",
+      "extensionPlaceholder": "Ex: 201"
+    },
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce site ? Les utilisateurs assignés n'auront plus de site.",
+    "deleteDisabledTooltip": "Impossible de supprimer un site avec des agents assignés.",
+    "backToList": "Retour à la liste des sites",
+    "detail": {
+      "description": "Gérer les extensions physiques pour ce site.",
+      "searchPlaceholder": "Rechercher une extension...",
+      "bulkGenerate": "Générer en Masse",
+      "addExtension": "Ajouter une Extension",
+      "confirmDeleteExtension": "Êtes-vous sûr de vouloir supprimer l'extension {number} ?",
+      "addModal": {
+        "title": "Ajouter une Extension",
+        "numberLabel": "Numéro d'extension",
+        "duplicateError": "Cette extension existe déjà."
+      },
+      "generateModal": {
+        "title": "Générer une Plage d'Extensions",
+        "from": "De",
+        "to": "À",
+        "rangeError": "La valeur 'De' doit être inférieure à la valeur 'À'.",
+        "limitError": "Vous ne pouvez générer que 100 extensions à la fois.",
+        "generatedMessage": "{count} extension(s) ajoutée(s)."
+      },
+      "deleteSelected": "Supprimer la sélection ({count})",
+      "confirmDeleteSelected": "Êtes-vous sûr de vouloir supprimer les {count} extensions sélectionnées ?"
+    }
+  }
+}
