@@ -31,8 +31,11 @@ export type FeatureId =
 export type FeatureCategory = 'Agent' | 'Outbound' | 'Inbound' | 'Sound' | 'Configuration' | 'Supervision & Reporting' | 'System' | 'Settings';
 
 export interface ModuleVisibility {
-  categories: Partial<Record<FeatureCategory, boolean>>;
-  features: Partial<Record<FeatureId, boolean>>;
+  // Gardons la visibilité par catégorie pour des futures évolutions
+  categories: Partial<Record<FeatureCategory, Partial<Record<UserRole, boolean>>>>;
+  // La visibilité par fonctionnalité est maintenant un objet qui mappe un rôle à un booléen.
+  // Exemple: features.users = { 'Superviseur': true, 'Administrateur': false }
+  features: Partial<Record<FeatureId, Partial<Record<UserRole, boolean>>>>;
 }
 
 export interface Feature {

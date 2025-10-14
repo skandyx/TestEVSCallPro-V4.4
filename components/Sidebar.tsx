@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import type { Feature, FeatureId, User, FeatureCategory, ModuleVisibility, AgentStatus } from '../types.ts';
+import type { Feature, FeatureId, User, FeatureCategory, ModuleVisibility, AgentStatus, UserRole } from '../types.ts';
 import {
     LogoIcon, UserCircleIcon, ChevronDownIcon,
     UsersIcon, PhoneArrowUpRightIcon, InboxArrowDownIcon, SpeakerWaveIcon, WrenchScrewdriverIcon,
@@ -63,7 +63,6 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
 
     const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-    const isSuperAdmin = currentUser?.role === 'SuperAdmin';
     const { t } = useI18n();
 
     const toggleCategory = (category: string) => {
@@ -80,6 +79,31 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
         (acc[feature.category] = acc[feature.category] || []).push(feature);
         return acc;
     }, {} as Record<string, Feature[]>);
+    
+    // NEW: List of features only visible to SuperAdmin, not configurable.
+    const SUPER_ADMIN_ONLY_FEATURES: FeatureId[] = ['module-settings', 'system-connection', 'api-docs', 'database-client', 'billing', 'system-settings'];
+
+    const isFeatureVisible = (feature: Feature, user: User, visibility: ModuleVisibility): boolean => {
+        // SuperAdmin sees everything.
+        if (user.role === 'SuperAdmin') {
+            return true;
+        }
+        // Features that are ONLY for SuperAdmin are hidden from others.
+        if (SUPER_ADMIN_ONLY_FEATURES.includes(feature.id)) {
+            return false;
+        }
+        // For other roles, check the visibility config. Default to true if not specified.
+        return visibility.features?.[feature.id]?.[user.role as UserRole] ?? true;
+    };
+    
+    // NEW: This function determines if an entire category should be shown.
+    // It is visible if at least one feature within it is visible to the current user.
+    const isCategoryVisible = (categoryName: string, user: User, visibility: ModuleVisibility): boolean => {
+        if (user.role === 'SuperAdmin') return true;
+        const featuresInCategory = categories[categoryName] || [];
+        return featuresInCategory.some(feature => isFeatureVisible(feature, user, visibility));
+    }
+
 
     return (
         <aside className={`transition-all duration-300 ${isSidebarCollapsed ? 'w-20' : 'w-64'} bg-white dark:bg-slate-800 flex-shrink-0 border-r border-slate-200 dark:border-slate-700 flex flex-col`}>
@@ -93,9 +117,8 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
             </div>
 
             <nav className="flex-1 overflow-y-auto p-2 space-y-1">
-                {categoryOrder
-                    .filter(categoryName => isSuperAdmin || (moduleVisibility.categories[categoryName as FeatureCategory] ?? true))
-                    .filter(categoryName => categories[categoryName]) // Ne rend que les catégories qui ont des fonctionnalités
+                {currentUser && categoryOrder
+                    .filter(categoryName => isCategoryVisible(categoryName, currentUser, moduleVisibility))
                     .map(categoryName => {
                         const featuresInCategory = categories[categoryName];
                         const isExpanded = expandedCategories.includes(categoryName);
@@ -103,8 +126,8 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
                         const isActiveCategory = featuresInCategory.some(f => f.id === activeFeatureId);
                         const translatedCategoryName = t(getCategoryTranslationKey(categoryName as FeatureCategory));
 
-                        // Hide the 'Help' feature from the main category list if it exists there
-                        const visibleFeatures = featuresInCategory.filter(feature => feature.id !== 'help');
+                        // Filter features based on the new visibility logic
+                        const visibleFeatures = featuresInCategory.filter(feature => isFeatureVisible(feature, currentUser, moduleVisibility));
                         if (visibleFeatures.length === 0) return null;
 
                         return (
@@ -124,16 +147,7 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
                                 </button>
                                 {!isSidebarCollapsed && isExpanded && (
                                     <div className="mt-1 space-y-1 pl-4">
-                                        {visibleFeatures
-                                            .filter(feature => {
-                                                // Special rules for SuperAdmin-only features
-                                                if (['module-settings', 'system-connection', 'api-docs', 'database-client', 'billing', 'system-settings'].includes(feature.id)) {
-                                                    return currentUser?.role === 'SuperAdmin';
-                                                }
-                                                // Default rule for all other features
-                                                return isSuperAdmin || (moduleVisibility.features[feature.id] ?? true);
-                                            })
-                                            .map(feature => (
+                                        {visibleFeatures.map(feature => (
                                             <button
                                                 key={feature.id}
                                                 onClick={() => onSelectFeature(feature.id)}
@@ -151,24 +165,6 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
                             </div>
                         )
                 })}
-                {/* Add Help button here, outside the main category map */}
-                {currentUser && ['Superviseur', 'Administrateur', 'SuperAdmin'].includes(currentUser.role) && (
-                    <div className="border-t border-slate-200 dark:border-slate-700 my-1"></div>
-                )}
-                {currentUser && ['Superviseur', 'Administrateur', 'SuperAdmin'].includes(currentUser.role) && (
-                    <button
-                        onClick={() => onSelectFeature('help')}
-                        className={`w-full text-left flex items-center p-2 text-sm font-semibold rounded-md transition-colors ${
-                            isSidebarCollapsed ? 'justify-center' : ''
-                        } ${
-                            activeFeatureId === 'help' ? 'bg-slate-100 text-slate-900 dark:bg-slate-700 dark:text-slate-50' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700'
-                        }`}
-                        title={t('features.help.title')}
-                    >
-                        <QuestionMarkCircleIcon className="w-5 h-5 flex-shrink-0" />
-                        {!isSidebarCollapsed && <span className="flex-1 ml-3">{t('features.help.title')}</span>}
-                    </button>
-                )}
             </nav>
 
             <div className="p-2 border-t border-slate-200 dark:border-slate-700 mt-auto flex-shrink-0">

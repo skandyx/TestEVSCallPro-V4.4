@@ -501,7 +501,6 @@ export const features: Feature[] = [
         titleKey: 'features.module-settings.title',
         category: 'Settings',
         descriptionKey: 'features.module-settings.description',
-        // FIX: Corrected module import path for lazy-loaded component to resolve module resolution error.
         component: lazy(() => import('../components/ModuleSettingsManager.tsx')),
         userJourney: {
             titleKey: 'features.module-settings.userJourney.title',
