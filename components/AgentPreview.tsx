@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import type { SavedScript, ScriptBlock, DisplayCondition, Page, ButtonAction, Contact, ContactNote, User, Campaign } from '../types.ts';
+import type { SavedScript, ScriptBlock, DisplayCondition, Page, ButtonAction, Contact, ContactNote, User, Campaign, QuotaRule } from '../types.ts';
 import { useI18n } from '../src/i18n/index.tsx';
 
 interface AgentPreviewProps {
@@ -17,7 +17,7 @@ interface AgentPreviewProps {
   onUpdateContact?: (contact: Contact) => Promise<void>;
   onClearContact?: () => void;
   matchingQuota?: {
-    name: string;
+    rule: QuotaRule;
     current: number;
     limit: number;
     progress: number;
@@ -395,6 +395,13 @@ const AgentPreview: React.FC<AgentPreviewProps> = ({
     );
     return `${lowestPoint + 20}px`; // Add some padding
   }, [currentPage, formValues]);
+  
+  const quotaTitle = useMemo(() => {
+      if (!matchingQuota) return '';
+      const { rule } = matchingQuota;
+      const operatorText = t(`outboundCampaignsManager.modal.operators.${rule.operator}`);
+      return t('agentView.activeQuota.title', { field: rule.contactField, operator: operatorText, value: rule.value });
+  }, [matchingQuota, t]);
 
   const ScriptCanvas = (
     <div 
@@ -427,14 +434,16 @@ const AgentPreview: React.FC<AgentPreviewProps> = ({
             
             <div className="flex-1 min-w-0">
                 {matchingQuota && (
-                    <div className="w-full max-w-xs mx-auto">
-                        <p className="text-xs text-center font-semibold text-slate-600 dark:text-slate-300 truncate" title={matchingQuota.name}>
-                           {matchingQuota.name}
+                    <div className="w-full max-w-sm mx-auto">
+                        <p className="text-xs text-center font-semibold text-slate-600 dark:text-slate-300 truncate" title={quotaTitle}>
+                           {quotaTitle}
                         </p>
-                        <div className="w-full bg-slate-200 dark:bg-slate-600 rounded-full h-2 mt-1">
-                            <div className="bg-primary h-2 rounded-full" style={{ width: `${matchingQuota.progress}%` }}></div>
+                        <div className="flex items-center gap-2 mt-1">
+                            <div className="flex-1 bg-slate-200 dark:bg-slate-600 rounded-full h-2">
+                                <div className="bg-primary h-2 rounded-full" style={{ width: `${matchingQuota.progress}%` }}></div>
+                            </div>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">{matchingQuota.current} / {matchingQuota.limit}</p>
                         </div>
-                        <p className="text-xs text-right text-slate-500 dark:text-slate-400">{matchingQuota.current} / {matchingQuota.limit}</p>
                     </div>
                 )}
             </div>

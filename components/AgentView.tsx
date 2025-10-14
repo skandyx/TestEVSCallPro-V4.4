@@ -533,13 +533,12 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
             if (rule.operator === 'equals') match = contactValue === rule.value;
             else if (rule.operator === 'starts_with') match = contactValue.startsWith(rule.value);
             if (match) {
-                const operatorText = t(`outboundCampaignsManager.modal.operators.${rule.operator}`);
-                const name = t('agentView.activeQuota.title', { field: rule.contactField, operator: operatorText, value: rule.value });
-                return { name, current: rule.currentCount, limit: rule.limit, progress: rule.limit > 0 ? (rule.currentCount / rule.limit) * 100 : 0 };
+                // Pass the raw rule object instead of the translated name
+                return { rule, current: rule.currentCount, limit: rule.limit, progress: rule.limit > 0 ? (rule.currentCount / rule.limit) * 100 : 0 };
             }
         }
         return null;
-    }, [currentContact, currentCampaign, t]);
+    }, [currentContact, currentCampaign]);
 
     const endCallButtonText = status === 'En Appel' ? t('agentView.callControls.endCall') : t('agentView.callControls.hangup');
 
