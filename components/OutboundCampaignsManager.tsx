@@ -227,8 +227,8 @@ const CampaignModal: React.FC<CampaignModalProps> = ({ campaign, users, scripts,
                             </div>
                              <div className="flex items-center justify-between pt-4 border-t dark:border-slate-700">
                                 <div>
-                                    <label className="font-medium text-slate-700 dark:text-slate-300">Forcer les Quotas</label>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400">Si activé, seuls les contacts correspondant à un quota non atteint seront présentés.</p>
+                                    <label className="font-medium text-slate-700 dark:text-slate-300">{t('outboundCampaignsManager.modal.labels.forceQuotas')}</label>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">{t('outboundCampaignsManager.modal.labels.forceQuotasHelp')}</p>
                                 </div>
                                 <ToggleSwitch 
                                     enabled={!!formData.quotasEnabled}

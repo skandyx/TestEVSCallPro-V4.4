@@ -457,6 +457,16 @@
         "noTime": "Please select a date and time.",
         "pastTime": "You cannot schedule a callback in the past."
       }
+    },
+    "relaunchModal": {
+      "title": "Schedule a Relaunch",
+      "description": "The record will be re-injected into the campaign at the chosen date.",
+      "label": "Relaunch Date and Time",
+      "button": "Schedule Relaunch",
+      "error": {
+        "noTime": "Please select a relaunch date and time.",
+        "pastTime": "The relaunch date must be in the future."
+      }
     }
   },
   "qualificationsManager": {
@@ -535,7 +545,9 @@
         "groups": "Groups",
         "individualAgents": "Individual Agents",
         "activeCampaign": "Active Campaign",
-        "activityDays": "Activity Days and Hours"
+        "activityDays": "Activity Days and Hours",
+        "forceQuotas": "Enforce Quotas",
+        "forceQuotasHelp": "If enabled, only contacts matching an unmet quota will be presented."
       },
       "noScript": "No script",
       "dialingModes": {

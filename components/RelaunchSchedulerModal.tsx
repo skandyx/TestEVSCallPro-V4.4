@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useI18n } from '../src/i18n/index.tsx';
 
 interface RelaunchSchedulerModalProps {
     isOpen: boolean;
@@ -7,6 +8,7 @@ interface RelaunchSchedulerModalProps {
 }
 
 const RelaunchSchedulerModal: React.FC<RelaunchSchedulerModalProps> = ({ isOpen, onClose, onSchedule }) => {
+    const { t } = useI18n();
     const getMinDateTime = () => {
         const now = new Date();
         now.setMinutes(now.getMinutes() + 5); // Minimum 5 minutes in the future
@@ -27,11 +29,11 @@ const RelaunchSchedulerModal: React.FC<RelaunchSchedulerModalProps> = ({ isOpen,
 
     const handleSubmit = () => {
         if (!relaunchTime) {
-            alert("Veuillez sélectionner une date et une heure de relance.");
+            alert(t('agentView.relaunchModal.error.noTime'));
             return;
         }
         if (new Date(relaunchTime) < new Date(minDateTime)) {
-            alert("La date de relance doit être dans le futur.");
+            alert(t('agentView.relaunchModal.error.pastTime'));
             return;
         }
         onSchedule(new Date(relaunchTime).toISOString());
@@ -41,11 +43,11 @@ const RelaunchSchedulerModal: React.FC<RelaunchSchedulerModalProps> = ({ isOpen,
         <div className="fixed inset-0 bg-slate-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
             <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl w-full max-w-md">
                 <div className="p-6">
-                    <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">Planifier une Relance</h3>
-                    <p className="text-sm text-slate-500 mt-1">La fiche sera réinjectée dans la campagne à la date choisie.</p>
+                    <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">{t('agentView.relaunchModal.title')}</h3>
+                    <p className="text-sm text-slate-500 mt-1">{t('agentView.relaunchModal.description')}</p>
                     <div className="mt-4 space-y-4">
                         <div>
-                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Date et Heure de la Relance</label>
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('agentView.relaunchModal.label')}</label>
                             <input 
                                 type="datetime-local" 
                                 value={relaunchTime} 
@@ -57,8 +59,8 @@ const RelaunchSchedulerModal: React.FC<RelaunchSchedulerModalProps> = ({ isOpen,
                     </div>
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-900 p-3 flex justify-end gap-2 border-t dark:border-slate-700">
-                    <button onClick={onClose} className="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-md hover:bg-slate-50 dark:hover:bg-slate-600">Annuler</button>
-                    <button onClick={handleSubmit} className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Planifier la Relance</button>
+                    <button onClick={onClose} className="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-md hover:bg-slate-50 dark:hover:bg-slate-600">{t('common.cancel')}</button>
+                    <button onClick={handleSubmit} className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">{t('agentView.relaunchModal.button')}</button>
                 </div>
             </div>
         </div>

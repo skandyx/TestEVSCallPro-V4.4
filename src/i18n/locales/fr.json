@@ -460,6 +460,16 @@
         "noTime": "Veuillez sélectionner une date et une heure.",
         "pastTime": "Vous ne pouvez pas planifier un rappel dans le passé."
       }
+    },
+    "relaunchModal": {
+      "title": "Planifier une Relance",
+      "description": "La fiche sera réinjectée dans la campagne à la date choisie.",
+      "label": "Date et Heure de la Relance",
+      "button": "Planifier la Relance",
+      "error": {
+        "noTime": "Veuillez sélectionner une date et une heure de relance.",
+        "pastTime": "La date de relance doit être dans le futur."
+      }
     }
   },
   "qualificationsManager": {
@@ -538,7 +548,9 @@
         "groups": "Groupes",
         "individualAgents": "Agents individuels",
         "activeCampaign": "Campagne active",
-        "activityDays": "Jours et heures d'activité"
+        "activityDays": "Jours et heures d'activité",
+        "forceQuotas": "Forcer les Quotas",
+        "forceQuotasHelp": "Si activé, seuls les contacts correspondant à un quota non atteint seront présentés."
       },
       "noScript": "Aucun script",
       "dialingModes": {
