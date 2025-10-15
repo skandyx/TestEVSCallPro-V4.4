@@ -81,6 +81,10 @@
   "features": {
     "users": { "title": "Utilisateurs", "description": "Gérer les comptes des collaborateurs, leurs rôles et leurs permissions." },
     "groups": { "title": "Groupes", "description": "Créer des groupes d'agents pour une gestion et un routage simplifiés." },
+    "agent-profiles": {
+      "title": "Profils Agent",
+      "description": "Créer des modèles de configuration de l'interface pour les agents."
+    },
     "planning": { "title": "Plannings", "description": "Gérer les plannings hebdomadaires des agents et leurs diverses activités." },
     "outbound": { "title": "Campagnes Sortantes", "description": "Module central pour la création et la gestion des campagnes d'appels sortants." },
     "scripts": { "title": "Scripts d'agent", "description": "Éditeur visuel pour construire des guides d'appel interactifs pour les agents." },
@@ -104,6 +108,35 @@
     "api-docs": { "title": "Documentation API", "description": "Documentation technique pour l'API REST." },
     "billing": { "title": "Facturation & Abonnement", "description": "Gérer votre abonnement, vos moyens de paiement et voir vos factures." },
     "system-settings": { "title": "Paramètres Système", "description": "Paramètres généraux de l'application, comme l'apparence et les e-mails." }
+  },
+  "agentProfiles": {
+    "title": "Profils Agent",
+    "createButton": "Créer un profil",
+    "assignedUsers": "Utilisateurs Assignés",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce profil ?",
+    "deleteDefaultTooltip": "Le profil par défaut ne peut pas être supprimé.",
+    "deleteAssignedTooltip": "Impossible de supprimer un profil assigné à des utilisateurs.",
+    "modal": {
+      "newTitle": "Nouveau Profil Agent",
+      "editTitle": "Modifier le Profil Agent",
+      "name": "Nom du profil",
+      "controlsTitle": "Configuration de la Barre de Contrôles",
+      "controlsDescription": "Activez ou désactivez les boutons visibles par les agents assignés à ce profil."
+    },
+    "controls": {
+      "dial": "Lancer l'appel / Numérotation",
+      "hangup": "Raccrocher / Terminer",
+      "hold": "Mise en attente / Reprendre",
+      "transfer": "Transférer",
+      "mute": "Muet",
+      "record": "Enregistrer",
+      "keypad": "Clavier (DTMF)",
+      "qualify": "Qualifier l'appel",
+      "search": "Rechercher (Contact/Script)",
+      "insert": "Insérer une fiche vierge",
+      "history": "Historique / Notes",
+      "raiseHand": "Demander de l'aide (🆘)"
+    }
   },
   "alerts": {
     "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible."
@@ -245,6 +278,8 @@
       "activeUser": "Utilisateur actif",
       "site": "Site",
       "noSite": "Aucun site",
+      "agentProfile": "Profil Agent",
+      "noAgentProfile": "Aucun profil",
       "planningManagement": {
       "title": "Gestion par Planning",
       "description": "Si activé, le statut de l'agent est géré automatiquement par le planning."

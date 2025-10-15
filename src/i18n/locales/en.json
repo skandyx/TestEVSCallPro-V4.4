@@ -81,6 +81,10 @@
   "features": {
     "users": { "title": "Users", "description": "Manage collaborator accounts, their roles, and permissions." },
     "groups": { "title": "Groups", "description": "Create agent groups for simplified management and call routing." },
+    "agent-profiles": {
+      "title": "Agent Profiles",
+      "description": "Create interface configuration templates for agents."
+    },
     "planning": { "title": "Planning", "description": "Manage weekly agent schedules and their various activities." },
     "outbound": { "title": "Outbound Campaigns", "description": "Central module for creating and managing outbound calling campaigns." },
     "scripts": { "title": "Agent Scripts", "description": "Visual editor to build interactive call guides for agents." },
@@ -104,6 +108,35 @@
     "api-docs": { "title": "API Documentation", "description": "Technical documentation for the REST API." },
     "billing": { "title": "Billing & Subscription", "description": "Manage your subscription, payment methods, and view invoices." },
     "system-settings": { "title": "System Settings", "description": "General settings for the application, like appearance and email." }
+  },
+  "agentProfiles": {
+    "title": "Agent Profiles",
+    "createButton": "Create Profile",
+    "assignedUsers": "Assigned Users",
+    "deleteConfirm": "Are you sure you want to delete this profile?",
+    "deleteDefaultTooltip": "The default profile cannot be deleted.",
+    "deleteAssignedTooltip": "Cannot delete a profile that is assigned to users.",
+    "modal": {
+      "newTitle": "New Agent Profile",
+      "editTitle": "Edit Agent Profile",
+      "name": "Profile Name",
+      "controlsTitle": "Call Controls Configuration",
+      "controlsDescription": "Enable or disable the buttons visible to agents assigned to this profile."
+    },
+    "controls": {
+      "dial": "Dial / Make Call",
+      "hangup": "Hang Up / End Call",
+      "hold": "Hold / Resume",
+      "transfer": "Transfer",
+      "mute": "Mute",
+      "record": "Record",
+      "keypad": "Keypad (DTMF)",
+      "qualify": "Qualify Call",
+      "search": "Search (Contact/Script)",
+      "insert": "Insert Blank Record",
+      "history": "History / Notes",
+      "raiseHand": "Ask for Help (🆘)"
+    }
   },
   "alerts": {
     "confirmDelete": "Are you sure you want to delete this item? This action is irreversible."
@@ -242,6 +275,8 @@
       "activeUser": "Active User",
       "site": "Site",
       "noSite": "No site",
+      "agentProfile": "Agent Profile",
+      "noAgentProfile": "No profile",
       "planningManagement": {
       "title": "Schedule Management",
       "description": "If enabled, the agent's status is automatically managed by the schedule."

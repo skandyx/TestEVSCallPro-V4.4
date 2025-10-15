@@ -4,18 +4,18 @@ import { useI18n } from '../src/i18n/index.tsx';
 import { useStore } from '../src/store/useStore.ts';
 
 const ALL_CONTROLS = [
-    { id: 'dial', label: 'Lancer l\'appel / Numérotation', icon: 'call' },
-    { id: 'hangup', label: 'Raccrocher / Terminer', icon: 'call_end' },
-    { id: 'hold', label: 'Mise en attente / Reprendre', icon: 'pause' },
-    { id: 'transfer', label: 'Transférer', icon: 'phone_forwarded' },
-    { id: 'mute', label: 'Muet', icon: 'mic_off' },
-    { id: 'record', label: 'Enregistrer', icon: 'radio_button_checked' },
-    { id: 'keypad', label: 'Clavier (DTMF)', icon: 'dialpad' },
-    { id: 'qualify', label: 'Qualifier l\'appel', icon: 'fact_check' },
-    { id: 'search', label: 'Rechercher (Contact/Script)', icon: 'search' },
-    { id: 'insert', label: 'Insérer une fiche vierge', icon: 'person_add' },
-    { id: 'history', label: 'Historique / Notes', icon: 'history' },
-    { id: 'raiseHand', label: 'Demander de l\'aide (🆘)', icon: 'front_hand' },
+    { id: 'dial', labelKey: 'agentProfiles.controls.dial', icon: 'call' },
+    { id: 'hangup', labelKey: 'agentProfiles.controls.hangup', icon: 'call_end' },
+    { id: 'hold', labelKey: 'agentProfiles.controls.hold', icon: 'pause' },
+    { id: 'transfer', labelKey: 'agentProfiles.controls.transfer', icon: 'phone_forwarded' },
+    { id: 'mute', labelKey: 'agentProfiles.controls.mute', icon: 'mic_off' },
+    { id: 'record', labelKey: 'agentProfiles.controls.record', icon: 'radio_button_checked' },
+    { id: 'keypad', labelKey: 'agentProfiles.controls.keypad', icon: 'dialpad' },
+    { id: 'qualify', labelKey: 'agentProfiles.controls.qualify', icon: 'fact_check' },
+    { id: 'search', labelKey: 'agentProfiles.controls.search', icon: 'search' },
+    { id: 'insert', labelKey: 'agentProfiles.controls.insert', icon: 'person_add' },
+    { id: 'history', labelKey: 'agentProfiles.controls.history', icon: 'history' },
+    { id: 'raiseHand', labelKey: 'agentProfiles.controls.raiseHand', icon: 'front_hand' },
 ];
 
 const ToggleSwitch: React.FC<{ enabled: boolean; onChange: (enabled: boolean) => void; }> = ({ enabled, onChange }) => (
@@ -72,7 +72,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ profile, onSave, onClose })
                                 <div key={control.id} className="flex items-center justify-between p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700">
                                     <label className="flex items-center gap-2 font-medium text-slate-700 dark:text-slate-300">
                                         <span className="material-symbols-outlined text-xl">{control.icon}</span>
-                                        {control.label}
+                                        {t(control.labelKey)}
                                     </label>
                                     <ToggleSwitch enabled={formData.callControlsConfig?.[control.id] ?? false} onChange={enabled => handleToggle(control.id, enabled)} />
                                 </div>
