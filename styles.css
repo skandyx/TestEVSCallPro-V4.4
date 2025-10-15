@@ -170,7 +170,6 @@ html[data-theme="cyan"].dark {
   border-color: var(--color-link-text);
 }
 
-/* NEW: Theming class for icons and text */
 .text-primary {
   color: var(--color-link-text);
 }

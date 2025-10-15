@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { WrenchScrewdriverIcon, ServerStackIcon, ComputerDesktopIcon, SunIcon, MoonIcon, ChevronDownIcon, BellAlertIcon } from './Icons.tsx';
+import { ComputerDesktopIcon, SunIcon, MoonIcon, ChevronDownIcon, BellAlertIcon } from './Icons.tsx';
 import { useI18n } from '../src/i18n/index.tsx';
 // FIX: Corrected module import path to resolve module resolution error.
 import { useStore } from '../src/store/useStore.ts';
@@ -148,17 +148,17 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange }) => {
         setNotifications([]);
     };
 
-    const TabButton: React.FC<{ viewName: 'app' | 'monitoring'; labelKey: string; icon: React.FC<React.SVGProps<SVGSVGElement>>; }> = ({ viewName, labelKey, icon: Icon }) => (
-        <button onClick={() => onViewChange(viewName)} className={`flex items-center space-x-2 px-4 py-3 text-sm font-semibold border-b-2 transition-colors ${activeView === viewName ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600'}`}>
-            <Icon className="w-5 h-5" /><span>{t(labelKey)}</span>
+    const TabButton: React.FC<{ viewName: 'app' | 'monitoring'; labelKey: string; icon: string; }> = ({ viewName, labelKey, icon }) => (
+        <button onClick={() => onViewChange(viewName)} className={`flex items-center space-x-2 px-4 py-3 text-sm font-semibold border-b-2 transition-colors ${activeView === viewName ? 'border-primary text-link' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600'}`}>
+            <span className="material-symbols-outlined text-xl">{icon}</span><span>{t(labelKey)}</span>
         </button>
     );
 
     return (
         <header className="flex-shrink-0 bg-white dark:bg-slate-800 shadow-sm border-b border-slate-200 dark:border-slate-700 flex justify-between items-center px-4">
             <nav className="flex space-x-2">
-                <TabButton viewName="app" labelKey="header.tabs.application" icon={WrenchScrewdriverIcon} />
-                <TabButton viewName="monitoring" labelKey="header.tabs.monitoring" icon={ServerStackIcon} />
+                <TabButton viewName="app" labelKey="header.tabs.application" icon="build" />
+                <TabButton viewName="monitoring" labelKey="header.tabs.monitoring" icon="data_usage" />
             </nav>
             <div className="flex items-center gap-4">
                 <Clock />
