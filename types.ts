@@ -3,6 +3,7 @@ import React from 'react';
 export type FeatureId =
   | 'users'
   | 'groups'
+  | 'agent-profiles'
   | 'trunks'
   | 'dids'
   | 'outbound'
@@ -60,6 +61,12 @@ export interface Feature {
 
 export type UserRole = 'Agent' | 'Superviseur' | 'Administrateur' | 'SuperAdmin';
 
+export interface AgentProfile {
+    id: string;
+    name: string;
+    callControlsConfig: Record<string, boolean>;
+}
+
 export interface User {
     id: string;
     loginId: string;
@@ -71,6 +78,7 @@ export interface User {
     campaignIds: string[];
     password?: string;
     siteId?: string | null;
+    agentProfileId?: string | null;
     mobileNumber?: string | null;
     useMobileAsStation?: boolean;
     profilePictureUrl?: string;

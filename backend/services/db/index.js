@@ -5,6 +5,7 @@ module.exports = {
     ...require('./auth.queries'),
     ...require('./user.queries'),
     ...require('./group.queries'),
+    ...require('./agentProfile.queries'),
     ...require('./campaign.queries'),
     ...require('./script.queries'),
     ...require('./ivr.queries'),

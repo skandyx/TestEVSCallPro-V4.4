@@ -5,13 +5,14 @@ import type {
     User, Campaign, SavedScript, Qualification, QualificationGroup, IvrFlow, AudioFile, Trunk, Did, Site,
     UserGroup, ActivityType, PersonalCallback, CallHistoryRecord, AgentSession, ContactNote,
     SystemConnectionSettings, SystemSmtpSettings, SystemAppSettings, ModuleVisibility,
-    BackupLog, BackupSchedule, SystemLog, VersionInfo, ConnectivityService, AgentState, ActiveCall, CampaignState, PlanningEvent, AgentStatus
+    BackupLog, BackupSchedule, SystemLog, VersionInfo, ConnectivityService, AgentState, ActiveCall, CampaignState, PlanningEvent, AgentStatus, AgentProfile
 } from '../../types.ts';
 import apiClient, { publicApiClient } from '../lib/axios.ts';
 import wsClient from '../services/wsClient.ts';
 
 type Theme = 'light' | 'dark' | 'system';
-type EntityName = 'users' | 'campaigns' | 'scripts' | 'user-groups' | 'qualification-groups' | 'qualifications' | 'ivr-flows' | 'trunks' | 'dids' | 'sites' | 'audio-files';
+// FIX: Add 'agent-profiles' to EntityName to allow it as a parameter in CRUD functions.
+type EntityName = 'users' | 'campaigns' | 'scripts' | 'user-groups' | 'qualification-groups' | 'qualifications' | 'ivr-flows' | 'trunks' | 'dids' | 'sites' | 'audio-files' | 'agent-profiles';
 
 interface AppState {
     // Auth & User
@@ -44,6 +45,8 @@ interface AppState {
     agentSessions: AgentSession[];
     contactNotes: ContactNote[];
     planningEvents: PlanningEvent[];
+    // FIX: Add 'agentProfiles' to the state to make it available throughout the application.
+    agentProfiles: AgentProfile[];
 
     // System Settings
     systemConnectionSettings: SystemConnectionSettings | null;
@@ -119,6 +122,8 @@ export const useStore = create<AppState>()(
                 users: [], userGroups: [], savedScripts: [], campaigns: [], qualifications: [], qualificationGroups: [],
                 ivrFlows: [], audioFiles: [], trunks: [], dids: [], sites: [], activityTypes: [], personalCallbacks: [],
                 callHistory: [], agentSessions: [], contactNotes: [], planningEvents: [],
+                // FIX: Initialize agentProfiles array in the default state.
+                agentProfiles: [],
                 // System
                 systemConnectionSettings: null, smtpSettings: null, appSettings: null, moduleVisibility: { categories: {}, features: {} },
                 backupLogs: [], backupSchedule: null, systemLogs: [], versionInfo: null, connectivityServices: [],
@@ -344,6 +349,20 @@ export const useStore = create<AppState>()(
                                 state.sites = state.sites.filter(s => s.id !== payload.id);
                                 break;
 
+                            // FIX: Add WebSocket event handlers for agent profiles.
+                            case 'newAgentProfile':
+                                state.agentProfiles.push(payload);
+                                break;
+                            case 'updateAgentProfile': {
+                                const index = state.agentProfiles.findIndex(p => p.id === payload.id);
+                                if (index > -1) state.agentProfiles[index] = payload;
+                                else state.agentProfiles.push(payload);
+                                break;
+                            }
+                            case 'deleteAgentProfile':
+                                state.agentProfiles = state.agentProfiles.filter(p => p.id !== payload.id);
+                                break;
+
                             case 'usersBulkUpdate': case 'qualificationsUpdated': case 'planningUpdated':
                                 get().fetchApplicationData();
                                 break;
@@ -416,6 +435,8 @@ export const useStore = create<AppState>()(
                             'dids': 'dids',
                             'sites': 'sites',
                             'audio-files': 'audioFiles',
+                            // FIX: Add 'agent-profiles' to the map to enable saving and updating.
+                            'agent-profiles': 'agentProfiles',
                         };
                         const storeKey = storeKeyMap[entityName];
                         const storeCollection = get()[storeKey] as any[] | undefined;

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import type { User, Campaign, Contact, Qualification, SavedScript, QualificationGroup, ContactNote, PersonalCallback, AgentStatus, AgentState } from '../types.ts';
-import { PowerIcon, PhoneIcon, UserCircleIcon, PauseIcon, CalendarDaysIcon, ComputerDesktopIcon, SunIcon, MoonIcon, ChevronDownIcon, ArrowLeftIcon, ArrowRightIcon, HandRaisedIcon, XMarkIcon, BellAlertIcon, Cog6ToothIcon, CheckIcon } from './Icons.tsx';
+import type { User, Campaign, Contact, Qualification, SavedScript, ContactNote, PersonalCallback, AgentStatus, AgentState, AgentProfile } from '../types.ts';
 import AgentPreview from './AgentPreview.tsx';
 import UserProfileModal from './UserProfileModal.tsx';
 import apiClient from '../src/lib/axios.ts';
@@ -8,6 +7,7 @@ import { useI18n } from '../src/i18n/index.tsx';
 import wsClient from '../src/services/wsClient.ts';
 import CallbackSchedulerModal from './CallbackSchedulerModal.tsx';
 import RelaunchSchedulerModal from './RelaunchSchedulerModal.tsx';
+import CallControlBar from './CallControlBar.tsx';
 import { useStore } from '../src/store/useStore.ts';
 
 type Theme = 'light' | 'dark' | 'system';
@@ -38,12 +38,12 @@ const Clock: React.FC = () => {
 
 const ThemeSwitcher: React.FC<{ theme: Theme; setTheme: (theme: Theme) => void; }> = ({ theme, setTheme }) => {
     const { t } = useI18n();
-    const options: { name: Theme; icon: React.FC<any>; titleKey: string }[] = [
-        { name: 'system', icon: ComputerDesktopIcon, titleKey: 'header.theme.system' },
-        { name: 'light', icon: SunIcon, titleKey: 'header.theme.light' },
-        { name: 'dark', icon: MoonIcon, titleKey: 'header.theme.dark' },
+    const options: { name: Theme; icon: string; titleKey: string }[] = [
+        { name: 'system', icon: 'desktop_windows', titleKey: 'header.theme.system' },
+        { name: 'light', icon: 'light_mode', titleKey: 'header.theme.light' },
+        { name: 'dark', icon: 'dark_mode', titleKey: 'header.theme.dark' },
     ];
-    return <div className="flex items-center p-1 space-x-1 bg-slate-100 dark:bg-slate-700 rounded-full">{options.map(option => <button key={option.name} onClick={() => setTheme(option.name)} className={`p-1.5 rounded-full transition-colors ${theme === option.name ? 'bg-white dark:bg-slate-900 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'}`} title={t(option.titleKey)}><option.icon className="w-5 h-5" /></button>)}</div>;
+    return <div className="flex items-center p-1 space-x-1 bg-slate-100 dark:bg-slate-700 rounded-full">{options.map(option => <button key={option.name} onClick={() => setTheme(option.name)} className={`p-1.5 rounded-full transition-colors ${theme === option.name ? 'bg-white dark:bg-slate-900 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'}`} title={t(option.titleKey)}><span className="material-symbols-outlined text-base">{option.icon}</span></button>)}</div>;
 };
 
 const LanguageSwitcher: React.FC = () => {
@@ -67,7 +67,7 @@ const LanguageSwitcher: React.FC = () => {
         return '';
     };
 
-    return <div className="relative"><button onClick={(e) => { e.stopPropagation(); toggleDropdown(); }} className="flex items-center p-1 space-x-2 bg-slate-100 dark:bg-slate-700 rounded-full text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600"><span className="w-6 h-6 rounded-full overflow-hidden"><img src={getFlagSrc(language)} alt={language} className="w-full h-full object-cover" /></span><span className="hidden sm:inline">{language.toUpperCase()}</span><ChevronDownIcon className="w-4 h-4 text-slate-500 dark:text-slate-400 mr-1" /></button>{isOpen && <div className="absolute right-0 mt-2 w-36 origin-top-right bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20"><div className="py-1">{languages.map(lang => <button key={lang.code} onClick={() => { setLanguage(lang.code); setIsOpen(false); }} className="w-full text-left flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"><img src={getFlagSrc(lang.code)} alt={lang.name} className="w-5 h-auto rounded-sm" />{lang.name}</button>)}</div></div>}</div>;
+    return <div className="relative"><button onClick={(e) => { e.stopPropagation(); toggleDropdown(); }} className="flex items-center p-1 space-x-2 bg-slate-100 dark:bg-slate-700 rounded-full text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600"><span className="w-6 h-6 rounded-full overflow-hidden"><img src={getFlagSrc(language)} alt={language} className="w-full h-full object-cover" /></span><span className="hidden sm:inline">{language.toUpperCase()}</span><span className="material-symbols-outlined w-4 h-4 text-slate-500 dark:text-slate-400 mr-1">expand_more</span></button>{isOpen && <div className="absolute right-0 mt-2 w-36 origin-top-right bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20"><div className="py-1">{languages.map(lang => <button key={lang.code} onClick={() => { setLanguage(lang.code); setIsOpen(false); }} className="w-full text-left flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"><img src={getFlagSrc(lang.code)} alt={lang.name} className="w-5 h-auto rounded-sm" />{lang.name}</button>)}</div></div>}</div>;
 }
 
 const ToggleSwitch: React.FC<{ enabled: boolean; onChange: (enabled: boolean) => void; disabled?: boolean }> = ({ enabled, onChange, disabled = false }) => (
@@ -111,7 +111,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
 
     const { 
         currentUser, campaigns, qualifications, savedScripts, contactNotes, users, personalCallbacks,
-        agentStates, logout, fetchApplicationData, updateContact, theme, setTheme, changeAgentStatus, callHistory
+        agentStates, agentProfiles, logout, fetchApplicationData, updateContact, theme, setTheme, changeAgentStatus, callHistory
     } = useStore(state => ({
         currentUser: state.currentUser!,
         campaigns: state.campaigns,
@@ -121,6 +121,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
         users: state.users,
         personalCallbacks: state.personalCallbacks,
         agentStates: state.agentStates,
+        agentProfiles: state.agentProfiles,
         logout: state.logout,
         fetchApplicationData: state.fetchApplicationData,
         updateContact: state.updateContact,
@@ -131,6 +132,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
     }));
     
     const agentState: AgentState | undefined = useMemo(() => agentStates.find(a => a.id === currentUser.id), [currentUser, agentStates]);
+    const agentProfile: AgentProfile | undefined = useMemo(() => agentProfiles.find(p => p.id === currentUser.agentProfileId), [currentUser, agentProfiles]);
 
     const [currentContact, setCurrentContact] = useState<Contact | null>(null);
     const [currentCampaign, setCurrentCampaign] = useState<Campaign | null>(null);
@@ -540,8 +542,6 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
         return null;
     }, [currentContact, currentCampaign]);
 
-    const endCallButtonText = status === 'En Appel' ? t('agentView.callControls.endCall') : t('agentView.callControls.hangup');
-
     const KpiCard: React.FC<{ title: string; value: string | number; }> = ({ title, value }) => (
         <div className="bg-slate-100 dark:bg-slate-900 p-2 rounded-md"><p className="text-xs text-slate-500 dark:text-slate-400">{title}</p><p className="text-xl font-bold text-slate-800 dark:text-slate-200 font-mono text-center">{value}</p></div>
     );
@@ -573,21 +573,28 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
              <header className="flex-shrink-0 bg-white dark:bg-slate-800 shadow-md p-3 flex justify-between items-center z-10">
                 <div ref={statusMenuRef} className="relative flex items-center gap-4">
                     <button onClick={() => setIsStatusMenuOpen(p => !p)} className="relative p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
-                        {currentUser.profilePictureUrl ? <img src={currentUser.profilePictureUrl} alt="Avatar" className="w-10 h-10 rounded-full object-cover" /> : <UserCircleIcon className="w-10 h-10 text-slate-400" />}
+                        {currentUser.profilePictureUrl ? <img src={currentUser.profilePictureUrl} alt="Avatar" className="w-10 h-10 rounded-full object-cover" /> : <span className="material-symbols-outlined text-4xl text-slate-400">account_circle</span>}
                         <span className={`absolute top-0 right-0 block h-3.5 w-3.5 rounded-full border-2 border-white dark:border-slate-800 ${getStatusColor(agentState?.status)}`}></span>
                     </button>
                     <div className="text-left">
                         <p className="font-bold text-slate-800 dark:text-slate-100">{currentUser.firstName} {currentUser.lastName} - {t('agentView.extension', { ext: currentUser.loginId })}</p>
-                         {agentState && (<div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2"><span className={`w-2 h-2 rounded-full ${getStatusColor(agentState.status)}`}></span><span>{t(statusToI18nKey(agentState.status))}</span><span className="font-mono">{formatTimer(agentState.totalConnectedTime)}</span></div>)}
+                         {agentState && (<div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2"><span className={`w-2 h-2 rounded-full ${getStatusColor(agentState.status)}`}></span><span>{t(statusToI18nKey(agentState.status))}</span><span className="font-mono">{formatTimer(agentState.statusDuration)}</span></div>)}
                     </div>
                     {isStatusMenuOpen && (
                          <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-slate-800 rounded-md shadow-lg border dark:border-slate-700 p-2 z-20">
-                            <div className="space-y-1">{statuses.map(s => (<button key={s.id} onClick={() => { changeAgentStatus(s.id); setIsStatusMenuOpen(false); }} disabled={!canChangeStatus} className={`w-full text-left flex items-center gap-3 p-2 rounded-md text-slate-700 dark:text-slate-200 ${agentState?.status === s.id ? 'bg-indigo-50 dark:bg-indigo-900/50' : 'hover:bg-slate-100 dark:hover:bg-slate-700'} disabled:opacity-50 disabled:cursor-not-allowed`}><span className={`w-2.5 h-2.5 rounded-full ${s.led}`}></span>{t(s.i18nKey)}{agentState?.status === s.id && <CheckIcon className="w-4 h-4 text-indigo-600 ml-auto"/>}</button>))}</div>
-                            <div className="border-t dark:border-slate-700 mt-2 pt-2"><button onClick={() => { setIsProfileModalOpen(true); setIsStatusMenuOpen(false); }} className="w-full text-left flex items-center gap-3 p-2 rounded-md text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"><Cog6ToothIcon className="w-5 h-5 text-slate-500" />{t('agentView.statusManager.settings')}</button></div>
+                            <div className="space-y-1">{statuses.map(s => (<button key={s.id} onClick={() => { changeAgentStatus(s.id); setIsStatusMenuOpen(false); }} disabled={!canChangeStatus} className={`w-full text-left flex items-center gap-3 p-2 rounded-md text-slate-700 dark:text-slate-200 ${agentState?.status === s.id ? 'bg-indigo-50 dark:bg-indigo-900/50' : 'hover:bg-slate-100 dark:hover:bg-slate-700'} disabled:opacity-50 disabled:cursor-not-allowed`}><span className={`w-2.5 h-2.5 rounded-full ${s.led}`}></span>{t(s.i18nKey)}{agentState?.status === s.id && <span className="material-symbols-outlined text-base text-indigo-600 ml-auto">check</span>}</button>))}</div>
+                            <div className="border-t dark:border-slate-700 mt-2 pt-2"><button onClick={() => { setIsProfileModalOpen(true); setIsStatusMenuOpen(false); }} className="w-full text-left flex items-center gap-3 p-2 rounded-md text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"><span className="material-symbols-outlined text-base text-slate-500">settings</span>{t('agentView.statusManager.settings')}</button></div>
                         </div>
                     )}
                 </div>
-                <div className="flex items-center gap-4"><Clock /><div className="relative"><button onClick={() => setIsAgentNotifOpen(p => !p)} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400"><BellAlertIcon className="w-6 h-6" />{agentNotifications.length > 0 && (<span className="absolute top-1 right-1 flex h-4 w-4"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 text-white text-xs items-center justify-center">{agentNotifications.length}</span></span>)}</button>{isAgentNotifOpen && (<div className="absolute right-0 mt-2 w-80 origin-top-right bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20"><div className="p-3 border-b dark:border-slate-700 flex justify-between items-center"><h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('agentView.messages')}</h3>{agentNotifications.length > 0 && <button onClick={() => setAgentNotifications([])} className="text-xs font-medium text-indigo-600 hover:underline">{t('agentView.clearAll')}</button>}</div><div className="max-h-96 overflow-y-auto">{agentNotifications.length === 0 ? (<p className="text-sm text-slate-500 text-center p-8">Aucun nouveau message.</p>) : (agentNotifications.map(notif => (<div key={String(notif.id)} className="p-3 border-b dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"><p className="text-sm text-slate-700 dark:text-slate-200"><span className="font-bold">{notif.from}:</span> {notif.message}</p><p className="text-xs text-slate-400 mt-1">{new Date(notif.timestamp).toLocaleString(language, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</p>{activeReplyId === notif.id ? (<form onSubmit={(e) => { e.preventDefault(); handleRespondToSupervisor(notif.id); }} className="mt-2 flex gap-2"><input type="text" value={replyText} onChange={e => setReplyText(e.target.value)} placeholder={t('agentView.yourResponsePlaceholder')} autoFocus className="w-full text-sm p-1.5 border rounded-md dark:bg-slate-900 dark:border-slate-600"/><button type="submit" className="text-sm bg-indigo-600 text-white px-3 rounded-md hover:bg-indigo-700">{t('common.send')}</button></form>) : (<button onClick={() => setActiveReplyId(notif.id)} className="mt-2 text-xs font-semibold text-indigo-600 hover:underline">{t('agentView.respond')}</button>)}</div>)))}</div></div>)}</div><LanguageSwitcher /><ThemeSwitcher theme={theme} setTheme={setTheme} /><button onClick={logout} className="font-semibold py-2 px-4 rounded-lg inline-flex items-center bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"><PowerIcon className="w-5 h-5 mr-2" /> {t('sidebar.logout')}</button></div>
+                <div className="flex items-center gap-4">
+                    <Clock />
+                    {agentProfile?.callControlsConfig?.raiseHand && <button onClick={handleRaiseHand} title={t('agentView.askForHelp')} className="p-2 rounded-full text-amber-500 bg-amber-100 dark:bg-amber-900/50 hover:bg-amber-200 dark:hover:bg-amber-900"><span className="material-symbols-outlined">front_hand</span></button>}
+                    <div className="relative"><button onClick={() => setIsAgentNotifOpen(p => !p)} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400"><span className="material-symbols-outlined">notifications</span>{agentNotifications.length > 0 && (<span className="absolute top-1 right-1 flex h-4 w-4"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 text-white text-xs items-center justify-center">{agentNotifications.length}</span></span>)}</button>{isAgentNotifOpen && (<div className="absolute right-0 mt-2 w-80 origin-top-right bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20"><div className="p-3 border-b dark:border-slate-700 flex justify-between items-center"><h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('agentView.messages')}</h3>{agentNotifications.length > 0 && <button onClick={() => setAgentNotifications([])} className="text-xs font-medium text-indigo-600 hover:underline">{t('agentView.clearAll')}</button>}</div><div className="max-h-96 overflow-y-auto">{agentNotifications.length === 0 ? (<p className="text-sm text-slate-500 text-center p-8">Aucun nouveau message.</p>) : (agentNotifications.map(notif => (<div key={String(notif.id)} className="p-3 border-b dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"><p className="text-sm text-slate-700 dark:text-slate-200"><span className="font-bold">{notif.from}:</span> {notif.message}</p><p className="text-xs text-slate-400 mt-1">{new Date(notif.timestamp).toLocaleString(language, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</p>{activeReplyId === notif.id ? (<form onSubmit={(e) => { e.preventDefault(); handleRespondToSupervisor(notif.id); }} className="mt-2 flex gap-2"><input type="text" value={replyText} onChange={e => setReplyText(e.target.value)} placeholder={t('agentView.yourResponsePlaceholder')} autoFocus className="w-full text-sm p-1.5 border rounded-md dark:bg-slate-900 dark:border-slate-600"/><button type="submit" className="text-sm bg-indigo-600 text-white px-3 rounded-md hover:bg-indigo-700">{t('common.send')}</button></form>) : (<button onClick={() => setActiveReplyId(notif.id)} className="mt-2 text-xs font-semibold text-indigo-600 hover:underline">{t('agentView.respond')}</button>)}</div>)))}</div></div>)}</div>
+                    <LanguageSwitcher />
+                    <ThemeSwitcher theme={theme} setTheme={setTheme} />
+                    <button onClick={logout} className="font-semibold py-2 px-4 rounded-lg inline-flex items-center bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"><span className="material-symbols-outlined mr-2">power_settings_new</span> {t('sidebar.logout')}</button>
+                </div>
             </header>
             
             <main className="flex-1 grid grid-cols-12 gap-4 p-4 overflow-hidden">
@@ -602,7 +609,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
                         <KpiCard title={t('agentView.kpis.totalTrainingTime')} value={formatTimer(agentState.totalTrainingTime)} />
                         <KpiCard title={t('agentView.kpis.trainingCount')} value={agentState.trainingCount} />
                     </div>) : <p className="text-xs text-slate-400 italic mt-1">Chargement...</p>}</div>{(!currentContact && status === 'En Attente') && (<div className="flex-1 mt-auto pt-4 border-t dark:border-slate-600"><div className="h-full flex flex-col items-center justify-center text-center">{feedbackMessage ? (<p className="text-amber-600 font-semibold">{feedbackMessage}</p>) : (<><svg className="animate-spin h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p className="text-slate-500 dark:text-slate-400 mt-4">{isLoadingNextContact ? t('agentView.searching') : t('agentView.waitingForCall')}</p></>)}</div></div>)}</div>
-                    <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border dark:border-slate-700 flex-1 flex flex-col min-h-0"><div className="border-b dark:border-slate-600 pb-2 mb-2 flex items-center justify-between flex-shrink-0"><h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2"><span className="material-symbols-outlined text-2xl text-primary">phone_callback</span>{t('agentView.myCallbacks')}</h2><div className="flex items-center gap-2"><button onClick={() => handleCallbackDateChange(-1)} className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"><ArrowLeftIcon className="w-4 h-4"/></button><span className="font-semibold text-sm">{callbackViewDate.toLocaleDateString(language, { weekday: 'long', day: 'numeric', month: 'long' })}</span><button onClick={() => handleCallbackDateChange(1)} className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"><ArrowRightIcon className="w-4 h-4"/></button></div><select value={callbackCampaignFilter} onChange={e => setCallbackCampaignFilter(e.target.value)} className="text-sm p-1 border bg-white dark:bg-slate-700 dark:border-slate-600 rounded-md"><option value="all">{t('agentView.callbacks.allCampaigns')}</option>{assignedCampaigns.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div><div className="flex-1 overflow-y-auto pr-2 space-y-2 text-base">
+                    <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border dark:border-slate-700 flex-1 flex flex-col min-h-0"><div className="border-b dark:border-slate-600 pb-2 mb-2 flex items-center justify-between flex-shrink-0"><h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2"><span className="material-symbols-outlined text-2xl text-primary">phone_callback</span>{t('agentView.myCallbacks')}</h2><div className="flex items-center gap-2"><button onClick={() => handleCallbackDateChange(-1)} className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"><span className="material-symbols-outlined">arrow_back</span></button><span className="font-semibold text-sm">{callbackViewDate.toLocaleDateString(language, { weekday: 'long', day: 'numeric', month: 'long' })}</span><button onClick={() => handleCallbackDateChange(1)} className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"><span className="material-symbols-outlined">arrow_forward</span></button></div><select value={callbackCampaignFilter} onChange={e => setCallbackCampaignFilter(e.target.value)} className="text-sm p-1 border bg-white dark:bg-slate-700 dark:border-slate-600 rounded-md"><option value="all">{t('agentView.callbacks.allCampaigns')}</option>{assignedCampaigns.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div><div className="flex-1 overflow-y-auto pr-2 space-y-2 text-base">
                         {mySortedCallbacks.length > 0 ? (
                             mySortedCallbacks.map(cb => {
                                 const scheduled = new Date(cb.scheduledTime);
@@ -658,8 +665,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
                         </div>
                     )}
                 </div>
-                <div className="col-span-3 flex flex-col gap-4">
-                     <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border dark:border-slate-700 relative"><h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 border-b dark:border-slate-600 pb-2 mb-4">{t('agentView.callControls.title')}</h2><div className="space-y-2"><div className="relative"><button onClick={handleMainCallClick} disabled={!currentContact || status !== 'En Attente' || currentCampaign?.dialingMode !== 'MANUAL'} className="w-full p-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 disabled:opacity-50">{t('agentView.callControls.call')}</button>{isDialOptionsOpen && (<div ref={dialOptionsRef} className="absolute right-full top-0 mr-2 w-72 bg-white dark:bg-slate-700 rounded-md shadow-lg border dark:border-slate-600 p-2 z-20 space-y-1">{allPhoneNumbers.map((phone, index) => (<button key={index} onClick={() => { handleDial(phone.number); setIsDialOptionsOpen(false); }} className="w-full text-left p-3 rounded-md hover:bg-slate-100 dark:hover:bg-slate-600 text-lg"><span className="font-semibold">{t('agentView.callNumber', { phoneName: phone.name })}</span> <span className="block text-sm text-slate-500 dark:text-slate-400 font-mono">{phone.number}</span></button>))}</div>)}</div><button className="w-full p-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 disabled:opacity-50" disabled={!currentContact || !selectedQual} onClick={() => handleEndCall()}>{endCallButtonText}</button><button className="w-full p-3 bg-slate-200 font-semibold rounded-lg hover:bg-slate-300 disabled:opacity-50 dark:bg-slate-700 dark:hover:bg-slate-600" disabled={status !== 'En Appel'}>{t('agentView.callControls.hold')}</button><button className="w-full p-3 bg-slate-200 font-semibold rounded-lg hover:bg-slate-300 disabled:opacity-50 dark:bg-slate-700 dark:hover:bg-slate-600" disabled={status !== 'En Appel'}>{t('agentView.callControls.transfer')}</button><button onClick={handleRaiseHand} disabled={status === 'En Pause'} className="w-full p-3 bg-amber-500 text-white font-bold rounded-lg hover:bg-amber-600 disabled:opacity-50 inline-flex items-center justify-center gap-2"><HandRaisedIcon className="w-5 h-5"/>{t('agentView.askForHelp')}</button></div></div>
+                 <div className="col-span-3 flex flex-col gap-4">
                     <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border dark:border-slate-700 flex-1 flex flex-col">
                         <div className="flex-1 flex flex-col min-h-0">
                             <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 border-b dark:border-slate-600 pb-2 mb-4 flex-shrink-0">{t('agentView.qualifications')}</h2>
@@ -682,6 +688,22 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
                     </div>
                 </div>
             </main>
+            <CallControlBar 
+                config={agentProfile?.callControlsConfig}
+                status={status}
+                currentContact={currentContact}
+                selectedQual={selectedQual}
+                dialOptions={{
+                    isOpen: isDialOptionsOpen,
+                    setIsOpen: setIsDialOptionsOpen,
+                    options: allPhoneNumbers,
+                    ref: dialOptionsRef
+                }}
+                onDial={handleDial}
+                onEndCall={handleEndCall}
+                onHold={() => alert('Hold action')}
+                onTransfer={() => alert('Transfer action')}
+            />
         </div>
     );
 };

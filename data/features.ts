@@ -65,6 +65,34 @@ export const features: Feature[] = [
         }
     },
     {
+        id: 'agent-profiles',
+        titleKey: 'features.agent-profiles.title',
+        category: 'Agent',
+        descriptionKey: 'features.agent-profiles.description',
+        component: lazy(() => import('../components/AgentProfileManager.tsx')),
+         userJourney: {
+            titleKey: 'features.agent-profiles.userJourney.title',
+            stepsKeys: [
+                'features.agent-profiles.userJourney.steps.0',
+                'features.agent-profiles.userJourney.steps.1',
+                'features.agent-profiles.userJourney.steps.2',
+                'features.agent-profiles.userJourney.steps.3',
+            ],
+        },
+        specs: {
+            titleKey: 'features.agent-profiles.specs.title',
+            pointsKeys: [
+                'features.agent-profiles.specs.points.0',
+                'features.agent-profiles.specs.points.1',
+                'features.agent-profiles.specs.points.2',
+            ],
+        },
+        simplificationTip: {
+            titleKey: 'features.agent-profiles.simplificationTip.title',
+            contentKey: 'features.agent-profiles.simplificationTip.content'
+        }
+    },
+    {
         id: 'planning',
         titleKey: 'features.planning.title',
         category: 'Agent',

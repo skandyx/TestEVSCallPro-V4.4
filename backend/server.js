@@ -119,6 +119,7 @@ const authRoutes = require(path.join(__dirname, 'routes', 'auth.js'));
 const callRoutes = require(path.join(__dirname, 'routes', 'call.js'));
 const usersRoutes = require(path.join(__dirname, 'routes', 'users.js'));
 const groupsRoutes = require(path.join(__dirname, 'routes', 'groups.js'));
+const agentProfilesRoutes = require(path.join(__dirname, 'routes', 'agentProfiles.js'));
 const campaignsRoutes = require(path.join(__dirname, 'routes', 'campaigns.js'));
 const scriptsRoutes = require(path.join(__dirname, 'routes', 'scripts.js'));
 const qualificationsRoutes = require(path.join(__dirname, 'routes', 'qualifications.js'));
@@ -205,6 +206,7 @@ app.get('/api/recordings/:fileId.mp3', (req, res) => {
 app.use('/api/call', callRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/user-groups', groupsRoutes);
+app.use('/api/agent-profiles', agentProfilesRoutes);
 app.use('/api/campaigns', campaignsRoutes);
 app.use('/api/scripts', scriptsRoutes);
 app.use('/api/qualifications', qualificationsRoutes);
@@ -244,13 +246,14 @@ app.get('/api/application-data', async (req, res) => {
             users, userGroups, savedScripts, campaigns, qualifications,
             qualificationGroups, ivrFlows, audioFiles, trunks, dids, sites,
             activityTypes, personalCallbacks, callHistory, agentSessions,
-            contactNotes
+            contactNotes, agentProfiles
         ] = await Promise.all([
             db.getUsers(), db.getUserGroups(), db.getScripts(), db.getCampaigns(),
             db.getQualifications(), db.getQualificationGroups(), db.getIvrFlows(),
             db.getAudioFiles(), db.getTrunks(), db.getDids(), db.getSites(),
             db.getActivityTypes(), db.getPersonalCallbacks(),
-            db.getCallHistory(), db.getAgentSessions(), db.getContactNotes()
+            db.getCallHistory(), db.getAgentSessions(), db.getContactNotes(),
+            db.getAgentProfiles(),
         ]);
         
         const systemConnectionSettings = {
@@ -297,7 +300,7 @@ app.get('/api/application-data', async (req, res) => {
             users, userGroups, savedScripts, campaigns, qualifications,
             qualificationGroups, ivrFlows, audioFiles, trunks, dids, sites,
             activityTypes, personalCallbacks, callHistory, agentSessions,
-            contactNotes,
+            contactNotes, agentProfiles,
             systemConnectionSettings,
             smtpSettings,
             appSettings,
@@ -317,7 +320,7 @@ app.get('/api/application-data', async (req, res) => {
     }
 });
 
-app.post('/api/system-connection', async (req, res) => {
+app.post('/system-connection', async (req, res) => {
     try {
         const settings = req.body;
         // This is simplified. A real app would write to a secure config store.

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import type { Feature, User, UserRole, Campaign, UserGroup, Site } from '../types.ts';
+import type { Feature, User, UserRole, Campaign, UserGroup, Site, AgentProfile } from '../types.ts';
 import ImportUsersModal from './ImportUsersModal.tsx';
 import { useI18n } from '../src/i18n/index.tsx';
 import { useStore } from '../src/store/useStore.ts';
@@ -35,12 +35,13 @@ interface UserModalProps {
     campaigns: Campaign[];
     userGroups: UserGroup[];
     sites: Site[];
+    agentProfiles: AgentProfile[];
     currentUser: User;
     onSave: (user: User, groupIds: string[]) => void;
     onClose: () => void;
 }
 
-const UserModal: React.FC<UserModalProps> = ({ user, users, campaigns, userGroups, sites, currentUser, onSave, onClose }) => {
+const UserModal: React.FC<UserModalProps> = ({ user, users, campaigns, userGroups, sites, agentProfiles, currentUser, onSave, onClose }) => {
     const { t } = useI18n();
     const [formData, setFormData] = useState<User>(user);
     const [isEmailEnabled, setIsEmailEnabled] = useState(!!user.email);
@@ -241,6 +242,17 @@ const UserModal: React.FC<UserModalProps> = ({ user, users, campaigns, userGroup
                                         </select>
                                     </div>
                                 </div>
+                                {formData.role === 'Agent' && (
+                                     <div>
+                                        <label htmlFor="agentProfileId" className="block text-sm font-medium text-slate-700 dark:text-slate-300">{t('userManager.modal.agentProfile')}</label>
+                                        <select id="agentProfileId" name="agentProfileId" value={formData.agentProfileId || ''} onChange={handleChange} className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border bg-white dark:bg-slate-900 dark:border-slate-600 dark:text-slate-200">
+                                            <option value="">{t('userManager.modal.noAgentProfile')}</option>
+                                            {agentProfiles.map(profile => (
+                                                <option key={profile.id} value={profile.id}>{profile.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
                                 <div className="flex items-center justify-between pt-4 border-t dark:border-slate-700">
                                     <label className="font-medium text-slate-700 dark:text-slate-300">{t('userManager.modal.activeUser')}</label>
                                     <ToggleSwitch
@@ -386,6 +398,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
         campaigns, 
         userGroups, 
         sites, 
+        agentProfiles,
         currentUser, 
         saveOrUpdate, 
         delete: deleteEntity, 
@@ -395,6 +408,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
         campaigns: state.campaigns,
         userGroups: state.userGroups,
         sites: state.sites,
+        agentProfiles: state.agentProfiles,
         currentUser: state.currentUser!,
         saveOrUpdate: state.saveOrUpdate,
         delete: state.delete,
@@ -478,6 +492,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
 
 
     const handleAddNew = () => {
+        const defaultProfile = agentProfiles.find(p => p.name === 'Défaut') || agentProfiles[0];
         setEditingUser({
             id: `new-${Date.now()}`,
             loginId: '',
@@ -489,6 +504,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
             campaignIds: [],
             password: '',
             siteId: null,
+            agentProfileId: defaultProfile?.id || null,
             mobileNumber: '',
             useMobileAsStation: false,
             planningEnabled: false,
@@ -578,7 +594,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
 
     return (
         <div className="space-y-8">
-            {isModalOpen && editingUser && <UserModal user={editingUser} users={users} campaigns={campaigns} userGroups={userGroups} sites={sites} currentUser={currentUser} onSave={handleSave} onClose={() => setIsModalOpen(false)} />}
+            {isModalOpen && editingUser && <UserModal user={editingUser} users={users} campaigns={campaigns} userGroups={userGroups} sites={sites} agentProfiles={agentProfiles} currentUser={currentUser} onSave={handleSave} onClose={() => setIsModalOpen(false)} />}
             {isImportModalOpen && <ImportUsersModal onClose={() => setIsImportModalOpen(false)} onImport={onImportUsers} existingUsers={users} />}
             {isGeneratingModalOpen && <GenerateModal onClose={() => setIsGeneratingModalOpen(false)} onConfirm={handleConfirmGeneration} sites={sites} />}
             <header>
