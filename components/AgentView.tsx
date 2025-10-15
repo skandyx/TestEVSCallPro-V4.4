@@ -476,9 +476,30 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
         } catch (error) { console.error("Failed to save note:", error); alert("Erreur lors de la sauvegarde de la note."); }
     };
     
-    const handleSaveNewContact = async (contactData: Contact) => {
+    // FIX: Changed signature to match the `onInsertContact` prop in AgentPreview.
+    // This function now handles creating a contact object from form data.
+    const handleSaveNewContact = async (campaignId: string, contactData: Record<string, any>, phoneNumber: string) => {
         try {
-            await apiClient.post(`/contacts`, contactData);
+            const standardFieldMap: Record<string, keyof Omit<Contact, 'id'|'status'|'customFields'>> = {
+                'first_name': 'firstName', 'last_name': 'lastName', 'phone_number': 'phoneNumber', 'postal_code': 'postalCode',
+            };
+            const newContactPayload: Partial<Contact> & { campaignId: string, customFields: Record<string, any> } = {
+                campaignId: campaignId,
+                status: 'pending',
+                customFields: {},
+            };
+            for (const key in contactData) {
+                if (standardFieldMap[key]) {
+                    (newContactPayload as any)[standardFieldMap[key]] = contactData[key];
+                } else {
+                    newContactPayload.customFields[key] = contactData[key];
+                }
+            }
+            if (!newContactPayload.phoneNumber) {
+                newContactPayload.phoneNumber = phoneNumber;
+            }
+    
+            await apiClient.post(`/contacts`, newContactPayload);
             await fetchApplicationData();
         } catch (error) {
             console.error("Failed to save new contact:", error);
@@ -488,7 +509,19 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
 
     const updateContact = async (contactData: Contact) => {
         if (contactData.id.startsWith('new-manual-insert-')) {
-            await handleSaveNewContact(contactData);
+            // FIX: Adapted this call to match the new signature of handleSaveNewContact.
+            if (!currentCampaign) {
+                alert("Erreur: Impossible de sauvegarder, aucune campagne active.");
+                return;
+            }
+            // Convert Contact object back to the format expected by handleSaveNewContact
+            const dataForSave: Record<string, any> = { ...contactData.customFields };
+            if (contactData.firstName) dataForSave['first_name'] = contactData.firstName;
+            if (contactData.lastName) dataForSave['last_name'] = contactData.lastName;
+            if (contactData.phoneNumber) dataForSave['phone_number'] = contactData.phoneNumber;
+            if (contactData.postalCode) dataForSave['postal_code'] = contactData.postalCode;
+    
+            await handleSaveNewContact(currentCampaign.id, dataForSave, contactData.phoneNumber);
         } else {
             await apiClient.put(`/contacts/${contactData.id}`, contactData);
         }
