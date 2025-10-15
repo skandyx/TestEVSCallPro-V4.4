@@ -179,6 +179,8 @@ CREATE TABLE contacts (
     postal_code TEXT,
     status TEXT NOT NULL DEFAULT 'pending', -- pending, called, qualified
     custom_fields JSONB,
+    locked_by_agent_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+    locked_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
