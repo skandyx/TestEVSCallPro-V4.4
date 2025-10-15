@@ -173,7 +173,7 @@ const AgentPreview: React.FC<AgentPreviewProps> = ({
     
     // A contact is considered "existing" if it has a database ID.
     // A manually inserted contact gets its ID after the first save.
-    const isExistingContact = contact && contact.id && !contact.id.startsWith('contact-import-');
+    const isExistingContact = contact && contact.id && !contact.id.startsWith('contact-import-') && !contact.id.startsWith('new-manual-insert-');
 
     switch (block.type) {
         // FIX: Removed hardcoded `text-lg` class to respect the dynamic `fontSize` property for true WYSIWYG between editor and preview.
