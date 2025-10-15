@@ -9,6 +9,7 @@ import CallbackSchedulerModal from './CallbackSchedulerModal.tsx';
 import RelaunchSchedulerModal from './RelaunchSchedulerModal.tsx';
 import CallControlBar from './CallControlBar.tsx';
 import ContactSearchModal from './ContactSearchModal.tsx';
+import QualificationModal from './QualificationModal.tsx'; // NEW: Import the new modal
 import { useStore } from '../src/store/useStore.ts';
 
 type Theme = 'light' | 'dark' | 'system';
@@ -157,6 +158,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
     const [callbackCampaignFilter, setCallbackCampaignFilter] = useState('all');
     const [activeCallbackId, setActiveCallbackId] = useState<string | null>(null);
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+    const [isQualifyModalOpen, setIsQualifyModalOpen] = useState(false); // NEW: State for the new modal
 
     const status = agentState?.status || 'Déconnecté';
     
@@ -392,8 +394,42 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
         }
     };
 
+    // NEW: Refactored core logic into its own function
+    const finalizeCall = async (qualificationId: string, relaunchTime?: string) => {
+        if (!currentContact || !currentCampaign) return;
+
+        try {
+            await apiClient.post(`/contacts/${currentContact.id}/qualify`, {
+                qualificationId,
+                campaignId: currentCampaign.id,
+                agentId: currentUser.id,
+                relaunchTime,
+            });
+
+            if (activeCallbackId) {
+                await apiClient.put(`/planning-events/callbacks/${activeCallbackId}`, { status: 'completed' });
+            }
+            
+            await fetchApplicationData();
+            
+            // Reset state
+            campaignForWrapUp.current = currentCampaign; // Store for wrap-up timer
+            setCurrentContact(null);
+            setActiveScript(null);
+            setSelectedQual(null);
+            setNewNote('');
+            setActiveCallbackId(null);
+            
+            changeAgentStatus('En Post-Appel');
+
+        } catch (error) {
+            console.error("Failed to qualify contact:", error);
+            alert("Erreur lors de la qualification.");
+        }
+    };
+
     const handleEndCall = async (relaunchTime?: string) => {
-        if (!selectedQual || !currentContact || !currentCampaign) {
+        if (!selectedQual) {
             alert("Veuillez sélectionner une qualification avant de finaliser.");
             return;
         }
@@ -410,52 +446,38 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
             return;
         }
     
-        try {
-            await apiClient.post(`/contacts/${currentContact.id}/qualify`, {
-                qualificationId: selectedQual,
-                campaignId: currentCampaign.id,
-                agentId: currentUser.id,
-                relaunchTime: relaunchTime,
-            });
-    
-            if (activeCallbackId) {
-                await apiClient.put(`/planning-events/callbacks/${activeCallbackId}`, { status: 'completed' });
-            }
-            
-            await fetchApplicationData();
-            
-            setCurrentContact(null);
-            setActiveScript(null);
-            setSelectedQual(null);
-            setNewNote('');
-            setActiveCallbackId(null);
-            
-            campaignForWrapUp.current = currentCampaign;
-            changeAgentStatus('En Post-Appel');
-    
-        } catch (error) {
-            console.error("Failed to qualify contact:", error);
-            alert("Erreur lors de la qualification.");
-        }
+        await finalizeCall(selectedQual, relaunchTime);
     };
+
+    // NEW: Handler for the new qualification modal
+    const handleQualifyAndEnd = async (qualificationId: string) => {
+        setIsQualifyModalOpen(false);
+
+        const qual = qualificationsForCampaign.find(q => q.id === qualificationId);
+        if (qual?.code === '94') { 
+            setSelectedQual(qualificationId);
+            setIsCallbackModalOpen(true); 
+            return; 
+        }
+        if (qual?.code === '95') { 
+            setSelectedQual(qualificationId);
+            setIsRelaunchModalOpen(true); 
+            return; 
+        }
+
+        await finalizeCall(qualificationId);
+    };
+
 
     const handleScheduleAndEndCall = async (scheduledTime: string) => {
         if (!currentContact || !currentCampaign || !selectedQual) return;
         try {
             await apiClient.post(`/contacts/${currentContact.id}/schedule-callback`, { agentId: currentUser.id, campaignId: currentCampaign.id, contactName: `${currentContact.firstName} ${currentContact.lastName}`, contactNumber: currentContact.phoneNumber, scheduledTime, notes: '' });
-            await apiClient.post(`/contacts/${currentContact.id}/qualify`, { qualificationId: selectedQual, campaignId: currentCampaign.id, agentId: currentUser.id });
             
-            await fetchApplicationData();
+            // We still need to qualify the call itself
+            await finalizeCall(selectedQual);
+
             setIsCallbackModalOpen(false); 
-            
-            setCurrentContact(null);
-            setActiveScript(null);
-            setSelectedQual(null);
-            setNewNote('');
-            setActiveCallbackId(null);
-            
-            campaignForWrapUp.current = currentCampaign;
-            changeAgentStatus('En Post-Appel');
 
         } catch (error: any) { 
             console.error("Failed to schedule callback:", error); 
@@ -476,8 +498,6 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
         } catch (error) { console.error("Failed to save note:", error); alert("Erreur lors de la sauvegarde de la note."); }
     };
     
-    // FIX: Changed signature to match the `onInsertContact` prop in AgentPreview.
-    // This function now handles creating a contact object from form data.
     const handleSaveNewContact = async (campaignId: string, contactData: Record<string, any>, phoneNumber: string) => {
         try {
             const standardFieldMap: Record<string, keyof Omit<Contact, 'id'|'status'|'customFields'>> = {
@@ -509,12 +529,10 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
 
     const updateContact = async (contactData: Contact) => {
         if (contactData.id.startsWith('new-manual-insert-')) {
-            // FIX: Adapted this call to match the new signature of handleSaveNewContact.
             if (!currentCampaign) {
                 alert("Erreur: Impossible de sauvegarder, aucune campagne active.");
                 return;
             }
-            // Convert Contact object back to the format expected by handleSaveNewContact
             const dataForSave: Record<string, any> = { ...contactData.customFields };
             if (contactData.firstName) dataForSave['first_name'] = contactData.firstName;
             if (contactData.lastName) dataForSave['last_name'] = contactData.lastName;
@@ -661,6 +679,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
              <CallbackSchedulerModal isOpen={isCallbackModalOpen} onClose={() => setIsCallbackModalOpen(false)} onSchedule={handleScheduleAndEndCall} />
              <RelaunchSchedulerModal isOpen={isRelaunchModalOpen} onClose={() => setIsRelaunchModalOpen(false)} onSchedule={handleScheduleRelaunch} />
              <ContactSearchModal isOpen={isSearchModalOpen} onClose={() => setIsSearchModalOpen(false)} campaigns={assignedCampaigns} onSelectContact={handleSelectContactFromSearch} />
+             <QualificationModal isOpen={isQualifyModalOpen} onClose={() => setIsQualifyModalOpen(false)} qualifications={qualificationsForCampaign} onQualify={handleQualifyAndEnd} />
 
              <header className="flex-shrink-0 bg-white dark:bg-slate-800 shadow-md p-3 flex justify-between items-center z-10">
                 <div ref={statusMenuRef} className="relative flex items-center gap-4">
@@ -792,7 +811,8 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
                     ref: dialOptionsRef
                 }}
                 onDial={handleDial}
-                onEndCall={handleEndCall}
+                onEndCall={() => handleEndCall()}
+                onQualify={() => setIsQualifyModalOpen(true)}
                 onHold={() => alert('Hold action')}
                 onTransfer={() => alert('Transfer action')}
                 onSearch={() => setIsSearchModalOpen(true)}

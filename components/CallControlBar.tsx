@@ -15,6 +15,7 @@ interface CallControlBarProps {
     };
     onDial: (destination: string) => void;
     onEndCall: () => void;
+    onQualify: () => void; // NEW: Prop to open qualification modal
     onHold: () => void;
     onTransfer: () => void;
     onSearch: () => void;
@@ -50,7 +51,7 @@ const CallControlButton: React.FC<{
 
 const CallControlBar: React.FC<CallControlBarProps> = ({
     config, status, currentContact, selectedQual, dialOptions,
-    onDial, onEndCall, onHold, onTransfer, onSearch, onInsert
+    onDial, onEndCall, onQualify, onHold, onTransfer, onSearch, onInsert
 }) => {
     const { t } = useI18n();
 
@@ -98,6 +99,15 @@ const CallControlBar: React.FC<CallControlBarProps> = ({
                     </div>
                 )}
             </div>
+            
+            <CallControlButton
+                show={config?.qualify ?? true}
+                icon="fact_check"
+                label={t('agentProfiles.controls.qualify')}
+                onClick={onQualify}
+                disabled={!currentContact}
+                className="bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800"
+            />
 
             <CallControlButton
                 show={config?.hangup ?? true}
