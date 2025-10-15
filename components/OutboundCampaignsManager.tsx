@@ -9,6 +9,18 @@ import { useStore } from '../src/store/useStore.ts';
 // FIX: Imported apiClient to resolve 'Cannot find name' error.
 import apiClient from '../src/lib/axios.ts';
 
+// --- Helper function for state comparison ---
+const getContactStatusCounts = (c: Campaign | null) => {
+    if (!c?.contacts) return { pending: 0, called: 0, qualified: 0 };
+    return c.contacts.reduce((acc, contact) => {
+        if (contact.status === 'pending') acc.pending++;
+        else if (contact.status === 'called') acc.called++;
+        else if (contact.status === 'qualified') acc.qualified++;
+        return acc;
+    }, { pending: 0, called: 0, qualified: 0 });
+};
+
+
 // --- Reusable ToggleSwitch Component ---
 const ToggleSwitch: React.FC<{ enabled: boolean; onChange: (enabled: boolean) => void; }> = ({ enabled, onChange }) => (
     <button
@@ -394,18 +406,21 @@ const OutboundCampaignsManager: React.FC<{ feature: Feature }> = ({ feature }) =
         if (selectedCampaign) {
             const updatedCampaign = campaigns.find(c => c.id === selectedCampaign.id);
 
-            // This comparison is optimized to prevent performance issues with large contact lists.
-            // It creates a temporary version of each campaign object without the 'contacts' array
-            // before stringifying, ensuring that updates to quotas or other campaign settings
-            // are detected quickly without comparing thousands of contacts.
             if (updatedCampaign) {
+                // This comparison is optimized to prevent performance issues with large contact lists.
+                // It checks for changes in campaign settings (excluding contacts) AND for changes
+                // in the counts of contact statuses. This ensures that actions like contact recycling,
+                // which only change contact statuses, trigger a view update for a seamless real-time experience.
                 const campaignWithoutContacts = (c: Campaign) => {
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const { contacts, ...rest } = c;
                     return rest;
                 };
 
-                if (JSON.stringify(campaignWithoutContacts(updatedCampaign)) !== JSON.stringify(campaignWithoutContacts(selectedCampaign))) {
+                const settingsChanged = JSON.stringify(campaignWithoutContacts(updatedCampaign)) !== JSON.stringify(campaignWithoutContacts(selectedCampaign));
+                const statusCountsChanged = JSON.stringify(getContactStatusCounts(updatedCampaign)) !== JSON.stringify(getContactStatusCounts(selectedCampaign));
+                
+                if (settingsChanged || statusCountsChanged) {
                     setSelectedCampaign(updatedCampaign);
                 }
             }
