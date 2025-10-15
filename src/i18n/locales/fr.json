@@ -506,6 +506,10 @@
         "noTime": "Veuillez sélectionner une date et une heure de relance.",
         "pastTime": "La date de relance doit être dans le futur."
       }
+    },
+    "campaignList": {
+      "title": "Mes Campagnes",
+      "button": "Liste des Campagnes"
     }
   },
   "qualificationsManager": {
@@ -976,7 +980,7 @@
     },
     "summary": {
       "title": "Résumé de l'Importation",
-      "rowsRead": "Lignes Lues",
+      "rowsRead": "Lignes lues",
       "contactsImported": "Contacts Importés",
       "rowsRejected": "Lignes Rejetées",
       "rejectionDetails": "Détails des Rejets",

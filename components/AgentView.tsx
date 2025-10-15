@@ -9,7 +9,8 @@ import CallbackSchedulerModal from './CallbackSchedulerModal.tsx';
 import RelaunchSchedulerModal from './RelaunchSchedulerModal.tsx';
 import CallControlBar from './CallControlBar.tsx';
 import ContactSearchModal from './ContactSearchModal.tsx';
-import QualificationModal from './QualificationModal.tsx'; // NEW: Import the new modal
+import QualificationModal from './QualificationModal.tsx';
+import CampaignSelectionModal from './CampaignSelectionModal.tsx';
 import { useStore } from '../src/store/useStore.ts';
 
 type Theme = 'light' | 'dark' | 'system';
@@ -71,12 +72,6 @@ const LanguageSwitcher: React.FC = () => {
 
     return <div className="relative"><button onClick={(e) => { e.stopPropagation(); toggleDropdown(); }} className="flex items-center p-1 space-x-2 bg-slate-100 dark:bg-slate-700 rounded-full text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600"><span className="w-6 h-6 rounded-full overflow-hidden"><img src={getFlagSrc(language)} alt={language} className="w-full h-full object-cover" /></span><span className="hidden sm:inline">{language.toUpperCase()}</span><span className="material-symbols-outlined w-4 h-4 text-slate-500 dark:text-slate-400 mr-1">expand_more</span></button>{isOpen && <div className="absolute right-0 mt-2 w-36 origin-top-right bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20"><div className="py-1">{languages.map(lang => <button key={lang.code} onClick={() => { setLanguage(lang.code); setIsOpen(false); }} className="w-full text-left flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"><img src={getFlagSrc(lang.code)} alt={lang.name} className="w-5 h-auto rounded-sm" />{lang.name}</button>)}</div></div>}</div>;
 }
-
-const ToggleSwitch: React.FC<{ enabled: boolean; onChange: (enabled: boolean) => void; disabled?: boolean }> = ({ enabled, onChange, disabled = false }) => (
-    <button type="button" onClick={() => !disabled && onChange(!enabled)} className={`${enabled ? 'bg-primary' : 'bg-slate-200'} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out`} role="switch" aria-checked={enabled} disabled={disabled}>
-        <span aria-hidden="true" className={`${enabled ? 'translate-x-5' : 'translate-x-0'} pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`} />
-    </button>
-);
 
 const getStatusColor = (status: AgentStatus | undefined): string => {
     if (!status) return 'bg-gray-400';
@@ -158,7 +153,8 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
     const [callbackCampaignFilter, setCallbackCampaignFilter] = useState('all');
     const [activeCallbackId, setActiveCallbackId] = useState<string | null>(null);
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-    const [isQualifyModalOpen, setIsQualifyModalOpen] = useState(false); // NEW: State for the new modal
+    const [isQualifyModalOpen, setIsQualifyModalOpen] = useState(false);
+    const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
 
     const status = agentState?.status || 'Déconnecté';
     
@@ -394,7 +390,6 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
         }
     };
 
-    // NEW: Refactored core logic into its own function
     const finalizeCall = async (qualificationId: string, relaunchTime?: string) => {
         if (!currentContact || !currentCampaign) return;
 
@@ -449,7 +444,6 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
         await finalizeCall(selectedQual, relaunchTime);
     };
 
-    // NEW: Handler for the new qualification modal
     const handleQualifyAndEnd = async (qualificationId: string) => {
         setIsQualifyModalOpen(false);
 
@@ -545,7 +539,9 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
         }
     };
 
-    const handleCampaignToggle = (campaignId: string) => setActiveDialingCampaignId(prev => (prev === campaignId ? null : campaignId));
+    const handleCampaignSelection = (campaignId: string) => {
+        setActiveDialingCampaignId(prevId => prevId === campaignId ? null : campaignId);
+    };
 
     const handleRaiseHand = useCallback(() => {
         wsClient.send({ type: 'agentRaisedHand', payload: { agentId: currentUser.id, agentName: `${currentUser.firstName} ${currentUser.lastName}`, agentLoginId: currentUser.loginId }});
@@ -680,6 +676,8 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
              <RelaunchSchedulerModal isOpen={isRelaunchModalOpen} onClose={() => setIsRelaunchModalOpen(false)} onSchedule={handleScheduleRelaunch} />
              <ContactSearchModal isOpen={isSearchModalOpen} onClose={() => setIsSearchModalOpen(false)} campaigns={assignedCampaigns} onSelectContact={handleSelectContactFromSearch} />
              <QualificationModal isOpen={isQualifyModalOpen} onClose={() => setIsQualifyModalOpen(false)} qualifications={qualificationsForCampaign} onQualify={handleQualifyAndEnd} />
+             {isCampaignModalOpen && <CampaignSelectionModal isOpen={isCampaignModalOpen} onClose={() => setIsCampaignModalOpen(false)} assignedCampaigns={assignedCampaigns} activeDialingCampaignId={activeDialingCampaignId} onCampaignToggle={handleCampaignSelection} />}
+
 
              <header className="flex-shrink-0 bg-white dark:bg-slate-800 shadow-md p-3 flex justify-between items-center z-10">
                 <div ref={statusMenuRef} className="relative flex items-center gap-4">
@@ -700,6 +698,10 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
                 </div>
                 <div className="flex items-center gap-4">
                     <Clock />
+                    <button onClick={() => setIsCampaignModalOpen(true)} className="font-semibold py-2 px-3 rounded-lg inline-flex items-center bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 text-sm">
+                        <span className="material-symbols-outlined mr-2 text-base">list</span>
+                        {t('agentView.campaignList.button')}
+                    </button>
                     {agentProfile?.callControlsConfig?.raiseHand && <button onClick={handleRaiseHand} title={t('agentView.askForHelp')} className="p-2 rounded-full text-amber-500 bg-amber-100 dark:bg-amber-900/50 hover:bg-amber-200 dark:hover:bg-amber-900"><span className="material-symbols-outlined">front_hand</span></button>}
                     <div className="relative"><button onClick={() => setIsAgentNotifOpen(p => !p)} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400"><span className="material-symbols-outlined">notifications</span>{agentNotifications.length > 0 && (<span className="absolute top-1 right-1 flex h-4 w-4"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 text-white text-xs items-center justify-center">{agentNotifications.length}</span></span>)}</button>{isAgentNotifOpen && (<div className="absolute right-0 mt-2 w-80 origin-top-right bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20"><div className="p-3 border-b dark:border-slate-700 flex justify-between items-center"><h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('agentView.messages')}</h3>{agentNotifications.length > 0 && <button onClick={() => setAgentNotifications([])} className="text-xs font-medium text-indigo-600 hover:underline">{t('agentView.clearAll')}</button>}</div><div className="max-h-96 overflow-y-auto">{agentNotifications.length === 0 ? (<p className="text-sm text-slate-500 text-center p-8">Aucun nouveau message.</p>) : (agentNotifications.map(notif => (<div key={String(notif.id)} className="p-3 border-b dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"><p className="text-sm text-slate-700 dark:text-slate-200"><span className="font-bold">{notif.from}:</span> {notif.message}</p><p className="text-xs text-slate-400 mt-1">{new Date(notif.timestamp).toLocaleString(language, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</p>{activeReplyId === notif.id ? (<form onSubmit={(e) => { e.preventDefault(); handleRespondToSupervisor(notif.id); }} className="mt-2 flex gap-2"><input type="text" value={replyText} onChange={e => setReplyText(e.target.value)} placeholder={t('agentView.yourResponsePlaceholder')} autoFocus className="w-full text-sm p-1.5 border rounded-md dark:bg-slate-900 dark:border-slate-600"/><button type="submit" className="text-sm bg-indigo-600 text-white px-3 rounded-md hover:bg-indigo-700">{t('common.send')}</button></form>) : (<button onClick={() => setActiveReplyId(notif.id)} className="mt-2 text-xs font-semibold text-indigo-600 hover:underline">{t('agentView.respond')}</button>)}</div>)))}</div></div>)}</div>
                     <LanguageSwitcher />
@@ -754,7 +756,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
                         )}
                     </div></div>
                 </div>
-                <div className="col-span-6 bg-white dark:bg-slate-800 rounded-lg shadow-sm border dark:border-slate-700">
+                <div className="col-span-9 bg-white dark:bg-slate-800 rounded-lg shadow-sm border dark:border-slate-700">
                     {status === 'En Post-Appel' ? (
                         <div className="h-full flex flex-col items-center justify-center text-center p-8">
                             <svg className="animate-spin h-12 w-12 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -775,28 +777,6 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
                             <p>{currentContact ? t('agentView.noScript') : t('agentView.scriptWillBeHere')}</p>
                         </div>
                     )}
-                </div>
-                 <div className="col-span-3 flex flex-col gap-4">
-                    <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm border dark:border-slate-700 flex-1 flex flex-col">
-                        <div className="flex-1 flex flex-col min-h-0">
-                            <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 border-b dark:border-slate-600 pb-2 mb-4 flex-shrink-0">{t('agentView.qualifications')}</h2>
-                            <select value={selectedQual || ''} onChange={e => setSelectedQual(e.target.value)} disabled={!currentContact} className="w-full p-3 rounded-md border bg-white border-slate-300 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed dark:bg-slate-900 dark:border-slate-600"><option value="">{t('agentView.selectQualification')}</option>{qualificationsForCampaign.map(q => <option key={q.id} value={q.id}>[{q.code}] {q.description}</option>)}</select>
-                            
-                            <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 border-b dark:border-slate-600 pb-2 my-4 flex-shrink-0">{t('agentView.activeCampaigns')}</h2>
-                            <div className="flex-1 overflow-y-auto pr-2 space-y-2">
-                                {assignedCampaigns.length > 0 ? assignedCampaigns.map(c => (
-                                    <div key={c.id} className="flex items-center justify-between p-3 rounded-md border bg-slate-50 dark:bg-slate-700 dark:border-slate-600">
-                                        <span className="font-medium text-slate-800 dark:text-slate-200">{c.name}</span>
-                                        <ToggleSwitch 
-                                            enabled={activeDialingCampaignId === c.id} 
-                                            onChange={() => handleCampaignToggle(c.id)}
-                                            disabled={!c.isActive}
-                                        />
-                                    </div>
-                                )) : <p className="text-sm text-slate-500 italic text-center">{t('agentView.noCampaigns')}</p>}
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </main>
             <CallControlBar 

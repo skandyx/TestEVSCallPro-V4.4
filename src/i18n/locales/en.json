@@ -503,6 +503,10 @@
         "noTime": "Please select a relaunch date and time.",
         "pastTime": "The relaunch date must be in the future."
       }
+    },
+    "campaignList": {
+      "title": "My Campaigns",
+      "button": "Campaign List"
     }
   },
   "qualificationsManager": {
