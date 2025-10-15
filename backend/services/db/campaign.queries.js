@@ -22,8 +22,6 @@ const getCampaigns = async () => {
         ORDER BY c.name;
     `;
     const res = await pool.query(query);
-    // The recursive keysToCamel function handles the entire object, including nested arrays.
-    // The previous extra .map() call was redundant and caused the bug.
     return res.rows.map(keysToCamel);
 };
 
@@ -48,8 +46,6 @@ const getCampaignById = async (id, client = pool) => {
     `;
     const res = await client.query(query, [id]);
     if (res.rows.length === 0) return null;
-    // The recursive keysToCamel function handles the entire object.
-    // The previous extra .map() call was redundant and caused the bug.
     return keysToCamel(res.rows[0]);
 }
 
@@ -81,7 +77,6 @@ const saveCampaign = async (campaign, id) => {
         
         const campaignId = savedCampaign.id;
 
-        // Sync assigned agents
         await client.query('DELETE FROM campaign_agents WHERE campaign_id = $1', [campaignId]);
         if (assignedUserIds && assignedUserIds.length > 0) {
             const uniqueUserIds = [...new Set(assignedUserIds)];
@@ -262,7 +257,6 @@ const getNextContactForCampaign = async (agentId, campaignId) => {
 };
 
 const markContactAsCalled = async (contactId, campaignId) => {
-    // Simple, atomic update.
     await pool.query(
         `UPDATE contacts SET status = 'called', updated_at = NOW() WHERE id = $1 AND campaign_id = $2`,
         [contactId, campaignId]
@@ -307,13 +301,11 @@ const qualifyContact = async (contactId, qualificationId, campaignId, agentId, r
         }
         
         if (relaunchTime) {
-            // It's a "Relance" (code 95), set status to pending and schedule relaunch
             await client.query(
                 `UPDATE contacts SET status = 'pending', custom_fields = custom_fields || jsonb_build_object('relaunch_at', $1::timestamptz), updated_at = NOW() WHERE id = $2`,
                 [relaunchTime, contactId]
             );
         } else {
-            // Normal qualification
             await client.query("UPDATE contacts SET status = 'qualified', updated_at = NOW() WHERE id = $1", [contactId]);
         }
         
@@ -419,6 +411,23 @@ const getCallHistoryForContact = async (contactId) => {
     return res.rows.map(keysToCamel);
 };
 
+const createContact = async (contactData) => {
+    const { campaignId, firstName, lastName, phoneNumber, postalCode, customFields } = contactData;
+    const newId = `contact-${Date.now()}`;
+    const query = `
+        INSERT INTO contacts (id, campaign_id, first_name, last_name, phone_number, postal_code, status, custom_fields)
+        VALUES ($1, $2, $3, $4, $5, $6, 'pending', $7)
+        RETURNING *;
+    `;
+    const res = await pool.query(query, [newId, campaignId, firstName || null, lastName || null, phoneNumber || null, postalCode || null, customFields || {}]);
+    
+    const updatedCampaign = await getCampaignById(campaignId);
+    publish('events:crud', { type: 'campaignUpdate', payload: updatedCampaign });
+    
+    return keysToCamel(res.rows[0]);
+};
+
+
 const updateContact = async (contactId, contactData) => {
     const client = await pool.connect();
     try {
@@ -487,5 +496,6 @@ module.exports = {
     qualifyContact,
     recycleContactsByQualification,
     getCallHistoryForContact,
+    createContact,
     updateContact,
 };

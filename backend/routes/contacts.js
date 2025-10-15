@@ -13,6 +13,37 @@ const isAdmin = (req, res, next) => {
     }
 };
 
+/**
+ * @openapi
+ * /contacts:
+ *   post:
+ *     summary: Crée une nouvelle fiche contact manuellement.
+ *     tags: [Contacts]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Contact'
+ *     responses:
+ *       '201':
+ *         description: "Contact créé."
+ */
+router.post('/', async (req, res) => {
+    try {
+        const contactData = req.body;
+        // The campaignId should be part of the contact data sent from the agent view
+        if (!contactData.campaignId) {
+            return res.status(400).json({ error: 'campaignId is required.' });
+        }
+        const newContact = await db.createContact(contactData);
+        res.status(201).json(newContact);
+    } catch (error) {
+        console.error('Error creating contact manually:', error);
+        res.status(500).json({ error: 'Failed to create contact' });
+    }
+});
+
 
 /**
  * @openapi

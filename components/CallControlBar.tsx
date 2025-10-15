@@ -17,6 +17,8 @@ interface CallControlBarProps {
     onEndCall: () => void;
     onHold: () => void;
     onTransfer: () => void;
+    onSearch: () => void;
+    onInsert: () => void;
 }
 
 const CallControlButton: React.FC<{
@@ -48,13 +50,12 @@ const CallControlButton: React.FC<{
 
 const CallControlBar: React.FC<CallControlBarProps> = ({
     config, status, currentContact, selectedQual, dialOptions,
-    onDial, onEndCall, onHold, onTransfer
+    onDial, onEndCall, onHold, onTransfer, onSearch, onInsert
 }) => {
     const { t } = useI18n();
 
     const isDuringCall = status === 'En Appel' || status === 'Ringing' || status === 'Mise en attente';
     
-    // The main Dial button logic
     const handleDialClick = () => {
         if (!currentContact) return;
         if (dialOptions.options.length > 1) {
@@ -123,7 +124,6 @@ const CallControlBar: React.FC<CallControlBarProps> = ({
                 disabled={!isDuringCall}
             />
 
-            {/* Placeholder for other configurable buttons */}
             <CallControlButton
                 show={config?.mute ?? false}
                 icon="mic_off"
@@ -139,10 +139,17 @@ const CallControlBar: React.FC<CallControlBarProps> = ({
                 disabled={!isDuringCall}
             />
              <CallControlButton
+                show={config?.search ?? false}
+                icon="search"
+                label={t('agentProfiles.controls.search')}
+                onClick={onSearch}
+                disabled={isDuringCall}
+            />
+             <CallControlButton
                 show={config?.insert ?? false}
                 icon="person_add"
                 label={t('agentProfiles.controls.insert')}
-                onClick={() => alert('Insert action')}
+                onClick={onInsert}
                 disabled={isDuringCall}
             />
         </footer>

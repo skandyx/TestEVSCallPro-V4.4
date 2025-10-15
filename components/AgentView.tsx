@@ -8,6 +8,7 @@ import wsClient from '../src/services/wsClient.ts';
 import CallbackSchedulerModal from './CallbackSchedulerModal.tsx';
 import RelaunchSchedulerModal from './RelaunchSchedulerModal.tsx';
 import CallControlBar from './CallControlBar.tsx';
+import ContactSearchModal from './ContactSearchModal.tsx';
 import { useStore } from '../src/store/useStore.ts';
 
 type Theme = 'light' | 'dark' | 'system';
@@ -111,7 +112,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
 
     const { 
         currentUser, campaigns, qualifications, savedScripts, contactNotes, users, personalCallbacks,
-        agentStates, agentProfiles, logout, fetchApplicationData, updateContact, theme, setTheme, changeAgentStatus, callHistory
+        agentStates, agentProfiles, logout, fetchApplicationData, theme, setTheme, changeAgentStatus, callHistory
     } = useStore(state => ({
         currentUser: state.currentUser!,
         campaigns: state.campaigns,
@@ -124,7 +125,6 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
         agentProfiles: state.agentProfiles,
         logout: state.logout,
         fetchApplicationData: state.fetchApplicationData,
-        updateContact: state.updateContact,
         theme: state.theme,
         setTheme: state.setTheme,
         changeAgentStatus: state.changeAgentStatus,
@@ -156,6 +156,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
     const [callbackViewDate, setCallbackViewDate] = useState(new Date());
     const [callbackCampaignFilter, setCallbackCampaignFilter] = useState('all');
     const [activeCallbackId, setActiveCallbackId] = useState<string | null>(null);
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
     const status = agentState?.status || 'Déconnecté';
     
@@ -474,6 +475,24 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
             setNewNote(''); await fetchApplicationData();
         } catch (error) { console.error("Failed to save note:", error); alert("Erreur lors de la sauvegarde de la note."); }
     };
+    
+    const handleSaveNewContact = async (contactData: Contact) => {
+        try {
+            await apiClient.post(`/contacts`, contactData);
+            await fetchApplicationData();
+        } catch (error) {
+            console.error("Failed to save new contact:", error);
+            alert("Erreur lors de la sauvegarde du nouveau contact.");
+        }
+    };
+
+    const updateContact = async (contactData: Contact) => {
+        if (contactData.id.startsWith('new-manual-insert-')) {
+            await handleSaveNewContact(contactData);
+        } else {
+            await apiClient.put(`/contacts/${contactData.id}`, contactData);
+        }
+    };
 
     const handleCampaignToggle = (campaignId: string) => setActiveDialingCampaignId(prev => (prev === campaignId ? null : campaignId));
 
@@ -501,6 +520,45 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
         const script = savedScripts.find(s => s.id === campaign.scriptId);
         setCurrentContact(contact); setCurrentCampaign(campaign); setActiveScript(script || null); setActiveDialingCampaignId(campaign.id);
     }, [status, campaigns, savedScripts, t]);
+
+    const handleSelectContactFromSearch = (contact: Contact, campaign: Campaign) => {
+        if (status !== 'En Attente') {
+            setFeedbackMessage(t('agentView.feedback.mustEndTask'));
+            setTimeout(() => setFeedbackMessage(null), 3000);
+            return;
+        }
+        const script = savedScripts.find(s => s.id === campaign.scriptId);
+        setCurrentContact(contact);
+        setCurrentCampaign(campaign);
+        setActiveScript(script || null);
+        setActiveDialingCampaignId(campaign.id);
+        setIsSearchModalOpen(false);
+    };
+
+    const handleInsertBlankRecord = () => {
+        if (!activeDialingCampaignId) {
+            setFeedbackMessage(t('agentView.feedback.activateCampaign'));
+            setTimeout(() => setFeedbackMessage(null), 3000);
+            return;
+        }
+        const activeCampaign = campaigns.find(c => c.id === activeDialingCampaignId);
+        if (!activeCampaign) return;
+
+        const blankContact: Contact = {
+            id: `new-manual-insert-${Date.now()}`,
+            firstName: '',
+            lastName: '',
+            phoneNumber: '',
+            postalCode: '',
+            status: 'pending',
+            customFields: {},
+        };
+        const script = savedScripts.find(s => s.id === activeCampaign.scriptId);
+        
+        setCurrentContact(blankContact);
+        setCurrentCampaign(activeCampaign);
+        setActiveScript(script || null);
+    };
     
     const handleCallbackDateChange = (offset: number) => {
         setCallbackViewDate(current => {
@@ -535,7 +593,6 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
             if (rule.operator === 'equals') match = contactValue === rule.value;
             else if (rule.operator === 'starts_with') match = contactValue.startsWith(rule.value);
             if (match) {
-                // Pass the raw rule object instead of the translated name
                 return { rule, current: rule.currentCount, limit: rule.limit, progress: rule.limit > 0 ? (rule.currentCount / rule.limit) * 100 : 0 };
             }
         }
@@ -570,6 +627,8 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
              {isProfileModalOpen && <UserProfileModal user={currentUser} onClose={() => setIsProfileModalOpen(false)} onSavePassword={onUpdatePassword} onSaveProfilePicture={onUpdateProfilePicture} />}
              <CallbackSchedulerModal isOpen={isCallbackModalOpen} onClose={() => setIsCallbackModalOpen(false)} onSchedule={handleScheduleAndEndCall} />
              <RelaunchSchedulerModal isOpen={isRelaunchModalOpen} onClose={() => setIsRelaunchModalOpen(false)} onSchedule={handleScheduleRelaunch} />
+             <ContactSearchModal isOpen={isSearchModalOpen} onClose={() => setIsSearchModalOpen(false)} campaigns={assignedCampaigns} onSelectContact={handleSelectContactFromSearch} />
+
              <header className="flex-shrink-0 bg-white dark:bg-slate-800 shadow-md p-3 flex justify-between items-center z-10">
                 <div ref={statusMenuRef} className="relative flex items-center gap-4">
                     <button onClick={() => setIsStatusMenuOpen(p => !p)} className="relative p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
@@ -658,7 +717,7 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
                             <p className="mt-2 text-sm font-mono text-slate-500">{formatTimer(wrapUpRemaining)} / {formatTimer(wrapUpTotal)}</p>
                         </div>
                     ) : activeScript && currentContact ? (
-                        <AgentPreview script={activeScript} onClose={() => {}} embedded={true} contact={currentContact} contactNotes={contactNotesForCurrentContact} users={users} newNote={newNote} setNewNote={setNewNote} onSaveNote={handleSaveNote} campaign={currentCampaign} onInsertContact={async () => {}} onUpdateContact={updateContact} onClearContact={handleClearContact} matchingQuota={matchingQuota} />
+                        <AgentPreview script={activeScript} onClose={() => {}} embedded={true} contact={currentContact} contactNotes={contactNotesForCurrentContact} users={users} newNote={newNote} setNewNote={setNewNote} onSaveNote={handleSaveNote} campaign={currentCampaign} onInsertContact={handleSaveNewContact} onUpdateContact={updateContact} onClearContact={handleClearContact} matchingQuota={matchingQuota} />
                     ) : (
                         <div className="h-full flex items-center justify-center text-slate-500 dark:text-slate-400">
                             <p>{currentContact ? t('agentView.noScript') : t('agentView.scriptWillBeHere')}</p>
@@ -703,6 +762,8 @@ const AgentView: React.FC<AgentViewProps> = ({ onUpdatePassword, onUpdateProfile
                 onEndCall={handleEndCall}
                 onHold={() => alert('Hold action')}
                 onTransfer={() => alert('Transfer action')}
+                onSearch={() => setIsSearchModalOpen(true)}
+                onInsert={handleInsertBlankRecord}
             />
         </div>
     );
