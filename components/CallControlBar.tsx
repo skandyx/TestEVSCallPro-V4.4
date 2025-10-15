@@ -58,7 +58,6 @@ const CallControlBar: React.FC<CallControlBarProps> = ({
     const handleDialClick = () => {
         if (!currentContact) return;
         if (dialOptions.options.length > 1) {
-            // FIX: Corrected the call to `dialOptions.setIsOpen` by passing the new boolean value directly instead of an updater function, resolving the TypeScript error.
             dialOptions.setIsOpen(!dialOptions.isOpen);
         } else {
             dialOptions.setIsOpen(false);
