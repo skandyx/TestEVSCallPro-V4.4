@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { Feature, AudioFile } from '../types.ts';
 import { useStore } from '../src/store/useStore.ts';
 import { useI18n } from '../src/i18n/index.tsx';
-import { PlusIcon, EditIcon, TrashIcon, SpeakerWaveIcon } from './Icons.tsx';
+import { PlusIcon, SpeakerWaveIcon } from './Icons.tsx';
 import AudioFileModal from './AudioFileModal.tsx';
 import apiClient from '../src/lib/axios.ts';
 import InlineAudioPlayer from './InlineAudioPlayer.tsx';
@@ -104,7 +104,7 @@ const AudioManager: React.FC<{ feature: Feature }> = ({ feature }) => {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">{t('audioManager.headers.duration')}</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">{t('audioManager.headers.size')}</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">{t('audioManager.headers.uploadDate')}</th>
-                                <th className="px-6 py-3"></th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Écouter</th>
                                 <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">{t('common.actions')}</th>
                             </tr>
                         </thead>
@@ -119,8 +119,8 @@ const AudioManager: React.FC<{ feature: Feature }> = ({ feature }) => {
                                         <InlineAudioPlayer fileId={file.id} src={`/api/media/${file.fileName}`} duration={file.duration} />
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                        <button onClick={() => handleEdit(file)} className="text-link hover:underline inline-flex items-center"><EditIcon className="w-4 h-4 mr-1"/>{t('common.edit')}</button>
-                                        <button onClick={() => handleDelete(file.id)} className="text-red-600 hover:text-red-900 dark:hover:text-red-400 inline-flex items-center"><TrashIcon className="w-4 h-4 mr-1"/>{t('common.delete')}</button>
+                                        <button onClick={() => handleEdit(file)} className="text-link hover:underline inline-flex items-center"><span className="material-symbols-outlined text-base mr-1">edit</span>{t('common.edit')}</button>
+                                        <button onClick={() => handleDelete(file.id)} className="text-red-600 hover:text-red-900 dark:hover:text-red-400 inline-flex items-center"><span className="material-symbols-outlined text-base mr-1">delete</span>{t('common.delete')}</button>
                                     </td>
                                 </tr>
                             ))}

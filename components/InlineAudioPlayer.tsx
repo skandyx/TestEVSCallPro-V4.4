@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useStore } from '../src/store/useStore.ts';
-import { PlayIcon, PauseIcon } from './Icons.tsx';
 
 interface InlineAudioPlayerProps {
     fileId: string;
@@ -98,7 +97,9 @@ const InlineAudioPlayer: React.FC<InlineAudioPlayerProps> = ({ fileId, src, dura
                 preload="metadata"
             />
             <button onClick={handlePlayPause} className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 p-1">
-                {isPlaying ? <PauseIcon className="w-5 h-5" /> : <PlayIcon className="w-5 h-5" />}
+                <span className="material-symbols-outlined text-2xl">
+                    {isPlaying ? 'pause' : 'play_arrow'}
+                </span>
             </button>
             <span className="text-xs font-mono text-slate-500 dark:text-slate-400 w-24 flex-shrink-0">
                 {formatTime(currentTime)} / {formatTime(duration)}

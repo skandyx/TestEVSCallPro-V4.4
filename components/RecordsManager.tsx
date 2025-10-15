@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import type { Feature, CallHistoryRecord, User, Campaign, Qualification } from '../types.ts';
 import { useStore } from '../src/store/useStore.ts';
 import { useI18n } from '../src/i18n/index.tsx';
-import { ArrowDownTrayIcon, TrashIcon } from './Icons.tsx';
 import InlineAudioPlayer from './InlineAudioPlayer.tsx';
 
 const RecordsManager: React.FC<{ feature: Feature }> = ({ feature }) => {
@@ -83,7 +82,7 @@ const RecordsManager: React.FC<{ feature: Feature }> = ({ feature }) => {
                             <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">{t('common.campaign')}</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">{t('recordsManager.headers.calledNumber')}</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">{t('recordsManager.headers.duration')}</th>
-                            <th className="px-6 py-3"></th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Écouter</th>
                             <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">{t('common.actions')}</th>
                         </tr></thead>
                         <tbody className="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
@@ -98,8 +97,8 @@ const RecordsManager: React.FC<{ feature: Feature }> = ({ feature }) => {
                                         <InlineAudioPlayer fileId={record.id} src={`/api/recordings/${record.id}.mp3`} duration={record.duration} />
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                        <button onClick={() => alert("Simulation: Téléchargement de l'enregistrement.")} className="text-link hover:underline inline-flex items-center"><ArrowDownTrayIcon className="w-4 h-4 mr-1"/>{t('recordsManager.download')}</button>
-                                        <button onClick={() => alert("Simulation: Suppression de l'enregistrement.")} className="text-red-600 hover:text-red-900 dark:hover:text-red-400 inline-flex items-center"><TrashIcon className="w-4 h-4 mr-1"/>{t('common.delete')}</button>
+                                        <button onClick={() => alert("Simulation: Téléchargement de l'enregistrement.")} className="text-link hover:underline inline-flex items-center"><span className="material-symbols-outlined text-base mr-1">download</span>{t('recordsManager.download')}</button>
+                                        <button onClick={() => alert("Simulation: Suppression de l'enregistrement.")} className="text-red-600 hover:text-red-900 dark:hover:text-red-400 inline-flex items-center"><span className="material-symbols-outlined text-base mr-1">delete</span>{t('common.delete')}</button>
                                     </td>
                                 </tr>
                             ))}
