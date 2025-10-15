@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import type { Feature, AudioFile } from '../types.ts';
 import { useStore } from '../src/store/useStore.ts';
 import { useI18n } from '../src/i18n/index.tsx';
-import { PlusIcon, SpeakerWaveIcon } from './Icons.tsx';
 import AudioFileModal from './AudioFileModal.tsx';
 import apiClient from '../src/lib/axios.ts';
 import InlineAudioPlayer from './InlineAudioPlayer.tsx';
@@ -88,11 +87,11 @@ const AudioManager: React.FC<{ feature: Feature }> = ({ feature }) => {
             <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-semibold flex items-center gap-2">
-                        <SpeakerWaveIcon className="w-6 h-6" />
+                        <span className="material-symbols-outlined text-3xl text-slate-600 dark:text-slate-400">volume_up</span>
                         {t('audioManager.title')}
                     </h2>
                     <button onClick={handleAddNew} className="bg-primary hover:bg-primary-hover text-primary-text font-bold py-2 px-4 rounded-lg shadow-md inline-flex items-center">
-                        <PlusIcon className="w-5 h-5 mr-2" />
+                        <span className="material-symbols-outlined mr-2">add</span>
                         {t('audioManager.uploadFile')}
                     </button>
                 </div>

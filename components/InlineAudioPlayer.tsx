@@ -20,45 +20,53 @@ const InlineAudioPlayer: React.FC<InlineAudioPlayerProps> = ({ fileId, src, dura
     const { playingFileId, setPlayingFileId } = useStore();
     const audioRef = useRef<HTMLAudioElement>(null);
     const [currentTime, setCurrentTime] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false); // Local playing state
 
-    const isPlaying = playingFileId === fileId;
-
+    // Sync local state with global state: if another file starts playing, stop this one.
     useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        const handlePlayPromise = async () => {
-            try {
-                await audio.play();
-            } catch (e) {
-                console.error("Audio play failed:", e);
-                // If play fails, reset the global state
-                if (playingFileId === fileId) {
-                    setPlayingFileId(null);
-                }
-            }
-        };
-
-        if (isPlaying) {
-            handlePlayPromise();
-        } else {
-            audio.pause();
+        if (playingFileId !== fileId && isPlaying) {
+            audioRef.current?.pause();
+            setIsPlaying(false);
         }
-    }, [isPlaying, fileId, playingFileId, setPlayingFileId]);
+    }, [playingFileId, fileId, isPlaying]);
     
-    // This is to reset current time when another track is played or playback stops
+    // Reset time when playback stops
     useEffect(() => {
-        const audio = audioRef.current;
-        if (audio && !isPlaying && currentTime > 0) {
-            audio.currentTime = 0;
+        if (!isPlaying && currentTime > 0) {
             setCurrentTime(0);
+            if(audioRef.current) audioRef.current.currentTime = 0;
         }
     }, [isPlaying, currentTime]);
 
+
     const handlePlayPause = () => {
-        // If another file is playing, this will stop it and start the new one
-        setPlayingFileId(isPlaying ? null : fileId);
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        if (isPlaying) {
+            audio.pause();
+            setIsPlaying(false);
+            if (playingFileId === fileId) {
+                setPlayingFileId(null);
+            }
+        } else {
+            // Set the global state to pause other players.
+            setPlayingFileId(fileId);
+            // The play() action must be in a user-initiated event handler.
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Playback started successfully.
+                    setIsPlaying(true);
+                }).catch(error => {
+                    console.error("Audio playback was prevented:", error);
+                    setIsPlaying(false);
+                    setPlayingFileId(null);
+                });
+            }
+        }
     };
+
 
     const handleTimeUpdate = () => {
         if (audioRef.current) {
@@ -75,12 +83,16 @@ const InlineAudioPlayer: React.FC<InlineAudioPlayerProps> = ({ fileId, src, dura
     };
     
     const handleAudioEnded = () => {
-        setPlayingFileId(null); // Set global state to null
+        setIsPlaying(false);
+        if (playingFileId === fileId) {
+            setPlayingFileId(null);
+        }
     };
 
     const handleAudioError = () => {
         console.error(`[AudioPlayer] Failed to load audio source: ${src}`);
-        if (isPlaying) {
+        setIsPlaying(false);
+        if (playingFileId === fileId) {
             setPlayingFileId(null);
         }
     };
