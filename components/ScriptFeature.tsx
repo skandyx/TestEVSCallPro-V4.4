@@ -83,7 +83,6 @@ const ScriptFeature: React.FC<{ feature: Feature }> = ({ feature }) => {
                             <li key={script.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900/50 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700">
                                 <div>
                                     <p className="font-semibold text-slate-800 dark:text-slate-200">{script.name}</p>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400">{t('scriptFeature.pageCount', { count: script.pages.length })}</p>
                                     {isAssigned && (
                                         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                                             <span className="font-semibold">{t('scriptFeature.usedBy')} </span>
