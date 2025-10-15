@@ -1,12 +1,13 @@
 
 
 
+
 const pool = require('./connection');
 const { keysToCamel } = require('./utils');
 const { publish } = require('../redisClient');
 
 // Define safe columns to be returned, excluding sensitive ones like password_hash
-const SAFE_USER_COLUMNS = 'u.id, u.login_id, u.extension, u.first_name, u.last_name, u.email, u."role", u.is_active, u.site_id, u.created_at, u.updated_at, u.mobile_number, u.use_mobile_as_station, u.profile_picture_url, u.planning_enabled';
+const SAFE_USER_COLUMNS = 'u.id, u.login_id, u.first_name, u.last_name, u.email, u."role", u.is_active, u.site_id, u.agent_profile_id, u.created_at, u.updated_at, u.mobile_number, u.use_mobile_as_station, u.profile_picture_url, u.planning_enabled';
 
 const generatePassword = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -47,7 +48,7 @@ const getUserById = async (id) => {
 
 const handleDbError = (e) => {
     if (e.code === '23505') { // Unique violation
-        if (e.constraint === 'users_login_id_key' || e.constraint === 'users_extension_key') {
+        if (e.constraint === 'users_login_id_key') {
             throw new Error(`L'identifiant/extension existe déjà.`);
         }
         if (e.constraint === 'users_email_key') {
@@ -68,14 +69,15 @@ const createUser = async (userData) => {
         // FIX: Use a distinct placeholder for each column to avoid type deduction errors.
         // The number of placeholders now matches the number of columns (12) and parameters.
         const userQuery = `
-            INSERT INTO users (id, login_id, extension, first_name, last_name, email, "role", is_active, password_hash, site_id, mobile_number, use_mobile_as_station, planning_enabled)
+            INSERT INTO users (id, login_id, first_name, last_name, email, "role", is_active, password_hash, site_id, agent_profile_id, mobile_number, use_mobile_as_station, planning_enabled)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-            RETURNING id, login_id, first_name, last_name, email, "role", is_active, site_id, mobile_number, use_mobile_as_station, planning_enabled;
+            RETURNING id, login_id, first_name, last_name, email, "role", is_active, site_id, agent_profile_id, mobile_number, use_mobile_as_station, planning_enabled;
         `;
         const userRes = await client.query(userQuery, [
-            user.id, user.loginId, user.loginId, // Pass loginId twice for both login_id and extension
+            user.id, user.loginId,
             user.firstName, user.lastName, user.email || null,
-            user.role, user.isActive, passwordToInsert, user.siteId || null, 
+            user.role, user.isActive, passwordToInsert, user.siteId || null,
+            user.agentProfileId || null, 
             user.mobileNumber || null, user.useMobileAsStation || false, user.planningEnabled || false
         ]);
 
@@ -121,13 +123,13 @@ const updateUser = async (userId, userData) => {
         // FIX: Use distinct placeholders for login_id and extension and adjust the parameter array.
         const queryParams = [
             user.loginId, // $1 for login_id
-            user.loginId, // $2 for extension
-            user.firstName, // $3
-            user.lastName, // $4
-            user.email || null, // $5
-            user.role, // $6
-            user.isActive, // $7
-            user.siteId || null, // $8
+            user.firstName, // $2
+            user.lastName, // $3
+            user.email || null, // $4
+            user.role, // $5
+            user.isActive, // $6
+            user.siteId || null, // $7
+            user.agentProfileId || null, // $8
             user.mobileNumber || null, // $9
             user.useMobileAsStation || false, // $10
             user.planningEnabled || false, // $11
@@ -144,8 +146,8 @@ const updateUser = async (userId, userData) => {
 
         const userQuery = `
             UPDATE users SET 
-                login_id = $1, extension = $2, first_name = $3, last_name = $4, email = $5, 
-                "role" = $6, is_active = $7, site_id = $8, mobile_number = $9, use_mobile_as_station = $10,
+                login_id = $1, first_name = $2, last_name = $3, email = $4, 
+                "role" = $5, is_active = $6, site_id = $7, agent_profile_id = $8, mobile_number = $9, use_mobile_as_station = $10,
                 planning_enabled = $11
                 ${passwordUpdateClause}, updated_at = NOW()
             WHERE id = $${userIdIndex}
@@ -171,7 +173,7 @@ const updateUser = async (userId, userData) => {
         const currentCampaignIds = new Set(currentCampaigns.map(c => c.campaign_id));
         const desiredCampaignIds = new Set(user.campaignIds || []);
         const campaignsToAdd = [...desiredCampaignIds].filter(id => !currentCampaignIds.has(id));
-        const campaignsToRemove = [...currentCampaignIds].filter(id => !desiredCampaignIds.has(id));
+        const campaignsToRemove = [...currentCampaignIds].filter(id => !currentCampaignIds.has(id));
         if (campaignsToRemove.length > 0) await client.query(`DELETE FROM campaign_agents WHERE user_id = $1 AND campaign_id = ANY($2::text[])`, [userId, campaignsToRemove]);
         if (campaignsToAdd.length > 0) for (const campaignId of campaignsToAdd) await client.query('INSERT INTO campaign_agents (user_id, campaign_id) VALUES ($1, $2)', [userId, campaignId]);
         
@@ -203,13 +205,12 @@ const createUsersBulk = async (users) => {
         for (const user of users) {
              // FIX: Use a distinct placeholder for each column to avoid type deduction errors.
             const userQuery = `
-                INSERT INTO users (id, login_id, extension, first_name, last_name, email, "role", is_active, password_hash, site_id, mobile_number, use_mobile_as_station, planning_enabled)
+                INSERT INTO users (id, login_id, first_name, last_name, email, "role", is_active, password_hash, site_id, mobile_number, use_mobile_as_station, planning_enabled, agent_profile_id)
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
             `;
             await client.query(userQuery, [
                 user.id,
                 user.loginId,
-                user.loginId, // Pass loginId twice for both login_id and extension
                 user.firstName,
                 user.lastName,
                 user.email || null,
@@ -219,7 +220,8 @@ const createUsersBulk = async (users) => {
                 user.siteId || null,
                 user.mobileNumber || null,
                 'useMobileAsStation' in user ? user.useMobileAsStation : false,
-                'planningEnabled' in user ? user.planningEnabled : false
+                'planningEnabled' in user ? user.planningEnabled : false,
+                user.agentProfileId || null,
             ]);
         }
         await client.query('COMMIT');

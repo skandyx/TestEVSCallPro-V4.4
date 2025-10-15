@@ -263,6 +263,7 @@
       "id": "ID",
       "loginId": "Identifiant",
       "role": "Rôle",
+      "site": "Site",
       "status": "Statut"
     },
     "modal": {

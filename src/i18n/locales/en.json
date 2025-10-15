@@ -260,6 +260,7 @@
       "id": "ID",
       "loginId": "Login ID",
       "role": "Role",
+      "site": "Site",
       "status": "Status"
     },
     "modal": {

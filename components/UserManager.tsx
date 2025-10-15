@@ -390,7 +390,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
     const [isGeneratingModalOpen, setIsGeneratingModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [sortConfig, setSortConfig] = useState<{ key: keyof User; direction: 'ascending' | 'descending' }>({ key: 'firstName', direction: 'ascending' });
+    const [sortConfig, setSortConfig] = useState<{ key: keyof User | 'siteName'; direction: 'ascending' | 'descending' }>({ key: 'firstName', direction: 'ascending' });
     const { t } = useI18n();
 
     const { 
@@ -414,6 +414,8 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
         delete: state.delete,
         createUsersBulk: state.createUsersBulk,
     }));
+
+    const siteMap = useMemo(() => new Map(sites.map(s => [s.id, s.name])), [sites]);
 
     const onSaveUser = (user: User, groupIds: string[]) => {
         saveOrUpdate('users', { ...user, groupIds });
@@ -444,24 +446,35 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
         if (searchTerm) {
             sortableUsers = sortableUsers.filter(user => {
                 const term = searchTerm.toLowerCase();
+                const siteName = user.siteId ? siteMap.get(user.siteId)?.toLowerCase() : '';
                 return (
                     user.firstName.toLowerCase().includes(term) ||
                     user.lastName.toLowerCase().includes(term) ||
                     (user.email && user.email.toLowerCase().includes(term)) ||
                     user.loginId.toLowerCase().includes(term) ||
-                    user.role.toLowerCase().includes(term)
+                    user.role.toLowerCase().includes(term) ||
+                    (siteName && siteName.includes(term))
                 );
             });
         }
 
         sortableUsers.sort((a, b) => {
             const key = sortConfig.key;
-            if (a[key] === null || a[key] === undefined) return 1;
-            if (b[key] === null || b[key] === undefined) return -1;
             
-            let aValue = a[key];
-            let bValue = b[key];
+            let aValue: any;
+            let bValue: any;
 
+            if (key === 'siteName') {
+                aValue = a.siteId ? siteMap.get(a.siteId) || '' : '';
+                bValue = b.siteId ? siteMap.get(b.siteId) || '' : '';
+            } else {
+                aValue = a[key as keyof User];
+                bValue = b[key as keyof User];
+            }
+
+            if (aValue === null || aValue === undefined) return 1;
+            if (bValue === null || bValue === undefined) return -1;
+            
             if (typeof aValue === 'boolean' && typeof bValue === 'boolean') {
                 if (aValue === bValue) return 0;
                 if (sortConfig.direction === 'ascending') return aValue ? -1 : 1;
@@ -479,10 +492,10 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
         });
 
         return sortableUsers;
-    }, [usersToDisplay, searchTerm, sortConfig]);
+    }, [usersToDisplay, searchTerm, sortConfig, siteMap]);
 
 
-    const requestSort = (key: keyof User) => {
+    const requestSort = (key: keyof User | 'siteName') => {
         let direction: 'ascending' | 'descending' = 'ascending';
         if (sortConfig.key === key && sortConfig.direction === 'ascending') {
             direction = 'descending';
@@ -579,7 +592,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
         return { canDelete: true, tooltip: t('common.delete') };
     };
 
-    const SortableHeader: React.FC<{ sortKey: keyof User; label: string }> = ({ sortKey, label }) => (
+    const SortableHeader: React.FC<{ sortKey: keyof User | 'siteName'; label: string }> = ({ sortKey, label }) => (
         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
             <button onClick={() => requestSort(sortKey)} className="group inline-flex items-center gap-1">
                 {label}
@@ -633,6 +646,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
                         <SortableHeader sortKey="id" label={t('userManager.headers.id')} />
                         <SortableHeader sortKey="loginId" label={t('userManager.headers.loginId')} />
                         <SortableHeader sortKey="role" label={t('userManager.headers.role')} />
+                        <SortableHeader sortKey="siteName" label={t('userManager.headers.site')} />
                         <SortableHeader sortKey="isActive" label={t('userManager.headers.status')} />
                         <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('common.actions')}</th>
                     </tr>
@@ -656,6 +670,7 @@ const UserManager: React.FC<UserManagerProps> = ({ feature }) => {
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 font-mono">{user.id}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-500 dark:text-slate-400">{user.loginId}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300">{user.role}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300">{user.siteId ? siteMap.get(user.siteId) : '-'}</td>
                             <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.isActive ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200' : 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200'}`}>
                                 {user.isActive ? t('common.active') : t('common.inactive')}
