@@ -131,7 +131,7 @@ const Sidebar: React.FC<SidebarProps> = ({ features, activeFeatureId, onSelectFe
                                     className={`w-full text-left flex items-center p-2 text-sm font-semibold rounded-md transition-colors ${
                                         isSidebarCollapsed ? 'justify-center' : ''
                                     } ${
-                                        isActiveCategory ? 'bg-slate-100 text-slate-900 dark:bg-slate-700 dark:text-slate-50' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700'
+                                        isActiveCategory ? 'bg-slate-100 dark:bg-slate-700 text-sidebar-active-text' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700'
                                     }`}
                                     title={translatedCategoryName}
                                 >
