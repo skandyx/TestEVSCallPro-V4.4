@@ -26,9 +26,10 @@ const InlineAudioPlayer: React.FC<InlineAudioPlayerProps> = ({ fileId, src, dura
 
     // Cleanup object URL on unmount
     useEffect(() => {
+        const urlToClean = objectUrl;
         return () => {
-            if (objectUrl) {
-                URL.revokeObjectURL(objectUrl);
+            if (urlToClean) {
+                URL.revokeObjectURL(urlToClean);
             }
         };
     }, [objectUrl]);
@@ -37,61 +38,8 @@ const InlineAudioPlayer: React.FC<InlineAudioPlayerProps> = ({ fileId, src, dura
     useEffect(() => {
         if (playingFileId !== fileId && isPlaying) {
             audioRef.current?.pause();
-            setIsPlaying(false);
         }
     }, [playingFileId, fileId, isPlaying]);
-    
-    // Reset time when playback stops
-    useEffect(() => {
-        if (!isPlaying && currentTime > 0) {
-            setCurrentTime(0);
-            if(audioRef.current) audioRef.current.currentTime = 0;
-        }
-    }, [isPlaying, currentTime]);
-
-    const loadAndPlayAudio = async () => {
-        if (!audioRef.current) return;
-        const audio = audioRef.current;
-
-        // If we already have the blob url, just play
-        if (objectUrl) {
-            const playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => setIsPlaying(true)).catch(error => {
-                    console.error("Audio playback error:", error);
-                    setIsPlaying(false);
-                    setPlayingFileId(null);
-                });
-            }
-            return;
-        }
-
-        // Fetch the audio file with authentication
-        try {
-            const response = await apiClient.get(src, { responseType: 'blob' });
-            const blob = new Blob([response.data], { type: response.headers['content-type'] });
-            const url = URL.createObjectURL(blob);
-            setObjectUrl(url);
-
-            audio.src = url;
-            const playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    setIsPlaying(true);
-                }).catch(error => {
-                    console.error("Audio playback was prevented:", error);
-                    setIsPlaying(false);
-                    setPlayingFileId(null);
-                    URL.revokeObjectURL(url);
-                    setObjectUrl(null);
-                });
-            }
-        } catch (error) {
-            console.error(`[AudioPlayer] Failed to fetch audio source: ${src}`, error);
-            setIsPlaying(false);
-            setPlayingFileId(null);
-        }
-    };
 
     const handlePlayPause = async () => {
         const audio = audioRef.current;
@@ -99,21 +47,54 @@ const InlineAudioPlayer: React.FC<InlineAudioPlayerProps> = ({ fileId, src, dura
 
         if (isPlaying) {
             audio.pause();
-            setIsPlaying(false);
-            if (playingFileId === fileId) {
+        } else {
+            // Set this as the active player globally
+            setPlayingFileId(fileId);
+
+            // If we already have the blob url, just play
+            if (objectUrl) {
+                if(audio.src !== objectUrl) audio.src = objectUrl;
+                audio.play().catch(error => {
+                    console.error("Audio playback error:", error);
+                    setIsPlaying(false);
+                    setPlayingFileId(null);
+                });
+                return;
+            }
+
+            // Fetch the audio file with authentication
+            try {
+                const response = await apiClient.get(src, { responseType: 'blob' });
+                const blob = response.data; // CRITICAL FIX: response.data IS the blob
+
+                if (blob.size === 0) {
+                    console.error("Fetched audio blob is empty.");
+                    setPlayingFileId(null); // Unset global state
+                    return;
+                }
+
+                const url = URL.createObjectURL(blob);
+                setObjectUrl(url);
+
+                audio.src = url;
+                audio.play().catch(error => {
+                    console.error("Audio playback was prevented:", error);
+                    setIsPlaying(false);
+                    setPlayingFileId(null);
+                    URL.revokeObjectURL(url); // Clean up on error
+                    setObjectUrl(null);
+                });
+
+            } catch (error) {
+                console.error(`[AudioPlayer] Failed to fetch audio source: ${src}`, error);
+                setIsPlaying(false);
                 setPlayingFileId(null);
             }
-        } else {
-            setPlayingFileId(fileId);
-            await loadAndPlayAudio();
         }
     };
 
-
     const handleTimeUpdate = () => {
-        if (audioRef.current) {
-            setCurrentTime(audioRef.current.currentTime);
-        }
+        if (audioRef.current) setCurrentTime(audioRef.current.currentTime);
     };
     
     const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,9 +106,10 @@ const InlineAudioPlayer: React.FC<InlineAudioPlayerProps> = ({ fileId, src, dura
     };
     
     const handleAudioEnded = () => {
-        setIsPlaying(false);
-        if (playingFileId === fileId) {
-            setPlayingFileId(null);
+        // State is handled by onPause, but we want to reset time
+        if (audioRef.current) {
+            audioRef.current.currentTime = 0;
+            setCurrentTime(0);
         }
     };
 
@@ -138,6 +120,13 @@ const InlineAudioPlayer: React.FC<InlineAudioPlayerProps> = ({ fileId, src, dura
                 onTimeUpdate={handleTimeUpdate}
                 onLoadedMetadata={handleTimeUpdate} 
                 onEnded={handleAudioEnded}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => {
+                    setIsPlaying(false);
+                    if (playingFileId === fileId) {
+                        setPlayingFileId(null);
+                    }
+                }}
                 preload="metadata"
             />
             <button onClick={handlePlayPause} className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 p-1">
